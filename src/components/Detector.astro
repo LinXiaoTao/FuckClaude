@@ -3,6 +3,7 @@ import { useTranslations, type Lang } from '../i18n/ui';
 import { SIGNALS } from '../config/signals';
 import LangToggle from './LangToggle.astro';
 import ScoreRing from './ScoreRing.astro';
+import Mascot from './Mascot.astro';
 import Footer from './Footer.astro';
 
 interface Props {
@@ -17,19 +18,15 @@ const home = lang === 'zh' ? '/zh/' : '/';
 <header class="nav">
   <div class="wrap nav__inner">
     <a class="brand" href={home}>
-      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" aria-hidden="true">
-        <line x1="41.0" y1="32.0" x2="56.0" y2="32.0"></line>
-        <line x1="39.5" y1="37.0" x2="46.9" y2="42.1"></line>
-        <line x1="36.8" y1="39.6" x2="44.2" y2="51.5"></line>
-        <line x1="31.5" y1="41.0" x2="31.1" y2="49.5"></line>
-        <line x1="27.6" y1="39.9" x2="20.4" y2="53.0"></line>
-        <line x1="23.9" y1="35.9" x2="14.9" y2="40.3"></line>
-        <line x1="23.0" y1="32.5" x2="9.0" y2="33.2"></line>
-        <line x1="24.4" y1="27.2" x2="17.2" y2="22.7"></line>
-        <line x1="27.2" y1="24.4" x2="19.3" y2="11.6"></line>
-        <line x1="32.5" y1="23.0" x2="32.9" y2="14.0"></line>
-        <line x1="36.4" y1="24.1" x2="42.9" y2="12.3"></line>
-        <line x1="39.9" y1="27.8" x2="48.8" y2="23.1"></line>
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="currentColor"></rect>
+        <g fill="#FAF9F5">
+          <rect x="26.9" y="8" width="7.6" height="29" rx="3.8"></rect>
+          <rect x="18.9" y="24.5" width="6.4" height="11" rx="3.2"></rect>
+          <rect x="36.1" y="24.5" width="6.4" height="11" rx="3.2"></rect>
+          <rect x="16.9" y="30" width="27.6" height="24" rx="9"></rect>
+          <rect x="40.6" y="32.5" width="7.6" height="16" rx="3.8" transform="rotate(-24 44.4 40.5)"></rect>
+        </g>
       </svg>
       <span class="brand__text">{t('nav.title')}</span>
     </a>
@@ -67,7 +64,10 @@ const home = lang === 'zh' ? '/zh/' : '/';
     </ul>
 
     <div class="panel">
-      <ScoreRing lang={lang} />
+      <div class="panel__main">
+        <Mascot />
+        <ScoreRing lang={lang} />
+      </div>
 
       <div class="result" id="result" hidden>
         <p class="result__title" id="result-title"></p>

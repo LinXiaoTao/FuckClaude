@@ -54,6 +54,7 @@ export const ui = {
       'OS vendor guessed from the user agent; a weak, loosely correlated signal.',
 
     'scan.detecting': 'Checking',
+    'scan.ready': 'Ready to scan',
     'result.hitsTitle': 'Matched signals',
     'result.noHits': 'No strong China signals matched. Low risk.',
 
@@ -131,6 +132,7 @@ export const ui = {
     'signal.emoji.desc': '由 UA 推断操作系统厂商,弱相关信号。',
 
     'scan.detecting': '检测中',
+    'scan.ready': '待检测',
     'result.hitsTitle': '命中的信号',
     'result.noHits': '没有命中明显的中国信号,风险较低。',
 

@@ -53,8 +53,9 @@ src/
 ├── i18n/ui.ts           # EN/ZH copy dictionary + translator
 ├── scripts/detect.ts    # animated scan + scoring + verdict (client)
 ├── layouts/BaseLayout.astro  # <head> SEO + GA + global styles
-├── components/          # Detector, ScoreRing, LangToggle, Footer
+├── components/          # Detector, ScoreRing, Mascot (animated Claude-CEO), LangToggle, Footer
 └── pages/               # index.astro (en) + zh/index.astro
+public/mascot/           # cartoon CEO state images (doze / search / low / medium / high)
 scripts/
 └── gen-assets.mjs       # regenerates favicon / PWA icons / og.png (node scripts/gen-assets.mjs)
 ```
@@ -135,8 +136,9 @@ src/
 ├── i18n/ui.ts           # 中英文案字典 + 取值 helper
 ├── scripts/detect.ts    # 扫描动效 + 打分 + 结论(客户端)
 ├── layouts/BaseLayout.astro  # <head> SEO + GA + 全局样式
-├── components/          # Detector、ScoreRing、LangToggle、Footer
+├── components/          # Detector、ScoreRing、Mascot(会动的 Claude CEO)、LangToggle、Footer
 └── pages/               # index.astro(英)+ zh/index.astro(中)
+public/mascot/           # 卡通 CEO 各状态图(打瞌睡 / 检测中 / 低 / 中 / 高风险)
 scripts/
 └── gen-assets.mjs       # 重新生成 favicon / PWA 图标 / og.png(node scripts/gen-assets.mjs)
 ```

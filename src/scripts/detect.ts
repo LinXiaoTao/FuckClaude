@@ -27,6 +27,11 @@ interface Hit {
   contribution: number;
 }
 
+type MascotState = 'doze' | 'search' | 'low' | 'medium' | 'high';
+function setMascot(state: MascotState) {
+  q('#mascot')?.setAttribute('data-state', state);
+}
+
 function setRing(total: number) {
   const ring = q<SVGCircleElement>('#score-ring');
   const valueEl = q('#score-value');
@@ -71,6 +76,7 @@ function resetUI() {
 
 function finalize(total: number, hits: Hit[]) {
   const band = riskBand(total);
+  setMascot(band);
   q('#score-gauge')?.removeAttribute('data-scanning');
   q('#score-gauge')?.setAttribute('data-band', band);
 
@@ -113,6 +119,7 @@ async function run() {
   const btn = q<HTMLButtonElement>('#retest');
   if (btn) btn.disabled = true;
 
+  setMascot('search');
   resetUI();
   await delay(SETTLE_MS);
 
@@ -153,12 +160,17 @@ async function run() {
   }
 
   finalize(Math.min(100, total), hits);
+  const label = q('#retest-label');
+  if (label) label.textContent = t('ui.retest');
   if (btn) btn.disabled = false;
   running = false;
 }
 
+/**
+ * No auto-run: the mascot dozes until the user hits "Start scan",
+ * then it wakes up and hunts for signals.
+ */
 function init() {
-  run();
   q('#retest')?.addEventListener('click', () => run());
 }
 

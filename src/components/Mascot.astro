@@ -1,0 +1,248 @@
+---
+/**
+ * Animated cartoon "Claude CEO" mascot. Five states, switched by
+ * `data-state` on #mascot (driven from scripts/detect.ts):
+ *   doze   – default, asleep (Zzz bubbles)
+ *   search – scanning with a magnifying glass
+ *   low    – smiling thumbs-up
+ *   medium – suspicious stare
+ *   high   – pointing a (toy) gun at you
+ * Every state loops a CSS animation so the character is never static.
+ */
+const STATES = [
+  { id: 'doze', src: '/mascot/ceo-doze.webp' },
+  { id: 'search', src: '/mascot/ceo-search.webp' },
+  { id: 'low', src: '/mascot/ceo-happy.webp' },
+  { id: 'medium', src: '/mascot/ceo-suspect.webp' },
+  { id: 'high', src: '/mascot/ceo-gun.webp' },
+];
+---
+
+<div class="mascot" id="mascot" data-state="doze" aria-hidden="true">
+  <div class="mascot__stage">
+    {STATES.map((s) => <img class="mascot__fig" data-mstate={s.id} src={s.src} alt="" decoding="async" />)}
+    <span class="mascot__zzz"><i>Z</i><i>Z</i><i>Z</i></span>
+  </div>
+  <span class="mascot__shadow"></span>
+</div>
+
+<style>
+  .mascot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 232px;
+    flex: none;
+  }
+  .mascot__stage {
+    position: relative;
+    height: 238px;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .mascot__fig {
+    display: none;
+    height: 232px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    transform-origin: 50% 85%;
+    will-change: transform;
+  }
+  .mascot__shadow {
+    width: 128px;
+    height: 15px;
+    border-radius: 50%;
+    background: rgba(31, 30, 29, 0.13);
+    filter: blur(3px);
+    margin-top: -5px;
+  }
+
+  /* ---- state visibility + loops (pop first, then the idle loop) ---- */
+  .mascot[data-state='doze'] .mascot__fig[data-mstate='doze'] {
+    display: block;
+    animation:
+      mascot-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+      mascot-doze 3.8s ease-in-out 0.32s infinite;
+  }
+  .mascot[data-state='search'] .mascot__fig[data-mstate='search'] {
+    display: block;
+    animation:
+      mascot-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+      mascot-search 1.9s ease-in-out 0.32s infinite;
+  }
+  .mascot[data-state='low'] .mascot__fig[data-mstate='low'] {
+    display: block;
+    animation:
+      mascot-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+      mascot-happy 0.95s ease-in-out 0.32s infinite;
+  }
+  .mascot[data-state='medium'] .mascot__fig[data-mstate='medium'] {
+    display: block;
+    animation:
+      mascot-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+      mascot-suspect 3s ease-in-out 0.32s infinite;
+  }
+  .mascot[data-state='high'] .mascot__fig[data-mstate='high'] {
+    display: block;
+    animation:
+      mascot-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+      mascot-gun 0.45s linear 0.32s infinite;
+  }
+
+  /* ---- Zzz bubbles, doze only ---- */
+  .mascot__zzz {
+    display: none;
+    position: absolute;
+    top: 14px;
+    right: 26px;
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
+  }
+  .mascot[data-state='doze'] .mascot__zzz {
+    display: block;
+  }
+  .mascot__zzz i {
+    position: absolute;
+    right: 6px;
+    bottom: 0;
+    font-style: normal;
+    font-family: var(--serif);
+    font-weight: 700;
+    color: var(--muted-2);
+    opacity: 0;
+    animation: mascot-zzz 2.7s ease-out infinite;
+  }
+  .mascot__zzz i:nth-child(1) {
+    font-size: 0.9rem;
+  }
+  .mascot__zzz i:nth-child(2) {
+    font-size: 1.15rem;
+    animation-delay: 0.9s;
+  }
+  .mascot__zzz i:nth-child(3) {
+    font-size: 1.45rem;
+    animation-delay: 1.8s;
+  }
+
+  /* ---- keyframes ---- */
+  @keyframes mascot-pop {
+    0% {
+      transform: scale(0.72);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.06);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  /* asleep: slow sway + breathing bob */
+  @keyframes mascot-doze {
+    0%,
+    100% {
+      transform: rotate(-1.6deg);
+    }
+    50% {
+      transform: rotate(2.2deg) translateY(-7px);
+    }
+  }
+  /* scanning: pans left/right like he's hunting for signals */
+  @keyframes mascot-search {
+    0%,
+    100% {
+      transform: translateX(-10px) rotate(-3.5deg);
+    }
+    22% {
+      transform: translateX(-2px) translateY(-5px) rotate(-1deg);
+    }
+    50% {
+      transform: translateX(10px) rotate(3.5deg);
+    }
+    72% {
+      transform: translateX(2px) translateY(-5px) rotate(1deg);
+    }
+  }
+  /* low risk: happy bounce */
+  @keyframes mascot-happy {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-1.2deg);
+    }
+    28% {
+      transform: translateY(-12px) rotate(1.6deg) scale(1.02);
+    }
+    55% {
+      transform: translateY(0) rotate(0.4deg);
+    }
+  }
+  /* medium risk: leans in and sizes you up */
+  @keyframes mascot-suspect {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    35% {
+      transform: scale(1.07) translateY(2px);
+    }
+    55% {
+      transform: scale(1.07) translateX(-4px) translateY(2px);
+    }
+    75% {
+      transform: scale(1.07) translateX(4px) translateY(2px);
+    }
+  }
+  @keyframes mascot-zzz {
+    0% {
+      opacity: 0;
+      transform: translate(0, 0) scale(0.7);
+    }
+    25% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(16px, -30px) scale(1.25);
+    }
+  }
+  /* high risk: furious trembling, gun trained on you */
+  @keyframes mascot-gun {
+    0%,
+    100% {
+      transform: scale(1.04) translate(0, 0);
+    }
+    15% {
+      transform: scale(1.04) translate(-2px, 1px) rotate(-0.8deg);
+    }
+    30% {
+      transform: scale(1.04) translate(2px, -1px) rotate(0.8deg);
+    }
+    45% {
+      transform: scale(1.04) translate(-2px, -1px) rotate(-0.5deg);
+    }
+    60% {
+      transform: scale(1.04) translate(2px, 1px) rotate(0.6deg);
+    }
+    80% {
+      transform: scale(1.04) translate(-1px, 0);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .mascot {
+      width: 190px;
+    }
+    .mascot__stage {
+      height: 196px;
+    }
+    .mascot__fig {
+      height: 190px;
+    }
+  }
+</style>
