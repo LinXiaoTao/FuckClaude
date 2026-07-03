@@ -42,6 +42,10 @@ const CN_TIMEZONES = [
 ];
 const CLAUDE_TIMEZONES = ['Asia/Shanghai', 'Asia/Urumqi'];
 const GREATER_CN_TIMEZONES = ['Asia/Hong_Kong', 'Asia/Macau', 'Asia/Taipei'];
+const OSAKA_TIMEZONES = ['Asia/Tokyo'];
+const OSAKA_TIMEZONE_LABELS: Record<string, string> = {
+  'Asia/Tokyo': 'Asia/Tokyo (Osaka)',
+};
 
 const FONTS_SC = [
   'Microsoft YaHei',
@@ -88,14 +92,15 @@ function detectTimezone(): DetectOutcome {
   let score = 0;
   if (CLAUDE_TIMEZONES.includes(tz) || CN_TIMEZONES.includes(tz)) score = 1;
   else if (GREATER_CN_TIMEZONES.includes(tz)) score = 0.6;
-  return { raw: tz || 'unknown', score };
+  const raw = OSAKA_TIMEZONES.includes(tz) ? OSAKA_TIMEZONE_LABELS[tz] : tz || 'unknown';
+  return { raw, score };
 }
 
 function detectTimezoneOffset(): DetectOutcome {
   const offset = new Date().getTimezoneOffset();
   const utcHours = -offset / 60;
   const sign = utcHours >= 0 ? '+' : '-';
-  const raw = `UTC${sign}${Math.abs(utcHours)}`;
+  const raw = `UTC${sign}${Math.abs(utcHours)}${offset === -540 ? ' (Osaka)' : ''}`;
   return { raw, score: offset === -480 ? 0.7 : 0 };
 }
 
@@ -112,13 +117,15 @@ function detectLanguage(): DetectOutcome {
   const primary = langs[0] || '';
   let score = 0;
   const isHansCN = (l: string) => l.startsWith('zh-cn') || l.includes('hans') || l === 'zh';
+  const isJapanese = (l: string) => l === 'ja' || l.startsWith('ja-');
   const isHant = (l: string) =>
     l.startsWith('zh-tw') || l.startsWith('zh-hk') || l.startsWith('zh-mo') || l.includes('hant');
   if (isHansCN(primary)) score = 1;
   else if (isHant(primary)) score = 0.5;
   else if (langs.some(isHansCN)) score = 0.7;
   else if (langs.some((l) => l.startsWith('zh'))) score = 0.4;
-  return { raw: langs.join(', ') || 'unknown', score };
+  const raw = langs.join(', ') || 'unknown';
+  return { raw: isJapanese(primary) ? `${raw} (Osaka)` : raw, score };
 }
 
 function detectIntlLocale(): DetectOutcome {
@@ -132,7 +139,8 @@ function detectIntlLocale(): DetectOutcome {
   let score = 0;
   if (l.startsWith('zh-cn') || l.includes('hans') || l === 'zh') score = 1;
   else if (l.startsWith('zh')) score = 0.5;
-  return { raw: locale || 'unknown', score };
+  const raw = l === 'ja' || l.startsWith('ja-') ? `${locale || 'ja'} (Osaka)` : locale || 'unknown';
+  return { raw, score };
 }
 
 function isFontAvailable(font: string, ctx: CanvasRenderingContext2D): boolean {

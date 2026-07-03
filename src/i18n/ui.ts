@@ -37,18 +37,18 @@ export const ui = {
 
     'signal.timezone.name': 'System timezone',
     'signal.timezone.desc':
-      'Intl.DateTimeFormat exposes the same OS timezone Claude Code reads; compared against Asia/Shanghai, Asia/Urumqi and other China zones.',
+      'Intl.DateTimeFormat exposes the same OS timezone Claude Code reads; China zones score, while Asia/Tokyo is shown as the Osaka baseline.',
     'signal.language.name': 'Browser language',
     'signal.language.desc':
-      'navigator.languages — zh-CN / Simplified Chinese at the top of the list scores highest.',
+      'navigator.languages — zh-CN / Simplified Chinese at the top scores highest; ja-JP / Japanese is the Osaka baseline.',
     'signal.fonts.name': 'Installed Chinese fonts',
     'signal.fonts.desc':
       'Canvas width-probing for Simplified / Traditional Chinese fonts such as Microsoft YaHei and PingFang SC.',
     'signal.intlLocale.name': 'Intl locale',
     'signal.intlLocale.desc':
-      'The locale your browser resolves for date and number formatting.',
+      'The locale your browser resolves for date and number formatting; ja-JP is shown as the Osaka baseline.',
     'signal.timezoneOffset.name': 'Timezone offset',
-    'signal.timezoneOffset.desc': 'Whether getTimezoneOffset() equals UTC+8.',
+    'signal.timezoneOffset.desc': 'Whether getTimezoneOffset() equals UTC+8; Osaka is UTC+9.',
     'signal.emoji.name': 'Emoji rendering style',
     'signal.emoji.desc':
       'OS vendor guessed from the user agent; a weak, loosely correlated signal.',
@@ -65,7 +65,7 @@ export const ui = {
     'how.p1':
       'When Claude Code is pointed at a proxy endpoint via ANTHROPIC_BASE_URL, public reverse-engineering reports found it reads your operating-system timezone and the proxy hostname, then hides the verdict inside the system prompt with Unicode steganography — the date separator and four look-alike apostrophes in the “Today’s date” line encode whether you look like a China user.',
     'how.p2':
-      'A web page cannot read everything Claude Code can, but the key signal is identical: this tool reads the same OS timezone, then adds five more browser-visible locale fingerprints — UI language, installed Chinese fonts, Intl locale, UTC+8 offset and emoji style — into a weighted score. Signals scoring ≥0.25 count as hits; bands are Low 0–30, Medium 31–60, High 61–100.',
+      'A web page cannot read everything Claude Code can, but the key signal is identical: this tool reads the same OS timezone, then adds five more browser-visible locale fingerprints — UI language, installed Chinese fonts, Intl locale, UTC+8 offset and emoji style — into a weighted score. Osaka-style settings use Asia/Tokyo, UTC+9 and ja-JP/Japanese as non-China baselines. Signals scoring ≥0.25 count as hits; bands are Low 0–30, Medium 31–60, High 61–100.',
     'ui.weight': 'Weight',
 
     'faq.title': 'FAQ',
@@ -77,7 +77,7 @@ export const ui = {
       'No. Only the system timezone maps one-to-one onto Claude’s reported mechanism. The other five signals are common Chinese-environment fingerprints that correlate with it, so treat the score as an estimate, not a verdict.',
     'faq.q3': 'How do I lower my score?',
     'faq.a3':
-      'Switch your OS timezone away from China zones such as Asia/Shanghai, move zh-CN off the top of your browser language list, and avoid routing Claude Code through proxies whose hostnames contain flagged domains or AI-lab keywords.',
+      'Switch your OS timezone away from China zones such as Asia/Shanghai. For an Osaka-style profile, use Asia/Tokyo, UTC+9 and ja-JP/Japanese, move zh-CN off the top of your browser language list, and avoid routing Claude Code through proxies whose hostnames contain flagged domains or AI-lab keywords.',
     'faq.q4': 'Is any data uploaded?',
     'faq.a4':
       'No. Every check runs locally in your browser and none of the detected signals are ever sent anywhere. The site only loads standard Google Analytics for anonymous page-view stats.',
@@ -119,15 +119,15 @@ export const ui = {
 
     'signal.timezone.name': '系统时区',
     'signal.timezone.desc':
-      'Intl.DateTimeFormat 读到的就是 Claude Code 读取的同一个系统时区,与 Asia/Shanghai、Asia/Urumqi 等中国时区比对。',
+      'Intl.DateTimeFormat 读到的就是 Claude Code 读取的同一个系统时区;中国时区计分,Asia/Tokyo 会显示为大阪基线。',
     'signal.language.name': '浏览器语言',
-    'signal.language.desc': '检查 navigator.languages;首选 zh-CN / 简体中文得分最高。',
+    'signal.language.desc': '检查 navigator.languages;首选 zh-CN / 简体中文得分最高,ja-JP / 日语视为大阪基线。',
     'signal.fonts.name': '已安装中文字体',
     'signal.fonts.desc': '用 canvas 宽度探测微软雅黑、苹方等简繁中文字体。',
     'signal.intlLocale.name': 'Intl 区域设置',
-    'signal.intlLocale.desc': '浏览器用于日期 / 数字格式化的 locale。',
+    'signal.intlLocale.desc': '浏览器用于日期 / 数字格式化的 locale;ja-JP 会显示为大阪基线。',
     'signal.timezoneOffset.name': '时区偏移',
-    'signal.timezoneOffset.desc': 'getTimezoneOffset() 是否为 UTC+8。',
+    'signal.timezoneOffset.desc': 'getTimezoneOffset() 是否为 UTC+8;大阪是 UTC+9。',
     'signal.emoji.name': 'Emoji 渲染风格',
     'signal.emoji.desc': '由 UA 推断操作系统厂商,弱相关信号。',
 
@@ -143,7 +143,7 @@ export const ui = {
     'how.p1':
       '当 Claude Code 通过 ANTHROPIC_BASE_URL 指向中转端点时,据公开逆向分析,它会读取操作系统时区与中转 hostname,再把结果用 Unicode 隐写术藏进 system prompt:「Today’s date」那一行的日期分隔符和 4 种几乎一样的撇号变体,编码了你是否像中国用户。',
     'how.p2':
-      '网页读不到 Claude Code 能读的全部信息,但关键信号完全一致:本工具读取同一个系统时区,再叠加浏览器语言、中文字体、Intl locale、UTC+8 偏移与 emoji 风格五项指纹,加权得分。得分 ≥0.25 计为命中;分档:低 0–30、中 31–60、高 61–100。',
+      '网页读不到 Claude Code 能读的全部信息,但关键信号完全一致:本工具读取同一个系统时区,再叠加浏览器语言、中文字体、Intl locale、UTC+8 偏移与 emoji 风格五项指纹,加权得分。大阪配置以 Asia/Tokyo、UTC+9、ja-JP / 日语作为非中国基线。得分 ≥0.25 计为命中;分档:低 0–30、中 31–60、高 61–100。',
     'ui.weight': '权重',
 
     'faq.title': '常见问题',
@@ -155,7 +155,7 @@ export const ui = {
       '不是。只有系统时区能与 Claude 被披露的机制一一对应,其余五项是与之相关的「中文环境指纹」。分数是估计,不是定论。',
     'faq.q3': '怎么降低分数?',
     'faq.a3':
-      '把系统时区改出 Asia/Shanghai 等中国时区,把 zh-CN 从浏览器语言列表首位移除,并避免让 Claude Code 走 hostname 含敏感域名 / AI 实验室关键词的中转。',
+      '把系统时区改出 Asia/Shanghai 等中国时区。若使用大阪配置,设为 Asia/Tokyo、UTC+9、ja-JP / 日语;同时把 zh-CN 从浏览器语言列表首位移除,并避免让 Claude Code 走 hostname 含敏感域名 / AI 实验室关键词的中转。',
     'faq.q4': '会上传我的数据吗?',
     'faq.a4':
       '不会。所有检测都在浏览器本地完成,检测到的任何信号都不会被发送。网站仅加载 Google Analytics 统计匿名访问量。',
