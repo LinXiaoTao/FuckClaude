@@ -39,6 +39,8 @@ export const ui = {
     'band.medium.desc': '🐶You are probably a “Claude China user”🐶',
     'band.high.title': 'High risk',
     'band.high.desc': '🐶You are definitely a “Claude China user”🐶',
+    'band.high.extra': 'But you still have',
+    'band.high.extraLink': 'Kimi Code',
 
     'signal.timezone.name': 'System timezone',
     'signal.timezone.desc':
@@ -126,6 +128,8 @@ export const ui = {
     'band.medium.desc': '🐶你可能是「Claude 中国用户」🐶',
     'band.high.title': '高风险',
     'band.high.desc': '🐶你绝对是「Claude 中国用户」🐶',
+    'band.high.extra': '但是你还有',
+    'band.high.extraLink': 'Kimi Code',
 
     'signal.timezone.name': '系统时区',
     'signal.timezone.desc':
