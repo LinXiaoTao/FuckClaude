@@ -99,12 +99,14 @@ const jsonLd = {
     <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
     ></script>
     <script is:inline define:vars={{ GA_ID }}>
+      // define:vars wraps this script in an IIFE, so `function gtag(){}` would
+      // stay local — assign to window explicitly so track.ts can call it.
       window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', GA_ID);
+      window.gtag = function gtag() {
+        window.dataLayer.push(arguments);
+      };
+      window.gtag('js', new Date());
+      window.gtag('config', GA_ID);
     </script>
   </head>
   <body>

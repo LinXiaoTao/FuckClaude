@@ -8,7 +8,18 @@ import { SIGNALS, riskBand, signalVerdict, type SignalDef } from '../config/sign
 import { CN_MODELS } from '../config/cn-models';
 import { useTranslations, type Lang } from '../i18n/ui';
 
-const KIMI_URL = CN_MODELS.find((m) => m.id === 'kimi')?.url ?? 'https://www.kimi.com/code?from=fuck-claude';
+/**
+ * High-risk consolation links — "But you still have Kimi Code, DeepSeek and GLM".
+ * Kimi leads and is branded "Kimi Code"; URLs come from CN_MODELS (utm-tagged).
+ */
+const BAND_HIGH_LINKS = [
+  { id: 'kimi', label: 'Kimi Code' },
+  { id: 'deepseek', label: 'DeepSeek' },
+  { id: 'glm', label: 'GLM' },
+].flatMap((link) => {
+  const model = CN_MODELS.find((m) => m.id === link.id);
+  return model ? [{ ...link, url: model.url }] : [];
+});
 
 const SCAN_STEP_MS = 460;
 const SETTLE_MS = 150;
@@ -91,17 +102,23 @@ function finalize(total: number, hits: Hit[]) {
   const desc = q('#risk-desc');
   if (desc) {
     desc.textContent = t(`band.${band}.desc`);
-    // High risk gets a consolation plug: "But you still have <Kimi Code>".
+    // High risk gets a consolation plug:
+    // "But you still have <Kimi Code>, <DeepSeek> and <GLM>".
     if (band === 'high') {
       desc.append(` ${t('band.high.extra')} `);
-      const kimi = document.createElement('a');
-      kimi.href = KIMI_URL;
-      kimi.target = '_blank';
-      kimi.rel = 'noopener noreferrer';
-      kimi.textContent = t('band.high.extraLink');
-      kimi.setAttribute('data-ga-event', 'cn_model_click');
-      kimi.setAttribute('data-ga-id', 'kimi-band-high');
-      desc.appendChild(kimi);
+      BAND_HIGH_LINKS.forEach((link, i) => {
+        if (i > 0) {
+          desc.append(i === BAND_HIGH_LINKS.length - 1 ? t('band.high.extraSepLast') : t('band.high.extraSep'));
+        }
+        const a = document.createElement('a');
+        a.href = link.url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = link.label;
+        a.setAttribute('data-ga-event', 'cn_model_click');
+        a.setAttribute('data-ga-id', `${link.id}-band-high`);
+        desc.appendChild(a);
+      });
     }
   }
 
@@ -121,7 +138,7 @@ function finalize(total: number, hits: Hit[]) {
         `<span class="chip__icon">${signal.icon}</span>` +
         `<span>${t(`signal.${signal.id}.name`)}</span>` +
         `<b>+${contribution}</b>`;
-      hitsBox.appendChild(chip);
+      hitsBox?.appendChild(chip);
     }
   }
   const result = q('#result');
