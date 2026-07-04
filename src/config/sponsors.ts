@@ -49,7 +49,7 @@ export const SPONSORS: Sponsor[] = [
     id: 'roxy',
     name: 'Roxy浏览器',
     url: 'https://roxybrowser.com/invite/0326196A',
-    logo: '/sponsors/roxy-wordmark-500x200.png',
+    logo: '/sponsors/roxy-wordmark.jpg',
     logoWidth: 500,
     logoHeight: 200,
     headline: {
