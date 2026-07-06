@@ -45,7 +45,12 @@ export const CN_TIMEZONES = [
   'Asia/Kashgar',
 ];
 export const CLAUDE_TIMEZONES = ['Asia/Shanghai', 'Asia/Urumqi'];
-export const GREATER_CN_TIMEZONES = ['Asia/Hong_Kong', 'Asia/Macau', 'Asia/Taipei'];
+/**
+ * Hong Kong / Macau are on Anthropic's restricted-region list, so they carry
+ * partial risk. Taiwan is fully supported by Anthropic — Asia/Taipei must NOT
+ * add any score (see issue #11).
+ */
+export const GREATER_CN_TIMEZONES = ['Asia/Hong_Kong', 'Asia/Macau'];
 
 const FONTS_SC = [
   'Microsoft YaHei',
@@ -181,17 +186,35 @@ function normLangs(): string[] {
   return list.map((l) => (l || '').toLowerCase());
 }
 
-/** Pure language scoring, reused server-side against the Accept-Language header. */
+/**
+ * Pure language scoring, reused server-side against the Accept-Language header.
+ * zh-TW is Taiwan — a region Anthropic fully supports — so it contributes
+ * nothing (issue #11), including the bare "zh" fallback browsers append after
+ * it ("zh-TW, zh, en"). zh-HK / zh-MO keep partial risk (restricted regions).
+ */
 export function scoreLanguages(langs: string[]): number {
-  const list = langs.map((l) => (l || '').toLowerCase());
-  const primary = list[0] || '';
-  const isHansCN = (l: string) => l.startsWith('zh-cn') || l.includes('hans') || l === 'zh';
-  const isHant = (l: string) =>
-    l.startsWith('zh-tw') || l.startsWith('zh-hk') || l.startsWith('zh-mo') || l.includes('hant');
-  if (isHansCN(primary)) return 1;
-  if (isHant(primary)) return 0.5;
-  if (list.some(isHansCN)) return 0.7;
-  if (list.some((l) => l.startsWith('zh'))) return 0.4;
+  const list = langs.map((l) => (l || '').toLowerCase()).filter(Boolean);
+  const isTW = (l: string) => l.startsWith('zh-tw') || (l.includes('hant') && l.includes('tw'));
+  const isHKMO = (l: string) => l.startsWith('zh-hk') || l.startsWith('zh-mo');
+  const isTrad = (l: string) => isTW(l) || isHKMO(l) || l.includes('hant');
+  const firstTrad = list.findIndex(isTrad);
+  // A bare "zh" only implies Simplified/mainland when it isn't the generic
+  // fallback trailing a Traditional-Chinese preference.
+  const isHansCN = (l: string, i: number) =>
+    l.startsWith('zh-cn') ||
+    l.includes('hans') ||
+    (l === 'zh' && (firstTrad === -1 || i < firstTrad));
+
+  const kept = list
+    .map((l, i) => ({ l, i }))
+    .filter(({ l, i }) => !isTW(l) && !(l === 'zh' && firstTrad !== -1 && i > firstTrad));
+
+  const primary = kept[0];
+  if (!primary) return 0;
+  if (isHansCN(primary.l, primary.i)) return 1;
+  if (isHKMO(primary.l) || primary.l.includes('hant')) return 0.5;
+  if (kept.some(({ l, i }) => isHansCN(l, i))) return 0.7;
+  if (kept.some(({ l }) => l.startsWith('zh'))) return 0.4;
   return 0;
 }
 
@@ -210,7 +233,8 @@ function detectIntlLocale(): DetectOutcome {
   const l = locale.toLowerCase();
   let score = 0;
   if (l.startsWith('zh-cn') || l.includes('hans') || l === 'zh') score = 1;
-  else if (l.startsWith('zh')) score = 0.5;
+  // zh-TW = Taiwan (supported region) → no score; zh-HK/zh-MO keep partial risk.
+  else if (l.startsWith('zh') && !l.startsWith('zh-tw')) score = 0.5;
   return { raw: locale || 'unknown', score };
 }
 
@@ -237,7 +261,9 @@ function detectFonts(): DetectOutcome {
 
   let score = 0;
   if (sc.length >= 1) score = Math.min(1, 0.75 + 0.08 * sc.length);
-  else if (tc.length >= 1) score = 0.5;
+  // TC-only fonts are typical for Taiwan (fully supported by Anthropic) and
+  // can't distinguish TW from HK/MO — keep them below the "hit" threshold.
+  else if (tc.length >= 1) score = 0.2;
 
   const hit = [...sc, ...tc];
   const raw = hit.length ? hit.slice(0, 4).join(', ') + (hit.length > 4 ? '…' : '') : 'none detected';
