@@ -13,14 +13,14 @@ export const defaultLang: Lang = 'en';
 
 export const ui = {
   en: {
-    'meta.title': 'Fuck Claude | Are You a Claude "China User"?',
+    'meta.title': 'Claude Check | Are You a Claude "China User"?',
     'meta.description':
       'One-click check of your browser timezone, language, Chinese fonts and locale to see if Claude Code would flag you as a China user. 100% local, nothing uploaded.',
 
-    'nav.title': 'Fuck Claude',
+    'nav.title': 'Claude Check',
     'credit': 'Built with Claude Fable 5',
 
-    'hero.title': 'Are you a Claude “China user”?',
+    'hero.title': 'Are you a Claude "China user"?',
     'hero.badge.local': '100% local scan',
     'hero.badge.noUpload': 'Results never uploaded',
     'hero.badge.openSource': 'Open source',
@@ -33,11 +33,11 @@ export const ui = {
     'cnModels.slogan': 'Chinese models are simply better',
 
     'band.low.title': 'Low risk',
-    'band.low.desc': '🐶You are not a “Claude China user”🐶',
+    'band.low.desc': '🐶 You are not a "Claude China user" 🐶',
     'band.medium.title': 'Medium risk',
-    'band.medium.desc': '🐶You are probably a “Claude China user”🐶',
+    'band.medium.desc': '🐶 You are probably a "Claude China user" 🐶',
     'band.high.title': 'High risk',
-    'band.high.desc': '🐶You are definitely a “Claude China user”🐶',
+    'band.high.desc': '🐶 You are definitely a "Claude China user" 🐶',
     'band.high.extra': 'But you still have',
     'band.high.extraSep': ', ',
     'band.high.extraSepLast': ' and ',
@@ -79,7 +79,7 @@ export const ui = {
 
     'how.title': 'How the check works',
     'how.p1':
-      'When Claude Code is pointed at a proxy endpoint via ANTHROPIC_BASE_URL, public reverse-engineering reports found it reads your operating-system timezone and the proxy hostname, then hides the verdict inside the system prompt with Unicode steganography — the date separator and four look-alike apostrophes in the “Today’s date” line encode whether you look like a China user.',
+      'When Claude Code is pointed at a proxy endpoint via ANTHROPIC_BASE_URL, public reverse-engineering reports found it reads your operating-system timezone and the proxy hostname, then hides the verdict inside the system prompt with Unicode steganography — the date separator and four look-alike apostrophes in the "Today\'s date" line encode whether you look like a China user.',
     'how.p2':
       'A web page cannot read everything Claude Code can, but the key signal is identical: this tool reads the same OS timezone, then adds eight more browser-visible fingerprints — UI language, Chinese fonts, Chinese vendor fonts, Chinese browsers, device brand, Intl locale, UTC+8 offset and emoji style — into a weighted score. Signals scoring ≥0.25 count as hits; bands are Low 0–30, Medium 31–60, High 61–100.',
     'ui.weight': 'Weight',
@@ -90,7 +90,7 @@ export const ui = {
       'According to public reverse-engineering reports, when Claude Code talks to a non-official endpoint it reads the OS timezone and proxy hostname, and steganographically encodes the result into its system prompt. The timezone this page reads via Intl.DateTimeFormat is the very same OS timezone.',
     'faq.q2': 'Is this score the exact check Claude runs?',
     'faq.a2':
-      'No. Only the system timezone maps one-to-one onto Claude’s reported mechanism. The other eight signals are common Chinese-environment fingerprints that correlate with it, so treat the score as an estimate, not a verdict.',
+      'No. Only the system timezone maps one-to-one onto Claude\'s reported mechanism. The other eight signals are common Chinese-environment fingerprints that correlate with it, so treat the score as an estimate, not a verdict.',
     'faq.q3': 'How do I lower my score?',
     'faq.a3':
       'Switch your OS timezone away from China zones such as Asia/Shanghai, move zh-CN off the top of your browser language list, and avoid routing Claude Code through proxies whose hostnames contain flagged domains or AI-lab keywords.',
@@ -121,7 +121,7 @@ export const ui = {
     'share.save': 'Save result image',
     'share.saved': 'Saved!',
     'share.text':
-      'I scored {score}/100 on the “Am I a Claude China User?” test — {verdict}! 🐶 Check yours:',
+      'I scored {score}/100 on the "Am I a Claude China User?" test — {verdict}! 🐶 Check yours:',
     'share.to.x': 'Share on X',
     'share.to.weibo': 'Share on Weibo',
     'share.to.telegram': 'Share on Telegram',
@@ -142,11 +142,11 @@ export const ui = {
   },
 
   zh: {
-    'meta.title': 'Fuck Claude ｜ 你是「Claude 中国用户」吗',
+    'meta.title': 'Claude 检测 ｜ 你是「Claude 中国用户」吗',
     'meta.description':
       '一键检测浏览器时区、语言、中文字体与 locale 等信号,评估你是否会被 Claude Code 判定为中国用户并有封号风险。纯本地运行,零数据上传。',
 
-    'nav.title': 'Fuck Claude',
+    'nav.title': 'Claude 检测',
     'credit': '此网站使用 Claude Fable 5 开发',
 
     'hero.title': '你是「Claude 中国用户」吗',
@@ -162,11 +162,11 @@ export const ui = {
     'cnModels.slogan': '模型还是中国的好',
 
     'band.low.title': '低风险',
-    'band.low.desc': '🐶你不是「Claude 中国用户」🐶',
+    'band.low.desc': '🐶 你不是「Claude 中国用户」🐶',
     'band.medium.title': '中等风险',
-    'band.medium.desc': '🐶你可能是「Claude 中国用户」🐶',
+    'band.medium.desc': '🐶 你可能是「Claude 中国用户」🐶',
     'band.high.title': '高风险',
-    'band.high.desc': '🐶你绝对是「Claude 中国用户」🐶',
+    'band.high.desc': '🐶 你绝对是「Claude 中国用户」🐶',
     'band.high.extra': '但是你还有',
     'band.high.extraSep': '、',
     'band.high.extraSepLast': ' 和 ',
@@ -204,7 +204,7 @@ export const ui = {
 
     'how.title': '检测原理',
     'how.p1':
-      '当 Claude Code 通过 ANTHROPIC_BASE_URL 指向中转端点时,据公开逆向分析,它会读取操作系统时区与中转 hostname,再把结果用 Unicode 隐写术藏进 system prompt:「Today’s date」那一行的日期分隔符和 4 种几乎一样的撇号变体,编码了你是否像中国用户。',
+      '当 Claude Code 通过 ANTHROPIC_BASE_URL 指向中转端点时,据公开逆向分析,它会读取操作系统时区与中转 hostname,再把结果用 Unicode 隐写术藏进 system prompt:「Today\'s date」那一行的日期分隔符和 4 种几乎一样的撇号变体,编码了你是否像中国用户。',
     'how.p2':
       '网页读不到 Claude Code 能读的全部信息,但关键信号完全一致:本工具读取同一个系统时区,再叠加浏览器语言、中文字体、国产厂商字体、国产浏览器、设备品牌、Intl locale、UTC+8 偏移与 emoji 风格八项指纹,加权得分。得分 ≥0.25 计为命中;分档:低 0–30、中 31–60、高 61–100。',
     'ui.weight': '权重',
