@@ -1,10 +1,49 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="14" fill="#D97757"/>
-  <g fill="#FAF9F5">
-    <rect x="26.9" y="8" width="7.6" height="29" rx="3.8"/>
-    <rect x="18.9" y="24.5" width="6.4" height="11" rx="3.2"/>
-    <rect x="36.1" y="24.5" width="6.4" height="11" rx="3.2"/>
-    <rect x="16.9" y="30" width="27.6" height="24" rx="9"/>
-    <rect x="40.6" y="32.5" width="7.6" height="16" rx="3.8" transform="rotate(-24 44.4 40.5)"/>
-  </g>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8825A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C96A45;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.95" />
+      <stop offset="100%" style="stop-color:#F0EDE8;stop-opacity:0.95" />
+    </linearGradient>
+  </defs>
+
+  <!-- 圆角矩形背景 -->
+  <rect width="64" height="64" rx="14" fill="url(#bgGrad)"/>
+
+  <!-- 盾牌轮廓 -->
+  <path d="M32 10 L46 16 L46 30 C46 40 40 48 32 53 C24 48 18 40 18 30 L18 16 Z"
+        fill="url(#shieldGrad)"
+        stroke="#E8DDD0"
+        stroke-width="1.2"/>
+
+  <!-- 盾牌上的对勾 -->
+  <path d="M25 32 L30 38 L41 25"
+        stroke="#D97757"
+        stroke-width="4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"/>
+
+  <!-- 对勾上的小高光 -->
+  <path d="M27 33 L31 38 L39.5 27.5"
+        stroke="#FFFFFF"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+        opacity="0.3"/>
+
+  <!-- 右上角小装饰点 -->
+  <circle cx="48" cy="14" r="3" fill="#FAF9F5" opacity="0.4"/>
+  <circle cx="48" cy="14" r="1.5" fill="#FFFFFF" opacity="0.6"/>
+
+  <!-- 左下角小装饰点 -->
+  <circle cx="16" cy="50" r="2" fill="#FAF9F5" opacity="0.25"/>
+
+  <!-- 底部文字标记 -->
+  <rect x="23" y="50" width="18" height="2.5" rx="1.25" fill="#FAF9F5" opacity="0.3"/>
+  <rect x="26" y="54.5" width="12" height="1.5" rx="0.75" fill="#FAF9F5" opacity="0.2"/>
 </svg>
