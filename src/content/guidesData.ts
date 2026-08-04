@@ -301,7 +301,7 @@ export HTTP_PROXY="http://127.0.0.1:7890"
 export HTTPS_PROXY="http://127.0.0.1:7890"</code></pre>
 
 <h2>2. Selecting API Relay Gateways</h2>
-<p>If direct access to <code>api.anthropic.com</code> is constrained, selecting reliable API gateways (e.g., Ergou API, Geek2API) ensures high availability without unexpected account blocks:</p>
+<p>If direct access to <code>api.anthropic.com</code> is constrained, selecting reliable API gateways ensures high availability without unexpected account blocks:</p>
 
 <ul>
   <li><strong>Prompt Cache Preservation:</strong> Ensure the gateway supports Anthropic prompt caching headers (<code>anthropic-beta: prompt-caching-2024-01-26</code>). Poorly implemented relays strip caching headers, causing input token costs to surge 4x to 10x.</li>
@@ -342,7 +342,7 @@ export HTTP_PROXY="http://127.0.0.1:7890"
 export HTTPS_PROXY="http://127.0.0.1:7890"</code></pre>
 
 <h2>二、 第三方 API 中转网关选型规范</h2>
-<p>在直连 <code>api.anthropic.com</code> 困难的场景下，选择优质 API 中转网关（如二狗 API、Geek2API 等）需关注以下维度：</p>
+<p>在直连 <code>api.anthropic.com</code> 困难的场景下，选择优质 API 中转网关需关注以下维度：</p>
 
 <ul>
   <li><strong>完整支持 Prompt Cache：</strong> 确保中转网关完整透传 Anthropic 的 Prompt Caching 请求头（<code>anthropic-beta: prompt-caching-2024-01-26</code>）。劣质中转丢弃 Cache 请求头会导致长上下文对话 Token 消耗暴增 4 到 10 倍。</li>

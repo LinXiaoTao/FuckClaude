@@ -26,34 +26,11 @@ export interface Sponsor {
 
 export const SPONSORS: Sponsor[] = [
   {
-    id: 'ergou',
-    name: '二狗 API',
-    url: {
-      zh: 'https://ergouapi.com/r/gh-fuckclaude',
-      en: 'https://ergouapi.com/r/gh-fuckclaude',
-    },
-    logo: '/sponsors/ergou-wordmark-340x112.png',
-    logoWidth: 340,
-    logoHeight: 112,
-    headline: {
-      zh: '接入二狗，稳如老狗。',
-      en: 'The rock-solid AI API gateway.',
-    },
-    tagline: {
-      zh: '全站 0.1x~0.2x 超低倍率，Claude/GPT/Gemini 等 100% 纯血大模型接口，顶级 IPLC 线路稳定低延迟',
-      en: 'Ultra-low 0.1x–0.2x rates for 100% genuine Claude / GPT / Gemini endpoints over premium IPLC routes',
-    },
-    cta: {
-      zh: '快来试试',
-      en: 'Try it now',
-    },
-  },
-  {
     id: 'roxy',
     name: 'Roxy浏览器',
     url: {
-      zh: 'https://roxybrowser.cn/invite/0326196A',
-      en: 'https://roxybrowser.com/invite/0326196A',
+      zh: 'https://roxybrowser.cn/invite/A4YZ2O',
+      en: 'https://roxybrowser.cn/invite/A4YZ2O',
     },
     logo: '/sponsors/roxy-wordmark.jpg',
     logoWidth: 500,
@@ -69,29 +46,6 @@ export const SPONSORS: Sponsor[] = [
     cta: {
       zh: '免费使用',
       en: 'Use for free',
-    },
-  },
-  {
-    id: 'geek2api',
-    name: 'Geek2API',
-    url: {
-      zh: 'https://hk.geek2api.com?ref=fuckclaude',
-      en: 'https://hk.geek2api.com?ref=fuckclaude',
-    },
-    logo: '/sponsors/geek2api-wordmark-340x108.jpg',
-    logoWidth: 340,
-    logoHeight: 108,
-    headline: {
-      zh: '高校企业都在选择的超低倍率中转站。',
-      en: 'The ultra-low-rate AI gateway universities & enterprises pick.',
-    },
-    tagline: {
-      zh: 'Claude / GPT / Gemini / Image2 全模型接入，可开发票',
-      en: 'Full Claude / GPT / Gemini / Image2 access, invoices available',
-    },
-    cta: {
-      zh: '立即体验',
-      en: 'Try it now',
     },
   },
   {
