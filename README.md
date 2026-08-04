@@ -39,20 +39,28 @@ Claude's real check. The other signals are general "Chinese environment" fingerp
 
 | Signal | Weight | How it's detected |
 | --- | --- | --- |
-| System timezone | 26 | `Intl.DateTimeFormat().resolvedOptions().timeZone` vs. `Asia/Shanghai`, `Asia/Urumqi`, … (**used by Claude**) |
-| Browser language | 20 | `navigator.language(s)`; `zh-CN` / `zh-Hans` scores highest |
-| Installed Chinese fonts | 16 | Canvas width-probing for SC/TC fonts (Microsoft YaHei, PingFang SC, …) |
+| System timezone | 24 | `Intl.DateTimeFormat().resolvedOptions().timeZone` vs. `Asia/Shanghai`, `Asia/Urumqi`, … (**used by Claude**) |
+| Browser language | 18 | `navigator.language(s)`; `zh-CN` / `zh-Hans` scores highest |
+| Installed Chinese fonts | 14 | Canvas width-probing for SC/TC fonts (Microsoft YaHei, PingFang SC, …) |
 | Chinese vendor fonts | 10 | Canvas probing for vendor/software faces (MiSans, HarmonyOS Sans, OPPO Sans, WPS Founder FZ\*, …) — any hit is a strong tell |
+| WebRTC IP leak | 10 | `RTCPeerConnection` ICE candidates via STUN — local / real public IP leaks |
 | Chinese browser / WebView | 8 | UA + UA-CH brands vs. WeChat, QQ, Quark, UC, Baidu, 360, Sogou, Douyin … |
 | Chinese-brand device | 6 | UA-CH high-entropy `model` (`navigator.userAgentData`) + UA vs. HarmonyOS, Huawei, Xiaomi, OPPO, vivo, … |
-| Intl locale | 6 | `Intl` resolved locale (date/number formatting) |
-| Timezone offset | 4 | `getTimezoneOffset() === -480` (UTC+8) |
-| Emoji rendering style | 4 | OS-vendor guess from platform/UA; weakly correlated |
+| Intl locale | 4 | `Intl` resolved locale (date/number formatting) |
+| Timezone offset | 3 | `getTimezoneOffset() === -480` (UTC+8) |
+| Emoji rendering style | 3 | OS-vendor guess from platform/UA; weakly correlated |
 
-Each signal returns a `0–1` "China-like" score, multiplied by its weight; the nine
+Each signal returns a `0–1` "China-like" score, multiplied by its weight; the ten
 weights sum to **100**, so the total score is the sum of contributions. Bands: Low
 `0–30`, Medium `31–60`, High `61–100`. A signal counts as a "hit" when its score
 ≥ 0.25.
+
+## Anti-Ban Guides
+
+Bilingual knowledge base at [`/guides/`](https://fuck-claude.vercel.app/guides/)
+(English) and [`/zh/guides/`](https://fuck-claude.vercel.app/zh/guides/) (中文):
+Claude Code steganography, environment cleanup, registration & payment, API
+safety, appeal SOP, and domestic / open-source failover.
 
 ## Share & API
 
@@ -66,9 +74,9 @@ weights sum to **100**, so the total score is the sum of contributions. Bands: L
   scores what the request exposes — the Vercel geo timezone
   (`x-vercel-ip-timezone`), country, the `Accept-Language` header and the
   User-Agent (emoji vendor + Chinese browser + Chinese device brand) — over
-  the measurable 68/100 of the weight (Chinese fonts, vendor fonts and Intl
-  locale are browser-only) and normalises it to 0–100, reusing the exact same
-  scorers as the browser scan. The response language follows your
+  the measurable 62/100 of the weight (Chinese fonts, vendor fonts, Intl
+  locale and WebRTC leaks are browser-only) and normalises it to 0–100, reusing
+  the exact same scorers as the browser scan. The response language follows your
   `Accept-Language` header automatically.
 
 ```bash
@@ -100,15 +108,17 @@ curl "https://fuck-claude.vercel.app/api/check?format=json"
 ```
 src/
 ├── config/signals.ts    # signal definitions, weights, detectors, icons
+├── config/guides.ts     # anti-ban guide catalog (slug, category, summary)
 ├── config/sponsors.ts   # sponsor list (logo, link, EN/ZH taglines)
 ├── config/cn-models.ts  # domestic-model picks (DeepSeek / GLM / Kimi name-only links)
 ├── config/socials.ts    # header social profiles (Xiaohongshu / Douyin / X) + QR payloads
+├── content/guidesData.ts # full bilingual guide article bodies
 ├── i18n/ui.ts           # EN/ZH copy dictionary + translator
 ├── scripts/detect.ts    # animated scan + scoring + verdict + share wiring (client)
 ├── scripts/track.ts     # GA click tracking for outbound promo links
 ├── layouts/BaseLayout.astro  # <head> SEO + GA + global styles
 ├── components/          # Detector (+ share buttons), Sponsors, CnModels, ScoreRing, Mascot, LangToggle, SocialLinks (QR popovers), Footer
-└── pages/               # index.astro (en) + zh/index.astro + api/check.ts (curl/HTTP endpoint)
+└── pages/               # index.astro (en) + zh/index.astro + guides/ + zh/guides/ + api/check.ts
 public/mascot/           # cartoon CEO state images (doze / search / low / medium / high)
 public/sponsors/         # sponsor logos
 scripts/
@@ -195,22 +205,29 @@ Claude Code 标记为中国用户。点击后会有逐项检测的扫描动效,�
 
 | 信号 | 权重 | 检测方式 |
 | --- | --- | --- |
-| 系统时区 | 26 | `Intl.DateTimeFormat().resolvedOptions().timeZone` 对比 `Asia/Shanghai`、`Asia/Urumqi` 等(**Claude 实际使用**) |
-| 浏览器语言 | 20 | `navigator.language(s)`;`zh-CN` / `zh-Hans` 得分最高 |
-| 已安装中文字体 | 16 | canvas 宽度探测简/繁体中文字体(微软雅黑、PingFang SC 等) |
+| 系统时区 | 24 | `Intl.DateTimeFormat().resolvedOptions().timeZone` 对比 `Asia/Shanghai`、`Asia/Urumqi` 等(**Claude 实际使用**) |
+| 浏览器语言 | 18 | `navigator.language(s)`;`zh-CN` / `zh-Hans` 得分最高 |
+| 已安装中文字体 | 14 | canvas 宽度探测简/繁体中文字体(微软雅黑、PingFang SC 等) |
 | 国产厂商字体 | 10 | canvas 探测厂商 / 软件字体(MiSans、鸿蒙黑体、OPPO Sans、WPS 方正 FZ\* 等),命中即强信号 |
+| WebRTC IP 泄露 | 10 | `RTCPeerConnection` 经 STUN 收集 ICE 候选,探测本机 / 真实公网 IP 泄露 |
 | 国产浏览器 / WebView | 8 | UA + UA-CH brands 匹配微信、QQ、夸克、UC、百度、360、搜狗、抖音等 |
 | 国产品牌设备 | 6 | UA-CH 高熵 `model`(`navigator.userAgentData`)+ UA 匹配鸿蒙、华为、小米、OPPO、vivo 等 |
-| Intl 区域设置 | 6 | `Intl` 解析出的 locale(日期 / 数字格式) |
-| 时区偏移 | 4 | `getTimezoneOffset() === -480`(UTC+8) |
-| Emoji 渲染风格 | 4 | 由平台 / UA 推断 OS 厂商,弱相关 |
+| Intl 区域设置 | 4 | `Intl` 解析出的 locale(日期 / 数字格式) |
+| 时区偏移 | 3 | `getTimezoneOffset() === -480`(UTC+8) |
+| Emoji 渲染风格 | 3 | 由平台 / UA 推断 OS 厂商,弱相关 |
 
-每个信号输出 `0–1` 的「中国相似度」,乘以权重;九项权重合计为 **100**,所以总分即各项
+每个信号输出 `0–1` 的「中国相似度」,乘以权重;十项权重合计为 **100**,所以总分即各项
 贡献之和。分档:低 `0–30`、中 `31–60`、高 `61–100`。信号得分 ≥ 0.25 记为「命中」。
 
 > 台湾不在 Anthropic 的封禁名单内,因此 `Asia/Taipei` 时区与 `zh-TW` 语言 / locale
 > **不计分**;繁体中文字体只保留极低的模糊分(无法区分台湾与港澳)。香港、澳门
 > 属于受限地区,相关信号保留部分风险分。
+
+## 防封指南资料库
+
+中英双语资料库:[`/guides/`](https://fuck-claude.vercel.app/guides/)(英文)与
+[`/zh/guides/`](https://fuck-claude.vercel.app/zh/guides/)(中文),覆盖 Claude Code
+隐写原理、环境纯化、注册支付避坑、API 安全、申诉 SOP 与国产 / 开源灾备。
 
 ## 分享与 API
 
@@ -220,8 +237,8 @@ Claude Code 标记为中国用户。点击后会有逐项检测的扫描动效,�
 - **curl / HTTP 接口** —— 网站是静态的,但 `/api/check` 是一个极小的 Vercel Function,
   为终端与脚本返回服务端估算。它基于请求可见的信息评分 —— Vercel 归属地时区
   (`x-vercel-ip-timezone`)、国家、`Accept-Language` 头与 User-Agent(emoji 厂商 +
-  国产浏览器 + 国产品牌设备)—— 在可检测的 68/100 权重上(中文字体、厂商字体与
-  Intl locale 仅浏览器可测)归一化到 0–100,复用与浏览器扫描完全一致的评分器。
+  国产浏览器 + 国产品牌设备)—— 在可检测的 62/100 权重上(中文字体、厂商字体、
+  Intl locale 与 WebRTC 泄露仅浏览器可测)归一化到 0–100,复用与浏览器扫描完全一致的评分器。
   响应语言会自动跟随你的 `Accept-Language` 请求头。
 
 ```bash
@@ -253,15 +270,17 @@ curl "https://fuck-claude.vercel.app/api/check?format=json"
 ```
 src/
 ├── config/signals.ts    # 信号定义、权重、检测函数、图标
+├── config/guides.ts     # 防封指南目录(slug、分类、摘要)
 ├── config/sponsors.ts   # 赞助商列表(logo、链接、中英文案)
 ├── config/cn-models.ts  # 国产模型推荐(DeepSeek / GLM / Kimi 纯文字链接)
 ├── config/socials.ts    # 头部社交主页(小红书 / 抖音 / X)+ 二维码内容
+├── content/guidesData.ts # 防封指南双语正文
 ├── i18n/ui.ts           # 中英文案字典 + 取值 helper
 ├── scripts/detect.ts    # 扫描动效 + 打分 + 结论 + 分享逻辑(客户端)
 ├── scripts/track.ts     # 出站推广链接的 GA 点击埋点
 ├── layouts/BaseLayout.astro  # <head> SEO + GA + 全局样式
 ├── components/          # Detector(含分享按钮)、Sponsors、CnModels、ScoreRing、Mascot、LangToggle、SocialLinks(二维码浮层)、Footer
-└── pages/               # index.astro(英)+ zh/index.astro + api/check.ts(curl/HTTP 接口)(中)
+└── pages/               # index.astro(英)+ zh/index.astro + guides/ + zh/guides/ + api/check.ts
 public/mascot/           # 卡通 CEO 各状态图(打瞌睡 / 检测中 / 低 / 中 / 高风险)
 public/sponsors/         # 赞助商 logo
 scripts/

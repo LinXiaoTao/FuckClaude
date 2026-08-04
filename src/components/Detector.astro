@@ -1,6 +1,7 @@
 ---
 import { useTranslations, type Lang } from '../i18n/ui';
 import { SIGNALS } from '../config/signals';
+import { GUIDES } from '../config/guides';
 import LangToggle from './LangToggle.astro';
 import ScoreRing from './ScoreRing.astro';
 import Mascot from './Mascot.astro';
@@ -41,6 +42,14 @@ const apiExamples = [
       <span class="brand__text">{t('nav.title')}</span>
     </a>
     <nav class="nav__actions">
+      <a class="nav__link" href={lang === 'zh' ? '/zh/guides/' : '/guides/'}>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+          <path d="M6 6h10"></path>
+          <path d="M6 10h10"></path>
+        </svg>
+        <span>{t('nav.guides')}</span>
+      </a>
       <LangToggle lang={lang} />
       <SocialLinks lang={lang} />
       <a
@@ -205,6 +214,29 @@ const apiExamples = [
     </div>
   </section>
 
+  <section id="guides-sec" aria-labelledby="guides-title">
+    <div class="section-head" style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+      <div>
+        <h2 id="guides-title">{t('guides.title')}</h2>
+        <p>{t('guides.sub')}</p>
+      </div>
+      <a class="nav__link" href={lang === 'zh' ? '/zh/guides/' : '/guides/'}>
+        <span>{t('guides.readMore')} →</span>
+      </a>
+    </div>
+    <div class="guides-showcase">
+      {
+        GUIDES.slice(0, 3).map((guide) => (
+          <a class="guide-box" href={lang === 'zh' ? `/zh/guides/${guide.slug}/` : `/guides/${guide.slug}/`}>
+            <h3>{guide.title[lang]}</h3>
+            <p>{guide.summary[lang]}</p>
+            <span class="guide-box__more">{t('guides.readMore')} →</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
   <CnModels lang={lang} />
 
   <section id="faq-sec" aria-labelledby="faq-title">
@@ -332,5 +364,54 @@ const apiExamples = [
     width: 14px;
     height: 14px;
     flex: none;
+  }
+
+  /* ---------- guides showcase ---------- */
+  .guides-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+  }
+  .guide-box {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    color: var(--text);
+    transition:
+      transform 0.18s,
+      border-color 0.18s,
+      box-shadow 0.18s;
+  }
+  .guide-box:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    box-shadow: var(--shadow-md);
+  }
+  .guide-box h3 {
+    font-size: 1.05rem;
+    margin: 0 0 8px;
+    line-height: 1.35;
+    color: var(--text);
+  }
+  .guide-box:hover h3 {
+    color: var(--accent-strong);
+  }
+  .guide-box p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin: 0 0 14px;
+    line-height: 1.5;
+    flex: 1;
+  }
+  .guide-box__more {
+    font-size: 0.82rem;
+    font-weight: 650;
+    color: var(--accent-strong);
   }
 </style>

@@ -9,10 +9,10 @@
  *   - `accept-language`       — browser/UA language preferences
  *   - `user-agent`            — OS/vendor guess for the emoji signal
  *
- * Fonts (Chinese + vendor faces) and Intl locale are browser-only, so the
- * score is computed over the measurable weight (68/100) and normalised to
- * 0–100. It reuses the exact same pure scorers as the client so results stay
- * consistent.
+ * Fonts (Chinese + vendor faces), Intl locale and WebRTC IP leak are
+ * browser-only, so the score is computed over the measurable weight (62/100)
+ * and normalised to 0–100. It reuses the exact same pure scorers as the client
+ * so results stay consistent.
  *
  * Response format:
  *   - default (curl, browser, …)                      → pretty plain-text report
@@ -215,8 +215,8 @@ function jsonBody(a: Analysis, lang: Lang) {
     signals: a.signals,
     note:
       lang === 'zh'
-        ? '基于 IP 归属地与请求头的服务端估算,与浏览器端读取操作系统的检测结果可能不同;中文字体、厂商字体与 Intl locale 只能在浏览器里检测。'
-        : 'Server-side estimate from IP geo + request headers; it can differ from the in-browser OS scan. Chinese fonts, vendor fonts and Intl locale can only be measured in a browser.',
+        ? '基于 IP 归属地与请求头的服务端估算,与浏览器端读取操作系统的检测结果可能不同;中文字体、厂商字体、Intl locale 与 WebRTC 泄露只能在浏览器里检测。'
+        : 'Server-side estimate from IP geo + request headers; it can differ from the in-browser OS scan. Chinese fonts, vendor fonts, Intl locale and WebRTC leaks can only be measured in a browser.',
     docs: lang === 'zh' ? `${SITE}/zh/` : `${SITE}/`,
   };
 }

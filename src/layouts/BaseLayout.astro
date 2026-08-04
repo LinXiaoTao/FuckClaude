@@ -4,57 +4,88 @@ import { useTranslations, type Lang } from '../i18n/ui';
 interface Props {
   lang: Lang;
   path: string;
+  /** Optional page title override (defaults to homepage meta). */
+  title?: string;
+  /** Optional meta description override. */
+  description?: string;
+  /** English alternate path for hreflang (defaults to `/`). */
+  enPath?: string;
+  /** Chinese alternate path for hreflang (defaults to `/zh/`). */
+  zhPath?: string;
+  /** When true, skip homepage FAQ JSON-LD (guide pages). */
+  omitFaq?: boolean;
 }
 
-const { lang, path } = Astro.props;
+const {
+  lang,
+  path,
+  title: titleProp,
+  description: descriptionProp,
+  enPath = '/',
+  zhPath = '/zh/',
+  omitFaq = false,
+} = Astro.props;
 const t = useTranslations(lang);
 
 const site = Astro.site ?? new URL('https://fuck-claude.vercel.app');
 const canonical = new URL(path, site).href;
-const enUrl = new URL('/', site).href;
-const zhUrl = new URL('/zh/', site).href;
+const enUrl = new URL(enPath, site).href;
+const zhUrl = new URL(zhPath, site).href;
 const ogImage = new URL('/og.png', site).href;
 
 const htmlLang = lang === 'zh' ? 'zh-CN' : 'en';
 const ogLocale = lang === 'zh' ? 'zh_CN' : 'en_US';
 
-const title = t('meta.title');
-const description = t('meta.description');
+const title = titleProp ?? t('meta.title');
+const description = descriptionProp ?? t('meta.description');
 
 const GA_ID = 'G-S19V74WZZJ';
 
-const faq = [1, 2, 3, 4].map((i) => ({
-  '@type': 'Question',
-  name: t(`faq.q${i}`),
-  acceptedAnswer: { '@type': 'Answer', text: t(`faq.a${i}`) },
-}));
+const faq = omitFaq
+  ? []
+  : [1, 2, 3, 4].map((i) => ({
+      '@type': 'Question',
+      name: t(`faq.q${i}`),
+      acceptedAnswer: { '@type': 'Answer', text: t(`faq.a${i}`) },
+    }));
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
-    {
-      '@type': 'WebApplication',
-      name: t('nav.title'),
-      url: canonical,
-      description,
-      applicationCategory: 'SecurityApplication',
-      operatingSystem: 'All',
-      inLanguage: htmlLang,
-      image: ogImage,
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-      featureList: [
-        t('signal.timezone.name'),
-        t('signal.language.name'),
-        t('signal.fonts.name'),
-        t('signal.vendorFonts.name'),
-        t('signal.cnBrowser.name'),
-        t('signal.deviceVendor.name'),
-        t('signal.intlLocale.name'),
-        t('signal.timezoneOffset.name'),
-        t('signal.emoji.name'),
-      ],
-    },
-    { '@type': 'FAQPage', mainEntity: faq },
+    omitFaq
+      ? {
+          '@type': 'WebPage',
+          name: title,
+          url: canonical,
+          description,
+          inLanguage: htmlLang,
+          image: ogImage,
+          isPartOf: { '@type': 'WebSite', name: t('nav.title'), url: new URL('/', site).href },
+        }
+      : {
+          '@type': 'WebApplication',
+          name: t('nav.title'),
+          url: canonical,
+          description,
+          applicationCategory: 'SecurityApplication',
+          operatingSystem: 'All',
+          inLanguage: htmlLang,
+          image: ogImage,
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+          featureList: [
+            t('signal.timezone.name'),
+            t('signal.language.name'),
+            t('signal.fonts.name'),
+            t('signal.vendorFonts.name'),
+            t('signal.webrtcLeak.name'),
+            t('signal.cnBrowser.name'),
+            t('signal.deviceVendor.name'),
+            t('signal.intlLocale.name'),
+            t('signal.timezoneOffset.name'),
+            t('signal.emoji.name'),
+          ],
+        },
+    ...(faq.length ? [{ '@type': 'FAQPage', mainEntity: faq }] : []),
   ],
 };
 ---
@@ -272,6 +303,27 @@ const jsonLd = {
         background: var(--accent);
         color: #fff;
         font-weight: 650;
+      }
+      .nav__link {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 12px;
+        border-radius: 999px;
+        font-size: 0.84rem;
+        font-weight: 600;
+        color: var(--muted);
+        border: 1px solid var(--border-strong);
+        background: var(--surface);
+        transition:
+          color 0.18s,
+          border-color 0.18s,
+          background 0.18s;
+      }
+      .nav__link:hover {
+        color: var(--accent-strong);
+        border-color: var(--accent);
+        text-decoration: none;
       }
       /* Bordered icon buttons — one shared style for GitHub + social icons. */
       .icon-link {

@@ -15,6 +15,7 @@ export type SignalId =
   | 'vendorFonts'
   | 'cnBrowser'
   | 'deviceVendor'
+  | 'webrtcLeak'
   | 'emoji';
 
 export interface DetectOutcome {
@@ -356,6 +357,55 @@ function detectEmoji(): DetectOutcome {
   return { raw: `${vendor} style`, score };
 }
 
+function detectWebrtcLeak(): Promise<DetectOutcome> {
+  return new Promise((resolve) => {
+    if (typeof window === 'undefined' || !window.RTCPeerConnection) {
+      resolve({ raw: 'no leak detected', score: 0 });
+      return;
+    }
+
+    let resolved = false;
+    const ips: string[] = [];
+    let pc: RTCPeerConnection | null = null;
+
+    const finish = () => {
+      if (resolved) return;
+      resolved = true;
+      try {
+        if (pc) pc.close();
+      } catch {}
+
+      if (ips.length === 0) {
+        resolve({ raw: 'no leak detected', score: 0 });
+      } else {
+        const raw = ips.slice(0, 2).join(', ');
+        resolve({ raw: `candidate leak (${raw})`, score: 0.5 });
+      }
+    };
+
+    try {
+      pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+      pc.onicecandidate = (e) => {
+        if (!e.candidate || !e.candidate.candidate) {
+          finish();
+          return;
+        }
+        const match = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/i.exec(e.candidate.candidate);
+        if (match && match[1] && !ips.includes(match[1])) {
+          ips.push(match[1]);
+        }
+      };
+
+      pc.createDataChannel('');
+      pc.createOffer().then((sdp) => pc?.setLocalDescription(sdp)).catch(() => finish());
+    } catch {
+      finish();
+    }
+
+    setTimeout(finish, 1000);
+  });
+}
+
 const ICON = {
   clock:
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
@@ -372,20 +422,23 @@ const ICON = {
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 17.5h2"/></svg>',
   sliders:
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16M4 16h16"/><circle cx="9" cy="8" r="2.2"/><circle cx="15" cy="16" r="2.2"/></svg>',
+  shield:
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
   smile:
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5s1.4 2 3.5 2 3.5-2 3.5-2"/><path d="M9 9.5h.01M15 9.5h.01"/></svg>',
 };
 
 export const SIGNALS: SignalDef[] = [
-  { id: 'timezone', weight: 26, claudeUsed: true, icon: ICON.clock, detect: detectTimezone },
-  { id: 'language', weight: 20, icon: ICON.globe, detect: detectLanguage },
-  { id: 'fonts', weight: 16, icon: ICON.type, detect: detectFonts },
+  { id: 'timezone', weight: 24, claudeUsed: true, icon: ICON.clock, detect: detectTimezone },
+  { id: 'language', weight: 18, icon: ICON.globe, detect: detectLanguage },
+  { id: 'fonts', weight: 14, icon: ICON.type, detect: detectFonts },
   { id: 'vendorFonts', weight: 10, icon: ICON.typeBox, detect: detectVendorFonts },
+  { id: 'webrtcLeak', weight: 10, icon: ICON.shield, detect: detectWebrtcLeak },
   { id: 'cnBrowser', weight: 8, icon: ICON.compass, detect: detectCnBrowser },
   { id: 'deviceVendor', weight: 6, icon: ICON.phone, detect: detectDeviceVendor },
-  { id: 'intlLocale', weight: 6, icon: ICON.sliders, detect: detectIntlLocale },
-  { id: 'timezoneOffset', weight: 4, icon: ICON.clockOffset, detect: detectTimezoneOffset },
-  { id: 'emoji', weight: 4, icon: ICON.smile, detect: detectEmoji },
+  { id: 'intlLocale', weight: 4, icon: ICON.sliders, detect: detectIntlLocale },
+  { id: 'timezoneOffset', weight: 3, icon: ICON.clockOffset, detect: detectTimezoneOffset },
+  { id: 'emoji', weight: 3, icon: ICON.smile, detect: detectEmoji },
 ];
 
 export type RiskBand = 'low' | 'medium' | 'high';

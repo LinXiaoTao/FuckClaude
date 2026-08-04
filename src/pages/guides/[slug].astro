@@ -1,0 +1,207 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LangToggle from '../../components/LangToggle.astro';
+import SocialLinks from '../../components/SocialLinks.astro';
+import Footer from '../../components/Footer.astro';
+import { GUIDES } from '../../config/guides';
+import { ARTICLES_DATA } from '../../content/guidesData';
+import { useTranslations } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return GUIDES.map((guide) => ({
+    params: { slug: guide.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const guide = GUIDES.find((g) => g.slug === slug);
+const article = ARTICLES_DATA[slug || ''];
+
+if (!guide || !article) {
+  throw new Error(`Guide not found for slug: ${slug}`);
+}
+
+const lang = 'en';
+const t = useTranslations(lang);
+const home = '/';
+const guidesHub = '/guides/';
+---
+
+<BaseLayout
+  lang={lang}
+  path={`/guides/${slug}/`}
+  title={`${article.title.en} | Fuck Claude`}
+  description={guide.summary.en}
+  enPath={`/guides/${slug}/`}
+  zhPath={`/zh/guides/${slug}/`}
+  omitFaq
+>
+  <header class="nav">
+    <div class="wrap nav__inner">
+      <a class="brand" href={home}>
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <rect width="64" height="64" rx="14" fill="currentColor"></rect>
+          <g fill="#FAF9F5">
+            <rect x="26.9" y="8" width="7.6" height="29" rx="3.8"></rect>
+            <rect x="18.9" y="24.5" width="6.4" height="11" rx="3.2"></rect>
+            <rect x="36.1" y="24.5" width="6.4" height="11" rx="3.2"></rect>
+            <rect x="16.9" y="30" width="27.6" height="24" rx="9"></rect>
+            <rect x="40.6" y="32.5" width="7.6" height="16" rx="3.8" transform="rotate(-24 44.4 40.5)"></rect>
+          </g>
+        </svg>
+        <span class="brand__text">{t('nav.title')}</span>
+      </a>
+      <nav class="nav__actions">
+        <a class="nav__link" href={guidesHub}>{t('nav.guides')}</a>
+        <LangToggle lang={lang} />
+        <SocialLinks lang={lang} />
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article class="article">
+      <div class="article__nav">
+        <a class="back-link" href={guidesHub}>{t('guides.back')}</a>
+      </div>
+
+      <header class="article__header">
+        <div class="article__meta">
+          <span class="article__tag">{article.category.en}</span>
+          <span class="article__time">{article.readTime} read</span>
+          <span class="article__date">Updated: {article.updatedAt}</span>
+        </div>
+        <h1>{article.title.en}</h1>
+      </header>
+
+      <div class="article__body prose" set:html={article.content.en} />
+
+      <footer class="article__footer">
+        <a class="back-btn" href={guidesHub}>{t('guides.back')}</a>
+      </footer>
+    </article>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>
+
+<style>
+  .article {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 32px 0 60px;
+  }
+  .article__nav {
+    margin-bottom: 16px;
+  }
+  .back-link,
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 650;
+    color: var(--accent-strong);
+  }
+  .back-btn {
+    padding: 10px 20px;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+  }
+  .back-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+  .article__header {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .article__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.82rem;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .article__tag {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-strong);
+    background: var(--accent-soft);
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .article__time,
+  .article__date {
+    color: var(--muted-2);
+    font-family: var(--mono);
+  }
+  .article__header h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3.8vw, 2.5rem);
+    line-height: 1.25;
+    margin: 0;
+  }
+  .article__body {
+    font-size: 1.02rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .article__body :global(h2) {
+    font-family: var(--serif);
+    font-size: 1.55rem;
+    margin: 36px 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--border-strong);
+  }
+  .article__body :global(h3) {
+    font-size: 1.18rem;
+    margin: 24px 0 10px;
+  }
+  .article__body :global(p) {
+    margin: 0 0 16px;
+    color: var(--text);
+  }
+  .article__body :global(ul),
+  .article__body :global(ol) {
+    margin: 0 0 20px;
+    padding-left: 24px;
+  }
+  .article__body :global(li) {
+    margin-bottom: 8px;
+  }
+  .article__body :global(pre) {
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.88rem;
+    margin: 18px 0 24px;
+  }
+  .article__body :global(code) {
+    font-family: var(--mono);
+    font-size: 0.9em;
+    background: var(--surface-2);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .article__body :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+  .article__footer {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-start;
+  }
+</style>

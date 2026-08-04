@@ -1,0 +1,169 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import LangToggle from '../../../components/LangToggle.astro';
+import SocialLinks from '../../../components/SocialLinks.astro';
+import Footer from '../../../components/Footer.astro';
+import { GUIDES, GUIDE_CATEGORIES } from '../../../config/guides';
+import { useTranslations } from '../../../i18n/ui';
+
+const lang = 'zh';
+const t = useTranslations(lang);
+const home = '/zh/';
+---
+
+<BaseLayout
+  lang={lang}
+  path="/zh/guides/"
+  title={`${t('guides.title')} | Fuck Claude`}
+  description={t('guides.sub')}
+  enPath="/guides/"
+  zhPath="/zh/guides/"
+  omitFaq
+>
+  <header class="nav">
+    <div class="wrap nav__inner">
+      <a class="brand" href={home}>
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <rect width="64" height="64" rx="14" fill="currentColor"></rect>
+          <g fill="#FAF9F5">
+            <rect x="26.9" y="8" width="7.6" height="29" rx="3.8"></rect>
+            <rect x="18.9" y="24.5" width="6.4" height="11" rx="3.2"></rect>
+            <rect x="36.1" y="24.5" width="6.4" height="11" rx="3.2"></rect>
+            <rect x="16.9" y="30" width="27.6" height="24" rx="9"></rect>
+            <rect x="40.6" y="32.5" width="7.6" height="16" rx="3.8" transform="rotate(-24 44.4 40.5)"></rect>
+          </g>
+        </svg>
+        <span class="brand__text">{t('nav.title')}</span>
+      </a>
+      <nav class="nav__actions">
+        <a class="nav__link" href={home}>{t('nav.home')}</a>
+        <LangToggle lang={lang} />
+        <SocialLinks lang={lang} />
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="guides-hero">
+      <a class="back-link" href={home}>{t('guides.backHome')}</a>
+      <h1>{t('guides.title')}</h1>
+      <p class="guides-sub">{t('guides.sub')}</p>
+    </section>
+
+    <section class="guides-grid">
+      {
+        GUIDES.map((guide) => (
+          <article class="guide-card">
+            <div class="guide-card__meta">
+              <span class="guide-card__tag">{GUIDE_CATEGORIES[guide.category].zh}</span>
+              <span class="guide-card__time">{guide.readTime}</span>
+            </div>
+            <h2>
+              <a href={`/zh/guides/${guide.slug}/`}>{guide.title.zh}</a>
+            </h2>
+            <p>{guide.summary.zh}</p>
+            <a class="guide-card__link" href={`/zh/guides/${guide.slug}/`}>
+              {t('guides.readMore')} →
+            </a>
+          </article>
+        ))
+      }
+    </section>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>
+
+<style>
+  .guides-hero {
+    padding: 36px 0 20px;
+  }
+  .back-link {
+    display: inline-block;
+    margin-bottom: 12px;
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .back-link:hover {
+    color: var(--accent-strong);
+  }
+  .guides-hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin: 0 0 10px;
+    line-height: 1.2;
+  }
+  .guides-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 65ch;
+    margin: 0;
+  }
+  .guides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 20px;
+    padding: 20px 0 40px;
+  }
+  .guide-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+  }
+  .guide-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    box-shadow: var(--shadow-md);
+  }
+  .guide-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .guide-card__tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-strong);
+    background: var(--accent-soft);
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .guide-card__time {
+    font-size: 0.78rem;
+    color: var(--muted-2);
+    font-family: var(--mono);
+  }
+  .guide-card h2 {
+    font-size: 1.22rem;
+    margin: 0 0 10px;
+    line-height: 1.35;
+  }
+  .guide-card h2 a {
+    color: var(--text);
+  }
+  .guide-card h2 a:hover {
+    color: var(--accent-strong);
+    text-decoration: none;
+  }
+  .guide-card p {
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.55;
+    margin: 0 0 18px;
+    flex: 1;
+  }
+  .guide-card__link {
+    font-size: 0.88rem;
+    font-weight: 650;
+    color: var(--accent-strong);
+  }
+</style>

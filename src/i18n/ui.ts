@@ -18,7 +18,16 @@ export const ui = {
       'One-click check of your browser timezone, language, Chinese fonts and locale to see if Claude Code would flag you as a China user. 100% local, nothing uploaded.',
 
     'nav.title': 'Fuck Claude',
+    'nav.guides': 'Anti-Ban Guides',
+    'nav.home': 'Home',
     'credit': 'Built with Claude Fable 5',
+
+    'guides.title': 'Claude Anti-Ban & Safety Knowledge Base',
+    'guides.sub':
+      'In-depth guides on Anthropic risk mechanisms, OS/browser environment cleanup, payment safety, API safety, and appeal SOPs.',
+    'guides.readMore': 'Read Guide',
+    'guides.back': '← Back to Knowledge Base',
+    'guides.backHome': '← Back to Home',
 
     'hero.title': 'Are you a Claude “China user”?',
     'hero.badge.local': '100% local scan',
@@ -65,6 +74,9 @@ export const ui = {
       'The locale your browser resolves for date and number formatting.',
     'signal.timezoneOffset.name': 'Timezone offset',
     'signal.timezoneOffset.desc': 'Whether getTimezoneOffset() equals UTC+8.',
+    'signal.webrtcLeak.name': 'WebRTC IP leak',
+    'signal.webrtcLeak.desc':
+      'RTCPeerConnection probing for local or real public IP candidate leaks through STUN.',
     'signal.emoji.name': 'Emoji rendering style',
     'signal.emoji.desc':
       'OS vendor guessed from the user agent; a weak, loosely correlated signal.',
@@ -75,13 +87,13 @@ export const ui = {
     'result.noHits': 'No strong China signals matched. Low risk.',
 
     'signals.title': 'What gets scanned',
-    'signals.sub': 'Nine locale fingerprints, weighted to a 0–100 risk score.',
+    'signals.sub': 'Ten locale & network fingerprints, weighted to a 0–100 risk score.',
 
     'how.title': 'How the check works',
     'how.p1':
       'When Claude Code is pointed at a proxy endpoint via ANTHROPIC_BASE_URL, public reverse-engineering reports found it reads your operating-system timezone and the proxy hostname, then hides the verdict inside the system prompt with Unicode steganography — the date separator and four look-alike apostrophes in the “Today’s date” line encode whether you look like a China user.',
     'how.p2':
-      'A web page cannot read everything Claude Code can, but the key signal is identical: this tool reads the same OS timezone, then adds eight more browser-visible fingerprints — UI language, Chinese fonts, Chinese vendor fonts, Chinese browsers, device brand, Intl locale, UTC+8 offset and emoji style — into a weighted score. Signals scoring ≥0.25 count as hits; bands are Low 0–30, Medium 31–60, High 61–100.',
+      'A web page cannot read everything Claude Code can, but the key signal is identical: this tool reads the same OS timezone, then adds nine more browser-visible fingerprints — UI language, Chinese fonts, Chinese vendor fonts, WebRTC IP leaks, Chinese browsers, device brand, Intl locale, UTC+8 offset and emoji style — into a weighted score. Signals scoring ≥0.25 count as hits; bands are Low 0–30, Medium 31–60, High 61–100.',
     'ui.weight': 'Weight',
 
     'faq.title': 'FAQ',
@@ -90,17 +102,17 @@ export const ui = {
       'According to public reverse-engineering reports, when Claude Code talks to a non-official endpoint it reads the OS timezone and proxy hostname, and steganographically encodes the result into its system prompt. The timezone this page reads via Intl.DateTimeFormat is the very same OS timezone.',
     'faq.q2': 'Is this score the exact check Claude runs?',
     'faq.a2':
-      'No. Only the system timezone maps one-to-one onto Claude’s reported mechanism. The other eight signals are common Chinese-environment fingerprints that correlate with it, so treat the score as an estimate, not a verdict.',
+      'No. Only the system timezone maps one-to-one onto Claude’s reported mechanism. The other nine signals are common Chinese-environment or network fingerprints that correlate with it, so treat the score as an estimate, not a verdict.',
     'faq.q3': 'How do I lower my score?',
     'faq.a3':
-      'Switch your OS timezone away from China zones such as Asia/Shanghai, move zh-CN off the top of your browser language list, and avoid routing Claude Code through proxies whose hostnames contain flagged domains or AI-lab keywords.',
+      'Switch your OS timezone away from China zones such as Asia/Shanghai, move zh-CN off the top of your browser language list, block WebRTC leaks, and avoid routing Claude Code through proxies whose hostnames contain flagged domains or AI-lab keywords.',
     'faq.q4': 'Is any data uploaded?',
     'faq.a4':
-      'No. Every check runs locally in your browser and none of the detected signals are ever sent anywhere. The site only loads standard Google Analytics for anonymous page-view stats.',
+      'No. Every check runs locally in your browser and none of the detected signals are ever sent anywhere. The site only loads standard Google Analytics for anonymous page-view stats. (WebRTC leak detection may briefly contact a public STUN server to gather ICE candidates.)',
 
     'privacy.title': 'Privacy',
     'privacy.body':
-      'Every check runs locally in your browser — your scan results never leave your device. The site only loads Google Analytics for anonymous page-view stats; none of the detected signals are ever sent.',
+      'Every check runs locally in your browser — your scan results never leave your device. The site only loads Google Analytics for anonymous page-view stats; none of the detected signals are ever sent. WebRTC leak detection may briefly contact a public STUN server.',
 
     'social.x': 'X (Twitter)',
     'social.xiaohongshu': 'Xiaohongshu (RED)',
@@ -147,7 +159,16 @@ export const ui = {
       '一键检测浏览器时区、语言、中文字体与 locale 等信号,评估你是否会被 Claude Code 判定为中国用户并有封号风险。纯本地运行,零数据上传。',
 
     'nav.title': 'Fuck Claude',
+    'nav.guides': '防封指南',
+    'nav.home': '首页',
     'credit': '此网站使用 Claude Fable 5 开发',
+
+    'guides.title': 'Claude 防封避坑与环境纯化资料库',
+    'guides.sub':
+      '全方位拆解 Anthropic 风控原理、操作系统与浏览器环境纯化、注册支付避坑、API 中转规范及英文申诉 SOP。',
+    'guides.readMore': '阅读全文',
+    'guides.back': '← 返回资料库',
+    'guides.backHome': '← 返回首页',
 
     'hero.title': '你是「Claude 中国用户」吗',
     'hero.badge.local': '纯本地检测',
@@ -191,6 +212,9 @@ export const ui = {
     'signal.intlLocale.desc': '浏览器用于日期 / 数字格式化的 locale。',
     'signal.timezoneOffset.name': '时区偏移',
     'signal.timezoneOffset.desc': 'getTimezoneOffset() 是否为 UTC+8。',
+    'signal.webrtcLeak.name': 'WebRTC IP 泄露',
+    'signal.webrtcLeak.desc':
+      '探测浏览器 RTCPeerConnection 是否通过 STUN 服务泄露真实内网或公网 IP。',
     'signal.emoji.name': 'Emoji 渲染风格',
     'signal.emoji.desc': '由 UA 推断操作系统厂商,弱相关信号。',
 
@@ -200,13 +224,13 @@ export const ui = {
     'result.noHits': '没有命中明显的中国信号,风险较低。',
 
     'signals.title': '检测哪些信号',
-    'signals.sub': '九项区域指纹,加权得出 0–100 风险分。',
+    'signals.sub': '十项区域与网络指纹,加权得出 0–100 风险分。',
 
     'how.title': '检测原理',
     'how.p1':
       '当 Claude Code 通过 ANTHROPIC_BASE_URL 指向中转端点时,据公开逆向分析,它会读取操作系统时区与中转 hostname,再把结果用 Unicode 隐写术藏进 system prompt:「Today’s date」那一行的日期分隔符和 4 种几乎一样的撇号变体,编码了你是否像中国用户。',
     'how.p2':
-      '网页读不到 Claude Code 能读的全部信息,但关键信号完全一致:本工具读取同一个系统时区,再叠加浏览器语言、中文字体、国产厂商字体、国产浏览器、设备品牌、Intl locale、UTC+8 偏移与 emoji 风格八项指纹,加权得分。得分 ≥0.25 计为命中;分档:低 0–30、中 31–60、高 61–100。',
+      '网页读不到 Claude Code 能读的全部信息,但关键信号完全一致:本工具读取同一个系统时区,再叠加浏览器语言、中文字体、国产厂商字体、WebRTC IP 泄露、国产浏览器、设备品牌、Intl locale、UTC+8 偏移与 emoji 风格九项指纹,加权得分。得分 ≥0.25 计为命中;分档:低 0–30、中 31–60、高 61–100。',
     'ui.weight': '权重',
 
     'faq.title': '常见问题',
@@ -215,17 +239,17 @@ export const ui = {
       '据公开逆向分析,Claude Code 连接非官方端点时会读取系统时区与中转 hostname,并把结果隐写进 system prompt。本页通过 Intl.DateTimeFormat 读到的,正是同一个系统时区。',
     'faq.q2': '这个分数就是 Claude 的真实判定吗?',
     'faq.a2':
-      '不是。只有系统时区能与 Claude 被披露的机制一一对应,其余八项是与之相关的「中文环境指纹」。分数是估计,不是定论。',
+      '不是。只有系统时区能与 Claude 被披露的机制一一对应,其余九项是与之相关的「中文环境 / 网络指纹」。分数是估计,不是定论。',
     'faq.q3': '怎么降低分数?',
     'faq.a3':
-      '把系统时区改出 Asia/Shanghai 等中国时区,把 zh-CN 从浏览器语言列表首位移除,并避免让 Claude Code 走 hostname 含敏感域名 / AI 实验室关键词的中转。',
+      '把系统时区改出 Asia/Shanghai 等中国时区,把 zh-CN 从浏览器语言列表首位移除,禁用 WebRTC 泄露,并避免让 Claude Code 走 hostname 含敏感域名 / AI 实验室关键词的中转。',
     'faq.q4': '会上传我的数据吗?',
     'faq.a4':
-      '不会。所有检测都在浏览器本地完成,检测到的任何信号都不会被发送。网站仅加载 Google Analytics 统计匿名访问量。',
+      '不会。所有检测都在浏览器本地完成,检测到的任何信号都不会被发送。网站仅加载 Google Analytics 统计匿名访问量。(WebRTC 泄露检测可能短暂连接公共 STUN 服务器以收集 ICE 候选。)',
 
     'privacy.title': '隐私说明',
     'privacy.body':
-      '所有检测都在你的浏览器本地完成,扫描结果不会离开你的设备。网站仅加载 Google Analytics 统计匿名页面访问量,检测到的信号不会被发送。',
+      '所有检测都在你的浏览器本地完成,扫描结果不会离开你的设备。网站仅加载 Google Analytics 统计匿名页面访问量,检测到的信号不会被发送。WebRTC 泄露检测可能短暂连接公共 STUN 服务器。',
 
     'social.x': 'X(推特)',
     'social.xiaohongshu': '小红书',

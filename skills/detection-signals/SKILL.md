@@ -45,7 +45,7 @@ interface DetectOutcome {
      `signals.sub`(N 项指纹)、`how.p2`(N-1 项叠加指纹列表)、`faq.a2`(其余 N-1 项)。
 3. **pages/api/check.ts**(仅当服务端可测)
    - `analyze()` 的 `measured` map 增加条目,复用第 1 步导出的纯评分函数。
-   - 更新文件头注释与 `note` 里的 browser-only 列表及可测权重数(当前 68/100)。
+   - 更新文件头注释与 `note` 里的 browser-only 列表及可测权重数(当前 62/100)。
 4. **layouts/BaseLayout.astro**:JSON-LD `featureList` 追加 `t('signal.<id>.name')`。
 5. **README.md**:英文与中文两张「信号与权重」表、API 段落的可测权重描述。
 
