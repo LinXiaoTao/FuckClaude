@@ -94,4 +94,27 @@ export const SPONSORS: Sponsor[] = [
       en: 'Try free',
     },
   },
+  {
+    id: 'flashrent',
+    name: 'FlashRent',
+    url: {
+      zh: 'https://www.energy-rent.work/',
+      en: 'https://www.energy-rent.work/',
+    },
+    logo: '/sponsors/flashrent-wordmark.png',
+    logoWidth: 340,
+    logoHeight: 126,
+    headline: {
+      zh: 'FlashRent 波场能量租用，USDT 转账省手续费高达 80%。',
+      en: 'FlashRent TRON energy rental, save up to 80% on USDT transfer gas.',
+    },
+    tagline: {
+      zh: '一键秒级到账，无需冻结 TRX，支持单笔租用、批量派发与 Telegram Bot 集成',
+      en: 'Instant delegation without freezing TRX — supports single rentals, bulk orders, and Telegram bot integration',
+    },
+    cta: {
+      zh: '免费体验',
+      en: 'Try free',
+    },
+  },
 ];
