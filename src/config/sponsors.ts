@@ -49,29 +49,6 @@ export const SPONSORS: Sponsor[] = [
     },
   },
   {
-    id: 'hanhui',
-    name: '瀚慧AI',
-    url: {
-      zh: 'https://shop.aishop.chat/',
-      en: 'https://shop.aishop.chat/',
-    },
-    logo: '/sponsors/hanhui-wordmark.png',
-    logoWidth: 328,
-    logoHeight: 104,
-    headline: {
-      zh: 'Claude / GPT / Gemini 会员充值，正规可开票。',
-      en: 'Claude / GPT / Gemini subscriptions, legit & invoiceable.',
-    },
-    tagline: {
-      zh: '海外 AI 会员订阅、续费、升级服务，稳定交付，售后跟进，企业/高校/个人更省心',
-      en: 'Overseas AI membership subscribe, renew & upgrade — reliable delivery with after-sales support for enterprises, universities & individuals',
-    },
-    cta: {
-      zh: '立即选购',
-      en: 'Shop now',
-    },
-  },
-  {
     id: 'nexsms',
     name: 'NexSMS',
     url: {
