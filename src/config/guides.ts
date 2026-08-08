@@ -129,4 +129,144 @@ export const GUIDES: GuideArticle[] = [
     readTime: '6 min',
     updatedAt: '2026-08',
   },
+  {
+    slug: 'browser-configuration-guide',
+    category: 'environment',
+    title: {
+      en: 'Browser Configuration Guide for Claude Anti-Ban',
+      zh: 'Chrome/Firefox/Edge 防封配置实操手册',
+    },
+    summary: {
+      en: 'Practical configuration guide for Chrome, Firefox, and Edge browsers including timezone sync, language settings, WebRTC controls, and essential privacy extensions.',
+      zh: '详解 Chrome、Firefox、Edge 三大浏览器的防封配置，包含时区同步、语言设置、WebRTC 禁用、隐私增强扩展等实操步骤。',
+    },
+    readTime: '10 min',
+    updatedAt: '2026-08',
+  },
+  {
+    slug: 'vpn-and-proxy-selection',
+    category: 'environment',
+    title: {
+      en: 'VPN & Proxy Selection: Residential IP vs Datacenter IP',
+      zh: 'VPN 与代理服务选择指南：住宅 IP vs 数据中心 IP',
+    },
+    summary: {
+      en: 'In-depth comparison of residential IPs vs datacenter IPs for Claude access, proxy protocol selection, VPN provider evaluation criteria, and DNS leak prevention.',
+      zh: '深度对比住宅 IP 与数据中心 IP 的风险差异，解析代理协议选择标准、VPN 服务商评估维度与 DNS 泄漏防护实操。',
+    },
+    readTime: '9 min',
+    updatedAt: '2026-08',
+  },
+  {
+    slug: 'ban-case-studies',
+    category: 'analysis',
+    title: {
+      en: 'Claude Ban Case Studies & Root Cause Analysis',
+      zh: 'Claude 封号案例复盘与避坑经验',
+    },
+    summary: {
+      en: 'Real-world Claude ban case studies including timezone mismatches, high-risk BINs, API abuse, and account association, with prevention checklists.',
+      zh: '真实封号案例深度复盘，涵盖时区不一致、虚拟卡 BIN 风险、API 滥用检测、账号关联连带等典型场景与规避策略。',
+    },
+    readTime: '11 min',
+    updatedAt: '2026-08',
+  },
+  {
+    slug: 'multi-account-management',
+    category: 'account',
+    title: {
+      en: 'Multi-Account Management Best Practices',
+      zh: '多账号管理最佳实践：环境隔离与安全切换',
+    },
+    summary: {
+      en: 'Complete multi-account isolation strategies including physical vs software separation, browser profile setup, IP/payment distribution, and safe switching procedures.',
+      zh: '多账号完全隔离方案，对比物理隔离与软件隔离优劣，涵盖浏览器 Profile 配置、IP 与支付分离策略、安全切换 SOP。',
+    },
+    readTime: '10 min',
+    updatedAt: '2026-08',
+  },
+  {
+    slug: 'api-advanced-optimization',
+    category: 'api',
+    title: {
+      en: 'Advanced Claude API Optimization & Token Management',
+      zh: 'Claude API 进阶优化：Token 控制与 Prompt Cache 实战',
+    },
+    summary: {
+      en: 'Advanced techniques for maximizing Prompt Cache efficiency, optimizing token billing, managing long context windows, and implementing robust retry logic.',
+      zh: '深度解析 Prompt Cache 最大化利用策略、Token 计费优化技巧、长上下文窗口管理、并发控制与流式输出最佳实践。',
+    },
+    readTime: '12 min',
+    updatedAt: '2026-08',
+  },
+  {
+    slug: 'troubleshooting-guide',
+    category: 'appeal',
+    title: {
+      en: 'Claude Troubleshooting & Diagnostic Guide',
+      zh: 'Claude 使用故障排查与问题定位手册',
+    },
+    summary: {
+      en: 'Systematic troubleshooting guide for Claude login failures, API call exceptions, payment binding issues, with diagnostic flowcharts and quick fixes.',
+      zh: '系统化故障排查手册，涵盖登录失败（403/429/500）、API 调用异常、支付绑卡失败的定位流程与快速解决方案。',
+    },
+    readTime: '9 min',
+    updatedAt: '2026-08',
+  },
+  {
+    slug: 'device-setup-guide',
+    category: 'environment',
+    title: {
+      en: 'Cross-Platform Device Setup for Claude Anti-Ban',
+      zh: '跨平台设备防封配置：Mac/Windows/Linux/移动端',
+    },
+    summary: {
+      en: 'Platform-specific anti-ban configuration guides for macOS, Windows, Linux, iOS, and Android including timezone settings, environment variables, and font isolation.',
+      zh: '跨平台防封配置实操，覆盖 macOS 时区设置、Windows 注册表配置、Linux 终端环境、iOS/Android 移动端的系统级防护。',
+    },
+    readTime: '10 min',
+    updatedAt: '2026-08',
+  },
+  {
+    slug: 'payment-methods-comparison',
+    category: 'account',
+    title: {
+      en: 'Virtual Card Platforms & Payment Methods Comparison',
+      zh: '虚拟卡平台与支付方式深度对比评测',
+    },
+    summary: {
+      en: 'Comprehensive comparison of virtual card platforms, credit vs debit vs prepaid card risk assessment, cryptocurrency payment options, and failure prevention.',
+      zh: '主流虚拟卡平台深度对比，信用卡/借记卡/预付卡风险评估，加密货币支付渠道分析，支付失败常见原因与规避方案。',
+    },
+    readTime: '11 min',
+    updatedAt: '2026-08',
+  },
+  {
+    slug: 'regional-access-strategy',
+    category: 'account',
+    title: {
+      en: 'Regional Access Strategies & Registration Guide',
+      zh: 'Claude 全球地区访问策略与注册指引',
+    },
+    summary: {
+      en: 'Region-specific Claude access guide covering supported vs restricted regions, US/UK/SG registration best practices, GDPR compliance, and cross-border travel scenarios.',
+      zh: '全球地区访问策略完全指南，Anthropic 支持/限制地区清单、美英新注册最佳实践、欧盟 GDPR 合规与跨境出差场景应对。',
+    },
+    readTime: '9 min',
+    updatedAt: '2026-08',
+  },
+  {
+    slug: 'automation-safety-practices',
+    category: 'api',
+    title: {
+      en: 'Safe Automation & Batch API Usage Guidelines',
+      zh: 'Claude 自动化与批量调用安全规范',
+    },
+    summary: {
+      en: 'Enterprise-grade automation safety practices including rate limiting, anti-abuse detection avoidance, multi-account load balancing, and compliance audit logging.',
+      zh: '企业级自动化安全规范，涵盖批量调用频率控制、反滥用检测规避、多账号轮询负载均衡架构、审计日志与合规性自查。',
+    },
+    readTime: '10 min',
+    updatedAt: '2026-08',
+  },
 ];
