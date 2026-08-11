@@ -18,6 +18,7 @@ import { device_setup_guide_content } from './guides/device-setup-guide';
 import { payment_methods_comparison_content } from './guides/payment-methods-comparison';
 import { regional_access_strategy_content } from './guides/regional-access-strategy';
 import { automation_safety_practices_content } from './guides/automation-safety-practices';
+import { claude_ai_content_watermarking_content } from './guides/claude-ai-content-watermarking';
 
 export interface ArticleContent {
   slug: string;
@@ -207,5 +208,16 @@ export const ARTICLES_DATA: Record<string, ArticleContent> = {
     readTime: '10 min',
     updatedAt: '2026-08',
     content: automation_safety_practices_content,
+  },
+  'claude-ai-content-watermarking': {
+    slug: 'claude-ai-content-watermarking',
+    category: { en: 'AI Content Detection & Evasion', zh: 'AI 内容检测与规避' },
+    title: {
+      en: 'Claude AI Content Watermarking: Detection & Removal Guide',
+      zh: 'Claude AI 内容水印：检测与去除完全指南',
+    },
+    readTime: '14 min',
+    updatedAt: '2026-08',
+    content: claude_ai_content_watermarking_content,
   },
 };

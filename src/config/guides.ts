@@ -4,7 +4,7 @@
 
 export interface GuideArticle {
   slug: string;
-  category: 'analysis' | 'environment' | 'account' | 'api' | 'appeal' | 'alternatives';
+  category: 'analysis' | 'environment' | 'account' | 'api' | 'appeal' | 'alternatives' | 'detection';
   title: {
     en: string;
     zh: string;
@@ -41,6 +41,10 @@ export const GUIDE_CATEGORIES = {
   alternatives: {
     en: 'Domestic Models & Failover',
     zh: '平替模型与灾备方案',
+  },
+  detection: {
+    en: 'AI Content Detection & Evasion',
+    zh: 'AI 内容检测与规避',
   },
 } as const;
 
@@ -267,6 +271,20 @@ export const GUIDES: GuideArticle[] = [
       zh: '企业级自动化安全规范，涵盖批量调用频率控制、反滥用检测规避、多账号轮询负载均衡架构、审计日志与合规性自查。',
     },
     readTime: '10 min',
+    updatedAt: '2026-08',
+  },
+  {
+    slug: 'claude-ai-content-watermarking',
+    category: 'detection',
+    title: {
+      en: 'Claude AI Content Watermarking: Detection & Removal Guide',
+      zh: 'Claude AI 内容水印：检测与去除完全指南',
+    },
+    summary: {
+      en: 'Complete guide to Claude\'s embedded text watermarks and C2PA metadata, detection methods, removal techniques including paraphrasing, translation, and metadata stripping, plus legal considerations.',
+      zh: '深度解析 Claude 嵌入式文本水印与 C2PA 元数据机制、检测方法、移除技术（改写、翻译、元数据剥离），以及法律与道德考量完全指南。',
+    },
+    readTime: '14 min',
     updatedAt: '2026-08',
   },
 ];
