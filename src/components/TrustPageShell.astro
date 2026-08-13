@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LangToggle from './LangToggle.astro';
+import SocialLinks from './SocialLinks.astro';
+import Footer from './Footer.astro';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  path: string;
+  enPath: string;
+  zhPath: string;
+  title: string;
+  description: string;
+  body: string;
+}
+
+const { lang, path, enPath, zhPath, title, description, body } = Astro.props;
+const t = useTranslations(lang);
+const home = lang === 'zh' ? '/zh/' : '/';
+const guidesHub = lang === 'zh' ? '/zh/guides/' : '/guides/';
+---
+
+<BaseLayout
+  lang={lang}
+  {path}
+  title={`${title} | Fuck Claude`}
+  {description}
+  {enPath}
+  {zhPath}
+  omitFaq
+>
+  <header class="nav">
+    <div class="wrap nav__inner">
+      <a class="brand" href={home}>
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <rect width="64" height="64" rx="14" fill="currentColor"></rect>
+          <g fill="#FAF9F5">
+            <rect x="26.9" y="8" width="7.6" height="29" rx="3.8"></rect>
+            <rect x="18.9" y="24.5" width="6.4" height="11" rx="3.2"></rect>
+            <rect x="36.1" y="24.5" width="6.4" height="11" rx="3.2"></rect>
+            <rect x="16.9" y="30" width="27.6" height="24" rx="9"></rect>
+            <rect x="40.6" y="32.5" width="7.6" height="16" rx="3.8" transform="rotate(-24 44.4 40.5)"></rect>
+          </g>
+        </svg>
+        <span class="brand__text">{t('nav.title')}</span>
+      </a>
+      <nav class="nav__actions">
+        <a class="nav__link" href={guidesHub}>{t('nav.guides')}</a>
+        <LangToggle lang={lang} />
+        <SocialLinks lang={lang} />
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <article class="article">
+      <header class="article__header">
+        <h1>{title}</h1>
+      </header>
+      <div class="article__body prose" set:html={body} />
+    </article>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>
+
+<style>
+  .article {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 32px 0 60px;
+  }
+  .article__header {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .article__header h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3.8vw, 2.5rem);
+    line-height: 1.25;
+    margin: 0;
+  }
+  .article__body {
+    font-size: 1.02rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .article__body :global(h2) {
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    margin: 32px 0 12px;
+    padding-bottom: 4px;
+    border-bottom: 1px dashed var(--border-strong);
+  }
+  .article__body :global(h2:first-child) {
+    margin-top: 0;
+  }
+  .article__body :global(p) {
+    margin: 0 0 16px;
+    color: var(--text);
+  }
+  .article__body :global(a) {
+    color: var(--accent-strong);
+  }
+</style>

@@ -6,11 +6,19 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+const prefix = lang === 'zh' ? '/zh' : '';
 ---
 
 <footer>
   <div class="wrap">
     <p class="footer__disclaimer">{t('footer.disclaimer')}</p>
+    <nav class="footer__links" aria-label="Trust pages">
+      <a href={`${prefix}/privacy/`}>{t('footer.privacy')}</a>
+      <span aria-hidden="true">·</span>
+      <a href={`${prefix}/about/`}>{t('footer.about')}</a>
+      <span aria-hidden="true">·</span>
+      <a href={`${prefix}/contact/`}>{t('footer.contact')}</a>
+    </nav>
     <p class="footer__meta">
       <span>{t('footer.license')}</span>
       <a
@@ -32,6 +40,25 @@ const t = useTranslations(lang);
 </footer>
 
 <style>
+  .footer__links {
+    margin: 14px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    font-size: 0.84rem;
+  }
+  .footer__links a {
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .footer__links a:hover {
+    color: var(--accent-strong);
+    text-decoration: none;
+  }
+  .footer__links span {
+    color: var(--muted-2);
+  }
   .footer__meta {
     margin: 12px 0 0;
     display: flex;

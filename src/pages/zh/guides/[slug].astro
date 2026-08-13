@@ -2,8 +2,10 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import LangToggle from '../../../components/LangToggle.astro';
 import SocialLinks from '../../../components/SocialLinks.astro';
+import AuthorByline from '../../../components/AuthorByline.astro';
 import Footer from '../../../components/Footer.astro';
 import { GUIDES } from '../../../config/guides';
+import { SITE_AUTHOR } from '../../../config/site';
 import { ARTICLES_DATA } from '../../../content/guidesData';
 import { useTranslations } from '../../../i18n/ui';
 
@@ -25,6 +27,18 @@ const lang = 'zh';
 const t = useTranslations(lang);
 const home = '/zh/';
 const guidesHub = '/zh/guides/';
+
+const articleJsonLd = {
+  '@type': 'Article',
+  headline: article.title.zh,
+  author: {
+    '@type': 'Person',
+    name: SITE_AUTHOR.name,
+    url: SITE_AUTHOR.githubUrl,
+  },
+  dateModified: article.updatedAt,
+  inLanguage: 'zh-CN',
+};
 ---
 
 <BaseLayout
@@ -35,6 +49,7 @@ const guidesHub = '/zh/guides/';
   enPath={`/guides/${slug}/`}
   zhPath={`/zh/guides/${slug}/`}
   omitFaq
+  jsonLdExtra={articleJsonLd}
 >
   <header class="nav">
     <div class="wrap nav__inner">
@@ -71,6 +86,7 @@ const guidesHub = '/zh/guides/';
           <span class="article__time">{article.readTime} 阅读</span>
           <span class="article__date">更新于：{article.updatedAt}</span>
         </div>
+        <AuthorByline lang={lang} updatedAt={article.updatedAt} />
         <h1>{article.title.zh}</h1>
       </header>
 

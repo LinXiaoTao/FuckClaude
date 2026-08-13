@@ -28,6 +28,8 @@ export const ui = {
     'guides.readMore': 'Read Guide',
     'guides.back': '← Back to Knowledge Base',
     'guides.backHome': '← Back to Home',
+    'guides.editorial':
+      'Written and maintained by LinXiaoTao, an independent developer. Guides are updated as new reverse-engineering findings and community reports emerge. This knowledge base is educational and for reference — not official Anthropic documentation.',
 
     'hero.title': 'Are you a Claude “China user”?',
     'hero.badge.local': '100% local scan',
@@ -108,11 +110,25 @@ export const ui = {
       'Switch your OS timezone away from China zones such as Asia/Shanghai, move zh-CN off the top of your browser language list, block WebRTC leaks, and avoid routing Claude Code through proxies whose hostnames contain flagged domains or AI-lab keywords.',
     'faq.q4': 'Is any data uploaded?',
     'faq.a4':
-      'No. Every check runs locally in your browser and none of the detected signals are ever sent anywhere. The site only loads standard Google Analytics for anonymous page-view stats. (WebRTC leak detection may briefly contact a public STUN server to gather ICE candidates.)',
+      'No. Every check runs locally in your browser and none of the detected signals are ever sent anywhere. The site loads Google Analytics for anonymous page-view stats and Google AdSense for advertising (ads may use cookies). WebRTC leak detection may briefly contact a public STUN server to gather ICE candidates.',
 
     'privacy.title': 'Privacy',
     'privacy.body':
-      'Every check runs locally in your browser — your scan results never leave your device. The site only loads Google Analytics for anonymous page-view stats; none of the detected signals are ever sent. WebRTC leak detection may briefly contact a public STUN server.',
+      'Every check runs locally in your browser — your scan results never leave your device. The site loads Google Analytics for anonymous page-view stats and Google AdSense for ads; none of the detected signals are ever sent. WebRTC leak detection may briefly contact a public STUN server.',
+    'privacy.fullPolicy': 'Full privacy policy →',
+
+    'author.by': 'Written by',
+    'author.updated': 'Updated:',
+
+    'trust.privacy.title': 'Privacy Policy',
+    'trust.privacy.description':
+      'How Fuck Claude handles local scans, Google Analytics, Google AdSense, and WebRTC STUN probing.',
+    'trust.about.title': 'About',
+    'trust.about.description':
+      'Who runs Fuck Claude, why it exists, and its relationship to Anthropic.',
+    'trust.contact.title': 'Contact',
+    'trust.contact.description':
+      'Reach LinXiaoTao by email, GitHub Issues, or social media.',
 
     'social.x': 'X (Twitter)',
     'social.xiaohongshu': 'Xiaohongshu (RED)',
@@ -125,6 +141,9 @@ export const ui = {
     'footer.license':
       'Open sourced under the MIT License — redistributions must keep the original project notice.',
     'footer.repo': 'Original project',
+    'footer.privacy': 'Privacy',
+    'footer.about': 'About',
+    'footer.contact': 'Contact',
 
     'share.label': 'Share your result',
     'share.native': 'Share',
@@ -169,6 +188,8 @@ export const ui = {
     'guides.readMore': '阅读全文',
     'guides.back': '← 返回资料库',
     'guides.backHome': '← 返回首页',
+    'guides.editorial':
+      '由独立开发者 LinXiaoTao 撰写与维护。指南会随新的逆向发现与社区反馈持续更新。本资料库仅供教育与参考,并非 Anthropic 官方文档。',
 
     'hero.title': '你是「Claude 中国用户」吗',
     'hero.badge.local': '纯本地检测',
@@ -245,11 +266,23 @@ export const ui = {
       '把系统时区改出 Asia/Shanghai 等中国时区,把 zh-CN 从浏览器语言列表首位移除,禁用 WebRTC 泄露,并避免让 Claude Code 走 hostname 含敏感域名 / AI 实验室关键词的中转。',
     'faq.q4': '会上传我的数据吗?',
     'faq.a4':
-      '不会。所有检测都在浏览器本地完成,检测到的任何信号都不会被发送。网站仅加载 Google Analytics 统计匿名访问量。(WebRTC 泄露检测可能短暂连接公共 STUN 服务器以收集 ICE 候选。)',
+      '不会。所有检测都在浏览器本地完成,检测到的任何信号都不会被发送。网站加载 Google Analytics 统计匿名访问量,并通过 Google AdSense 展示广告(广告可能使用 Cookie)。WebRTC 泄露检测可能短暂连接公共 STUN 服务器以收集 ICE 候选。',
 
     'privacy.title': '隐私说明',
     'privacy.body':
-      '所有检测都在你的浏览器本地完成,扫描结果不会离开你的设备。网站仅加载 Google Analytics 统计匿名页面访问量,检测到的信号不会被发送。WebRTC 泄露检测可能短暂连接公共 STUN 服务器。',
+      '所有检测都在你的浏览器本地完成,扫描结果不会离开你的设备。网站加载 Google Analytics 统计匿名页面访问量,并通过 Google AdSense 展示广告;检测到的信号不会被发送。WebRTC 泄露检测可能短暂连接公共 STUN 服务器。',
+    'privacy.fullPolicy': '完整隐私政策 →',
+
+    'author.by': '作者',
+    'author.updated': '更新于:',
+
+    'trust.privacy.title': '隐私政策',
+    'trust.privacy.description':
+      'Fuck Claude 如何处理本地检测、Google Analytics、Google AdSense 与 WebRTC STUN 探测。',
+    'trust.about.title': '关于本站',
+    'trust.about.description': 'Fuck Claude 的运营者、项目目的及其与 Anthropic 的关系。',
+    'trust.contact.title': '联系我们',
+    'trust.contact.description': '通过电子邮件、GitHub Issues 或社交媒体联系 LinXiaoTao。',
 
     'social.x': 'X(推特)',
     'social.xiaohongshu': '小红书',
@@ -260,6 +293,9 @@ export const ui = {
     'footer.disclaimer': '本工具仅供参考,基于公开逆向分析,不构成任何官方结论或建议。',
     'footer.license': '基于 MIT 协议开源 —— 二次发布请保留原项目署名。',
     'footer.repo': 'GitHub 原项目',
+    'footer.privacy': '隐私政策',
+    'footer.about': '关于',
+    'footer.contact': '联系',
 
     'share.label': '分享你的结果',
     'share.native': '分享',

@@ -264,6 +264,9 @@ const apiExamples = [
       <div>
         <h2>{t('privacy.title')}</h2>
         <p>{t('privacy.body')}</p>
+        <p class="privacy__link">
+          <a href={lang === 'zh' ? '/zh/privacy/' : '/privacy/'}>{t('privacy.fullPolicy')}</a>
+        </p>
       </div>
     </div>
   </section>
@@ -287,6 +290,14 @@ const apiExamples = [
     .brand__text {
       display: none;
     }
+  }
+
+  .privacy__link {
+    margin-top: 8px;
+  }
+  .privacy__link a {
+    font-size: 0.88rem;
+    font-weight: 650;
   }
 
   .api-cmd {

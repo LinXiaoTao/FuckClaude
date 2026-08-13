@@ -1,5 +1,6 @@
 ---
 import { useTranslations, type Lang } from '../i18n/ui';
+import { ADSENSE_PUB_ID } from '../config/site';
 
 interface Props {
   lang: Lang;
@@ -14,6 +15,8 @@ interface Props {
   zhPath?: string;
   /** When true, skip homepage FAQ JSON-LD (guide pages). */
   omitFaq?: boolean;
+  /** Extra JSON-LD nodes merged into @graph (e.g. Article on guide pages). */
+  jsonLdExtra?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
@@ -24,6 +27,7 @@ const {
   enPath = '/',
   zhPath = '/zh/',
   omitFaq = false,
+  jsonLdExtra,
 } = Astro.props;
 const t = useTranslations(lang);
 
@@ -86,6 +90,11 @@ const jsonLd = {
           ],
         },
     ...(faq.length ? [{ '@type': 'FAQPage', mainEntity: faq }] : []),
+    ...(jsonLdExtra
+      ? Array.isArray(jsonLdExtra)
+        ? jsonLdExtra
+        : [jsonLdExtra]
+      : []),
   ],
 };
 ---
@@ -157,7 +166,7 @@ const jsonLd = {
     <script
       is:inline
       async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1916766675410622"
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUB_ID}`}
       crossorigin="anonymous"></script>
 
     <!-- Google tag (gtag.js) -->

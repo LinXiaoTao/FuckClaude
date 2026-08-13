@@ -1,0 +1,18 @@
+---
+import TrustPageShell from '../../components/TrustPageShell.astro';
+import { TRUST_CONTENT } from '../../content/trust';
+import { useTranslations } from '../../i18n/ui';
+
+const lang = 'zh';
+const t = useTranslations(lang);
+---
+
+<TrustPageShell
+  lang={lang}
+  path="/zh/about/"
+  enPath="/about/"
+  zhPath="/zh/about/"
+  title={t('trust.about.title')}
+  description={t('trust.about.description')}
+  body={TRUST_CONTENT.about.zh}
+/>

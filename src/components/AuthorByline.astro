@@ -1,0 +1,39 @@
+---
+import { SITE_AUTHOR } from '../config/site';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  updatedAt: string;
+}
+
+const { lang, updatedAt } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<p class="byline">
+  {t('author.by')} <a href={SITE_AUTHOR.githubUrl}>{SITE_AUTHOR.name}</a>
+  <span class="byline__sep" aria-hidden="true">·</span>
+  <span class="byline__date">{t('author.updated')} {updatedAt}</span>
+</p>
+
+<style>
+  .byline {
+    margin: 0 0 12px;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .byline a {
+    font-weight: 650;
+    color: var(--accent-strong);
+  }
+  .byline__sep {
+    margin: 0 6px;
+    color: var(--muted-2);
+  }
+  .byline__date {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--muted-2);
+  }
+</style>

@@ -74,7 +74,7 @@ export const GUIDES: GuideArticle[] = [
       en: 'Step-by-step guide to syncing OS timezones, isolating Chinese font fingerprints, preventing WebRTC/DNS leaks, and setting up anti-detect browsers.',
       zh: '一键同步系统与 Intl 时区、隔离中文字体指纹、禁用 WebRTC 内网泄漏，以及通过防指纹浏览器配置隔离环境实操。',
     },
-    readTime: '10 min',
+    readTime: '14 min',
     updatedAt: '2026-08',
   },
   {
@@ -88,7 +88,7 @@ export const GUIDES: GuideArticle[] = [
       en: 'How to choose physical SIM verification services, pick high-rate virtual credit card BINs, align billing addresses, and avoid chain bans.',
       zh: '避开 VoIP 虚拟号段接码坑点，挑选高通过率虚拟信用卡 BIN、对齐 IP 与账单国家地址，避免续费扣款失败导致的批量连带封号。',
     },
-    readTime: '9 min',
+    readTime: '14 min',
     updatedAt: '2026-08',
   },
   {
@@ -102,7 +102,7 @@ export const GUIDES: GuideArticle[] = [
       en: 'How to safely set custom ANTHROPIC_BASE_URL, override TZ env variables, choose high-availability API gateways, and preserve prompt caching.',
       zh: '安全配置 ANTHROPIC_BASE_URL 与隐藏主机名，通过 TZ 与环境变量防护，以及如何选择不破坏 Prompt Cache 的优质 API 中转。',
     },
-    readTime: '7 min',
+    readTime: '10 min',
     updatedAt: '2026-08',
   },
   {
@@ -130,7 +130,7 @@ export const GUIDES: GuideArticle[] = [
       en: 'Complete guide to DeepSeek R1/V3, GLM-4, and Kimi integrations, plus setting up Ollama and One-API as local Claude API drop-in replacements.',
       zh: '无缝对接 DeepSeek R1/V3、GLM-4 与 Kimi，使用 Ollama 和 One-API 搭建本地与私有化 Claude 兼容接口，确保生产研发中断降至零。',
     },
-    readTime: '6 min',
+    readTime: '12 min',
     updatedAt: '2026-08',
   },
   {

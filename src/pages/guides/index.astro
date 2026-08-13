@@ -48,6 +48,7 @@ const home = '/';
       <a class="back-link" href={home}>{t('guides.backHome')}</a>
       <h1>{t('guides.title')}</h1>
       <p class="guides-sub">{t('guides.sub')}</p>
+      <p class="guides-editorial">{t('guides.editorial')}</p>
     </section>
 
     <section class="guides-grid">
@@ -99,6 +100,13 @@ const home = '/';
     color: var(--muted);
     max-width: 65ch;
     margin: 0;
+  }
+  .guides-editorial {
+    font-size: 0.92rem;
+    color: var(--muted-2);
+    max-width: 65ch;
+    margin: 12px 0 0;
+    line-height: 1.55;
   }
   .guides-grid {
     display: grid;
