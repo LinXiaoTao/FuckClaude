@@ -30,6 +30,24 @@ export const ui = {
     'guides.backHome': '← Back to Home',
     'guides.editorial':
       'Written and maintained by LinXiaoTao, an independent developer. Guides are updated as new reverse-engineering findings and community reports emerge. This knowledge base is educational and for reference — not official Anthropic documentation.',
+    'guides.intro':
+      'This knowledge base collects everything we have learned about how Claude Code fingerprints users and how bans actually happen — from the low-level Unicode steganography and Anthropic’s multi-layer risk model, through practical environment cleanup, account and payment safety, all the way to what to do once an account is already flagged. Every article is bilingual, sourced from public reverse-engineering and community reports, and written to be read on its own or as part of a longer path below.',
+    'guides.paths.title': 'Where to start',
+    'guides.paths.sub': 'Not sure which article to open first? Pick the path that matches your situation.',
+    'guides.path1.title': '1 · Understand the risk',
+    'guides.path1.desc': 'New here? Start with how the fingerprinting and 4-layer risk model actually work before you change anything.',
+    'guides.path1.cta': 'Read the risk model',
+    'guides.path2.title': '2 · Clean your environment',
+    'guides.path2.desc': 'Sync your timezone, isolate Chinese fonts, stop WebRTC leaks and set up a residential IP the right way.',
+    'guides.path2.cta': 'Clean up your setup',
+    'guides.path3.title': '3 · Register & pay safely',
+    'guides.path3.desc': 'Choose a verification number, pick a low-risk virtual-card BIN and align your billing details before you subscribe.',
+    'guides.path3.cta': 'Register the safe way',
+    'guides.path4.title': '4 · Recover a banned account',
+    'guides.path4.desc': 'Already flagged? Diagnose the ban type, send a high-success English appeal, or fail over to an alternative model.',
+    'guides.path4.cta': 'Start recovery',
+    'guides.related': 'Related reading',
+    'guides.allGuides': 'Browse all guides',
 
     'hero.title': 'Are you a Claude “China user”?',
     'hero.badge.local': '100% local scan',
@@ -98,6 +116,34 @@ export const ui = {
       'A web page cannot read everything Claude Code can, but the key signal is identical: this tool reads the same OS timezone, then adds nine more browser-visible fingerprints — UI language, Chinese fonts, Chinese vendor fonts, WebRTC IP leaks, Chinese browsers, device brand, Intl locale, UTC+8 offset and emoji style — into a weighted score. Signals scoring ≥0.25 count as hits; bands are Low 0–30, Medium 31–60, High 61–100.',
     'ui.weight': 'Weight',
 
+    'why.title': 'Why Claude flags you as a “China user”',
+    'why.p1':
+      'Anthropic does not sell Claude in mainland China, and Claude Code was reported to treat traffic that “looks Chinese” as higher risk. The judgement is not a single toggle — it stacks several weak signals into one probability. Your system timezone is the heaviest single tell because it travels with every request and is hard to fake accidentally, but language, fonts, device brand and network all add weight on top of it.',
+    'why.p2':
+      'The reason a whole browser environment leaks so much is that locale settings bleed into everything: the OS timezone drives Intl and Date, your language preference sets navigator.languages and the Accept-Language header, and the fonts your OS ships with can be probed pixel by pixel through a canvas. Route Claude Code through a proxy on top of that, and the proxy hostname itself becomes another signal — reverse-engineering reports found the verdict encoded steganographically into the “Today’s date” line of the system prompt.',
+    'why.p3':
+      'None of these signals is decisive on its own, which is exactly why the risk is cumulative. A US timezone with a Chinese font pack and a WeChat WebView still reads as suspicious. The steganography and full risk model are broken down in the',
+    'why.link1': 'steganography & 4-layer risk model guide',
+    'why.p3b': ', and the practical fixes live in the',
+    'why.link2': 'environment cleanup & residential IP guide',
+    'why.p3c': '.',
+
+    'reduce.title': 'How to lower your risk score',
+    'reduce.sub':
+      'A quick, ordered checklist. Each step maps directly to one of the weighted signals above — start from the top, because timezone and language carry the most weight.',
+    'reduce.s1':
+      'Set your OS timezone to a non-China zone (for example America/New_York or Europe/London) and confirm getTimezoneOffset() is no longer UTC+8. This is the single highest-impact change.',
+    'reduce.s2':
+      'Move zh-CN / zh-Hans off the top of your browser and OS language list so navigator.languages and Accept-Language lead with English or another non-Chinese locale.',
+    'reduce.s3':
+      'Isolate Chinese and vendor fonts (Microsoft YaHei, PingFang SC, MiSans, HarmonyOS Sans) — use a clean browser profile or an anti-detect browser so the canvas font probe finds nothing distinctly Chinese.',
+    'reduce.s4':
+      'Block WebRTC IP leaks and route through a residential IP rather than a datacenter one, so your real network and geography don’t override an otherwise clean profile.',
+    'reduce.s5':
+      'When using Claude Code through a relay, keep the ANTHROPIC_BASE_URL hostname neutral — avoid domains that contain flagged keywords or AI-lab names, and override the TZ environment variable if the host machine is in China.',
+    'reduce.cta': 'Full step-by-step walkthroughs are in the',
+    'reduce.ctaLink': 'Anti-Ban Guides knowledge base',
+
     'faq.title': 'FAQ',
     'faq.q1': 'Does Claude really check my timezone?',
     'faq.a1':
@@ -107,10 +153,25 @@ export const ui = {
       'No. Only the system timezone maps one-to-one onto Claude’s reported mechanism. The other nine signals are common Chinese-environment or network fingerprints that correlate with it, so treat the score as an estimate, not a verdict.',
     'faq.q3': 'How do I lower my score?',
     'faq.a3':
-      'Switch your OS timezone away from China zones such as Asia/Shanghai, move zh-CN off the top of your browser language list, block WebRTC leaks, and avoid routing Claude Code through proxies whose hostnames contain flagged domains or AI-lab keywords.',
+      'Switch your OS timezone away from China zones such as Asia/Shanghai, move zh-CN off the top of your browser language list, block WebRTC leaks, and avoid routing Claude Code through proxies whose hostnames contain flagged domains or AI-lab keywords. The “How to lower your risk score” checklist above walks through it in order.',
     'faq.q4': 'Is any data uploaded?',
     'faq.a4':
       'No. Every check runs locally in your browser and none of the detected signals are ever sent anywhere. The site loads Google Analytics for anonymous page-view stats and Google AdSense for advertising (ads may use cookies). WebRTC leak detection may briefly contact a public STUN server to gather ICE candidates.',
+    'faq.q5': 'Will a low score guarantee I won’t get banned?',
+    'faq.a5':
+      'No guarantee. This tool only measures browser-visible fingerprints. Anthropic’s real risk model also weighs your IP reputation, payment-card BIN, account age and usage patterns — none of which a web page can see. A low score removes obvious local tells, but a datacenter IP or a high-risk virtual card can still get an account flagged.',
+    'faq.q6': 'Is using this tool or the guides against Anthropic’s terms?',
+    'faq.a6':
+      'The scanner just reads your own browser and reports what it sees — nothing about that is against any terms. The guides are educational reference material about how fingerprinting works. You are responsible for your own use of Claude and for complying with Anthropic’s policies and your local laws.',
+    'faq.q7': 'Why does the timezone matter more than my IP address?',
+    'faq.a7':
+      'Because the OS timezone is read on the client and rides inside the request in a way the reverse-engineering reports tied directly to the encoded verdict. A VPN changes your IP but usually leaves the OS timezone untouched — which is the most common reason a “clean” VPN setup still scores high here.',
+    'faq.q8': 'The API result differs from the browser scan — why?',
+    'faq.a8':
+      'The curl endpoint at /api/check runs on the server, so it can only see what your request exposes: the Vercel geo timezone, country, Accept-Language and User-Agent. It cannot probe fonts, Intl locale or WebRTC leaks, so it scores roughly 62/100 of the total weight and normalises that to 0–100. The in-browser scan reads your actual OS and is the more complete picture.',
+    'faq.q9': 'My account was already banned — what now?',
+    'faq.a9':
+      'First identify the ban type (IP block, forced refund, or a fully disabled account), because each has a different path. The account ban diagnosis & English appeal SOP guide covers how to tell them apart and includes appeal-email templates; if recovery isn’t realistic, the domestic & open-source failover guide covers switching to alternative models with minimal disruption.',
 
     'privacy.title': 'Privacy',
     'privacy.body':
@@ -190,6 +251,24 @@ export const ui = {
     'guides.backHome': '← 返回首页',
     'guides.editorial':
       '由独立开发者 LinXiaoTao 撰写与维护。指南会随新的逆向发现与社区反馈持续更新。本资料库仅供教育与参考,并非 Anthropic 官方文档。',
+    'guides.intro':
+      '这个资料库汇总了我们对 Claude Code 如何给用户打指纹、封号究竟如何发生的全部理解 —— 从底层的 Unicode 隐写与 Anthropic 多维风控模型,到环境纯化、账号与支付避坑的实操,再到账号已经被盯上之后该怎么办。每篇文章都是中英双语,取材自公开逆向分析与社区反馈,既可以单独阅读,也可以按照下方的阅读路径循序渐进。',
+    'guides.paths.title': '从哪里开始',
+    'guides.paths.sub': '不知道先看哪一篇?挑一条最贴合你当前处境的路径。',
+    'guides.path1.title': '1 · 先搞懂风控',
+    'guides.path1.desc': '刚接触?动手改任何东西之前,先看懂指纹检测与四维风控模型到底是怎么运作的。',
+    'guides.path1.cta': '阅读风控原理',
+    'guides.path2.title': '2 · 纯化你的环境',
+    'guides.path2.desc': '同步时区、隔离中文字体、堵住 WebRTC 泄露,并正确配置原生住宅 IP。',
+    'guides.path2.cta': '开始纯化环境',
+    'guides.path3.title': '3 · 安全注册与支付',
+    'guides.path3.desc': '选对接码号段、挑低风险虚拟卡 BIN,并在订阅前对齐你的账单信息。',
+    'guides.path3.cta': '按安全方式注册',
+    'guides.path4.title': '4 · 封号后的自救',
+    'guides.path4.desc': '已经被封?先判定封号类型,发送高成功率英文申诉,或平滑切换到平替模型。',
+    'guides.path4.cta': '开始自救',
+    'guides.related': '相关阅读',
+    'guides.allGuides': '浏览全部指南',
 
     'hero.title': '你是「Claude 中国用户」吗',
     'hero.badge.local': '纯本地检测',
@@ -254,6 +333,34 @@ export const ui = {
       '网页读不到 Claude Code 能读的全部信息,但关键信号完全一致:本工具读取同一个系统时区,再叠加浏览器语言、中文字体、国产厂商字体、WebRTC IP 泄露、国产浏览器、设备品牌、Intl locale、UTC+8 偏移与 emoji 风格九项指纹,加权得分。得分 ≥0.25 计为命中;分档:低 0–30、中 31–60、高 61–100。',
     'ui.weight': '权重',
 
+    'why.title': '为什么会被 Claude 判为「中国用户」',
+    'why.p1':
+      'Anthropic 并不在中国大陆销售 Claude,而 Claude Code 被曝会把「看起来像中国」的流量视为更高风险。这个判定并不是一个开关,而是把多个弱信号叠加成一个概率。系统时区是单项里最重的一环 —— 它伴随每一次请求,又很难被无意伪装;但语言、字体、设备品牌与网络都会在它之上继续加权。',
+    'why.p2':
+      '整个浏览器环境之所以会泄露这么多,是因为区域设置会渗透到方方面面:操作系统时区决定了 Intl 与 Date,语言偏好决定了 navigator.languages 与 Accept-Language 请求头,而操作系统自带的字体可以被 canvas 逐像素探测。如果再让 Claude Code 走一层中转,中转的 hostname 本身又成了一个信号 —— 逆向分析发现,判定结果被隐写进了 system prompt 里「Today’s date」那一行。',
+    'why.p3':
+      '这些信号单看没有一个是决定性的,而这恰恰是风险会累积的原因:一个美国时区,配上一整套中文字体和一个微信 WebView,照样会被读成可疑。隐写机制与完整风控模型拆解见',
+    'why.link1': '隐写暗记与四维风控模型指南',
+    'why.p3b': ',而具体的解决办法收在',
+    'why.link2': '环境纯化与住宅 IP 配置指南',
+    'why.p3c': '。',
+
+    'reduce.title': '如何降低你的风险分',
+    'reduce.sub':
+      '一份简明的有序清单。每一步都直接对应上方某一项加权信号 —— 请从上往下做,因为时区和语言的权重最高。',
+    'reduce.s1':
+      '把系统时区改成非中国时区(例如 America/New_York 或 Europe/London),并确认 getTimezoneOffset() 不再是 UTC+8。这是单项收益最高的改动。',
+    'reduce.s2':
+      '把 zh-CN / zh-Hans 从浏览器与系统语言列表的首位移除,让 navigator.languages 和 Accept-Language 以英文或其他非中文 locale 打头。',
+    'reduce.s3':
+      '隔离中文与厂商字体(微软雅黑、PingFang SC、MiSans、鸿蒙黑体)—— 使用干净的浏览器 Profile 或防指纹浏览器,让 canvas 字体探测找不到任何明显的中文痕迹。',
+    'reduce.s4':
+      '堵住 WebRTC 的 IP 泄露,并走原生住宅 IP 而非数据中心 IP,避免真实网络与地理位置盖过一个本来已经很干净的环境。',
+    'reduce.s5':
+      '通过中转使用 Claude Code 时,保持 ANTHROPIC_BASE_URL 的 hostname 中性 —— 避开含敏感关键词或 AI 实验室名称的域名,若宿主机在中国还需覆盖 TZ 环境变量。',
+    'reduce.cta': '完整的逐步操作收录在',
+    'reduce.ctaLink': '防封指南资料库',
+
     'faq.title': '常见问题',
     'faq.q1': 'Claude 真的会检查我的时区吗?',
     'faq.a1':
@@ -263,10 +370,25 @@ export const ui = {
       '不是。只有系统时区能与 Claude 被披露的机制一一对应,其余九项是与之相关的「中文环境 / 网络指纹」。分数是估计,不是定论。',
     'faq.q3': '怎么降低分数?',
     'faq.a3':
-      '把系统时区改出 Asia/Shanghai 等中国时区,把 zh-CN 从浏览器语言列表首位移除,禁用 WebRTC 泄露,并避免让 Claude Code 走 hostname 含敏感域名 / AI 实验室关键词的中转。',
+      '把系统时区改出 Asia/Shanghai 等中国时区,把 zh-CN 从浏览器语言列表首位移除,禁用 WebRTC 泄露,并避免让 Claude Code 走 hostname 含敏感域名 / AI 实验室关键词的中转。上方「如何降低你的风险分」清单按顺序完整讲了一遍。',
     'faq.q4': '会上传我的数据吗?',
     'faq.a4':
       '不会。所有检测都在浏览器本地完成,检测到的任何信号都不会被发送。网站加载 Google Analytics 统计匿名访问量,并通过 Google AdSense 展示广告(广告可能使用 Cookie)。WebRTC 泄露检测可能短暂连接公共 STUN 服务器以收集 ICE 候选。',
+    'faq.q5': '分数低就一定不会被封吗?',
+    'faq.a5':
+      '不能保证。本工具只衡量浏览器可见的指纹。Anthropic 真实的风控模型还会权衡你的 IP 信誉、支付卡 BIN、账号资历与使用模式 —— 这些网页都看不到。低分能消除明显的本地破绽,但一个数据中心 IP 或高风险虚拟卡照样可能让账号被标记。',
+    'faq.q6': '用这个工具或看这些指南会违反 Anthropic 条款吗?',
+    'faq.a6':
+      '检测器只是读取你自己的浏览器并如实报告 —— 这本身不违反任何条款。指南是关于指纹检测原理的教育性参考资料。你需要为自己如何使用 Claude、以及是否遵守 Anthropic 政策与当地法律负责。',
+    'faq.q7': '为什么时区比我的 IP 地址还重要?',
+    'faq.a7':
+      '因为系统时区是在客户端读取的,并以逆向报告直接关联到「被编码的判定结果」的方式随请求一起传出。VPN 换的是 IP,通常不会改动系统时区 —— 这正是很多「干净」的 VPN 配置在这里依然高分的最常见原因。',
+    'faq.q8': 'API 结果和浏览器检测不一样,为什么?',
+    'faq.a8':
+      '/api/check 的 curl 接口跑在服务端,只能看到请求暴露的信息:Vercel 归属地时区、国家、Accept-Language 与 User-Agent。它无法探测字体、Intl locale 或 WebRTC 泄露,因此只覆盖约 62/100 的权重再归一化到 0–100。浏览器端检测读取的是你真实的操作系统,是更完整的画像。',
+    'faq.q9': '我的账号已经被封了,现在怎么办?',
+    'faq.a9':
+      '先判定封号类型(IP 拦截、被迫退款,还是账号被完全禁用),因为每一种的处理路径都不一样。「封号类型判定与英文申诉 SOP」指南讲了如何区分并附有申诉信模板;如果恢复不现实,「国产 / 开源灾备」指南讲了如何以最小损失切换到平替模型。',
 
     'privacy.title': '隐私说明',
     'privacy.body':

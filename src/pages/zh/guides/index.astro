@@ -9,6 +9,13 @@ import { useTranslations } from '../../../i18n/ui';
 const lang = 'zh';
 const t = useTranslations(lang);
 const home = '/zh/';
+
+const readingPaths = [
+  { slug: 'claude-steganography-and-risk-model', key: 'path1' },
+  { slug: 'environment-cleanup-and-ip-setup', key: 'path2' },
+  { slug: 'account-registration-and-payment-antiban', key: 'path3' },
+  { slug: 'account-appeal-and-recovery-sop', key: 'path4' },
+];
 ---
 
 <BaseLayout
@@ -48,7 +55,26 @@ const home = '/zh/';
       <a class="back-link" href={home}>{t('guides.backHome')}</a>
       <h1>{t('guides.title')}</h1>
       <p class="guides-sub">{t('guides.sub')}</p>
+      <p class="guides-intro">{t('guides.intro')}</p>
       <p class="guides-editorial">{t('guides.editorial')}</p>
+    </section>
+
+    <section class="reading-paths" aria-labelledby="paths-title">
+      <div class="paths-head">
+        <h2 id="paths-title">{t('guides.paths.title')}</h2>
+        <p>{t('guides.paths.sub')}</p>
+      </div>
+      <div class="paths-grid">
+        {
+          readingPaths.map((p) => (
+            <a class="path-card" href={`/zh/guides/${p.slug}/`}>
+              <h3>{t(`guides.${p.key}.title`)}</h3>
+              <p>{t(`guides.${p.key}.desc`)}</p>
+              <span class="path-card__cta">{t(`guides.${p.key}.cta`)} →</span>
+            </a>
+          ))
+        }
+      </div>
     </section>
 
     <section class="guides-grid">
@@ -101,12 +127,75 @@ const home = '/zh/';
     max-width: 65ch;
     margin: 0;
   }
+  .guides-intro {
+    font-size: 0.98rem;
+    color: var(--muted);
+    max-width: 70ch;
+    margin: 16px 0 0;
+    line-height: 1.75;
+  }
   .guides-editorial {
     font-size: 0.92rem;
     color: var(--muted-2);
     max-width: 65ch;
     margin: 12px 0 0;
     line-height: 1.55;
+  }
+  .reading-paths {
+    padding: 8px 0 4px;
+  }
+  .paths-head h2 {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    margin: 0 0 4px;
+  }
+  .paths-head p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin: 0 0 16px;
+  }
+  .paths-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .path-card {
+    display: flex;
+    flex-direction: column;
+    padding: 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    color: var(--text);
+    transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+  }
+  .path-card:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    box-shadow: var(--shadow-md);
+  }
+  .path-card h3 {
+    font-size: 1rem;
+    margin: 0 0 8px;
+    line-height: 1.4;
+    color: var(--text);
+  }
+  .path-card:hover h3 {
+    color: var(--accent-strong);
+  }
+  .path-card p {
+    font-size: 0.86rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin: 0 0 14px;
+    flex: 1;
+  }
+  .path-card__cta {
+    font-size: 0.82rem;
+    font-weight: 650;
+    color: var(--accent-strong);
   }
   .guides-grid {
     display: grid;

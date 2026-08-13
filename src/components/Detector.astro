@@ -17,6 +17,9 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const home = lang === 'zh' ? '/zh/' : '/';
+const guidesHub = lang === 'zh' ? '/zh/guides/' : '/guides/';
+const guideUrl = (slug: string) => (lang === 'zh' ? `/zh/guides/${slug}/` : `/guides/${slug}/`);
+const reduceSteps = [t('reduce.s1'), t('reduce.s2'), t('reduce.s3'), t('reduce.s4'), t('reduce.s5')];
 
 const API_BASE = 'https://fuck-claude.vercel.app/api/check';
 const apiExamples = [
@@ -182,6 +185,39 @@ const apiExamples = [
     </div>
   </section>
 
+  <section id="why-sec" aria-labelledby="why-title">
+    <div class="section-head">
+      <h2 id="why-title">{t('why.title')}</h2>
+    </div>
+    <div class="prose">
+      <p>{t('why.p1')}</p>
+      <p>{t('why.p2')}</p>
+      <p>
+        {t('why.p3')} <a href={guideUrl('claude-steganography-and-risk-model')}>{t('why.link1')}</a>{t('why.p3b')} <a href={guideUrl('environment-cleanup-and-ip-setup')}>{t('why.link2')}</a>{t('why.p3c')}
+      </p>
+    </div>
+  </section>
+
+  <section id="reduce-sec" aria-labelledby="reduce-title">
+    <div class="section-head">
+      <h2 id="reduce-title">{t('reduce.title')}</h2>
+      <p>{t('reduce.sub')}</p>
+    </div>
+    <ol class="reduce-list">
+      {
+        reduceSteps.map((step, i) => (
+          <li class="reduce-item">
+            <span class="reduce-item__num" aria-hidden="true">{i + 1}</span>
+            <span class="reduce-item__text">{step}</span>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="reduce-cta">
+      {t('reduce.cta')} <a href={guidesHub}>{t('reduce.ctaLink')}</a>.
+    </p>
+  </section>
+
   <section id="api-sec" aria-labelledby="api-title">
     <div class="section-head">
       <h2 id="api-title">{t('api.title')}</h2>
@@ -245,7 +281,7 @@ const apiExamples = [
     </div>
     <div class="faq">
       {
-        [1, 2, 3, 4].map((i) => (
+        [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
           <details>
             <summary>{t(`faq.q${i}`)}</summary>
             <p>{t(`faq.a${i}`)}</p>
@@ -375,6 +411,56 @@ const apiExamples = [
     width: 14px;
     height: 14px;
     flex: none;
+  }
+
+  /* ---------- reduce checklist ---------- */
+  .reduce-list {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    counter-reset: reduce;
+  }
+  .reduce-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 16px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+  }
+  .reduce-item__num {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-top: 1px;
+  }
+  .reduce-item__text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .reduce-cta {
+    margin: 16px 0 0;
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+  .reduce-cta a {
+    font-weight: 650;
+    color: var(--accent-strong);
   }
 
   /* ---------- guides showcase ---------- */

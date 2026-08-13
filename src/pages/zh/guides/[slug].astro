@@ -4,7 +4,7 @@ import LangToggle from '../../../components/LangToggle.astro';
 import SocialLinks from '../../../components/SocialLinks.astro';
 import AuthorByline from '../../../components/AuthorByline.astro';
 import Footer from '../../../components/Footer.astro';
-import { GUIDES } from '../../../config/guides';
+import { GUIDES, GUIDE_CATEGORIES } from '../../../config/guides';
 import { SITE_AUTHOR } from '../../../config/site';
 import { ARTICLES_DATA } from '../../../content/guidesData';
 import { useTranslations } from '../../../i18n/ui';
@@ -27,6 +27,10 @@ const lang = 'zh';
 const t = useTranslations(lang);
 const home = '/zh/';
 const guidesHub = '/zh/guides/';
+
+const sameCategory = GUIDES.filter((g) => g.category === guide.category && g.slug !== guide.slug);
+const others = GUIDES.filter((g) => g.category !== guide.category && g.slug !== guide.slug);
+const relatedGuides = [...sameCategory, ...others].slice(0, 3);
 
 const articleJsonLd = {
   '@type': 'Article',
@@ -91,6 +95,22 @@ const articleJsonLd = {
       </header>
 
       <div class="article__body prose" set:html={article.content.zh} />
+
+      <section class="related" aria-labelledby="related-title">
+        <h2 id="related-title">{t('guides.related')}</h2>
+        <div class="related-grid">
+          {
+            relatedGuides.map((g) => (
+              <a class="related-card" href={`/zh/guides/${g.slug}/`}>
+                <span class="related-card__tag">{GUIDE_CATEGORIES[g.category].zh}</span>
+                <span class="related-card__title">{g.title.zh}</span>
+                <span class="related-card__sum">{g.summary.zh}</span>
+              </a>
+            ))
+          }
+        </div>
+        <a class="related-all" href={guidesHub}>{t('guides.allGuides')} →</a>
+      </section>
 
       <footer class="article__footer">
         <a class="back-btn" href={guidesHub}>{t('guides.back')}</a>
@@ -212,6 +232,66 @@ const articleJsonLd = {
   .article__body :global(pre code) {
     background: none;
     padding: 0;
+  }
+  .related {
+    margin-top: 44px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+  .related h2 {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    margin: 0 0 16px;
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .related-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    color: var(--text);
+    transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+  }
+  .related-card:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    box-shadow: var(--shadow-md);
+  }
+  .related-card__tag {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-strong);
+  }
+  .related-card__title {
+    font-size: 0.98rem;
+    font-weight: 650;
+    line-height: 1.4;
+  }
+  .related-card:hover .related-card__title {
+    color: var(--accent-strong);
+  }
+  .related-card__sum {
+    font-size: 0.84rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+  .related-all {
+    display: inline-block;
+    margin-top: 18px;
+    font-size: 0.88rem;
+    font-weight: 650;
+    color: var(--accent-strong);
   }
   .article__footer {
     margin-top: 40px;
