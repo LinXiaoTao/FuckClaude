@@ -29,7 +29,6 @@ Claude's real check. The other signals are general "Chinese environment" fingerp
 | 🏆 Sponsors 🏆 | Introduction |
 | --- | --- |
 | <a href="https://roxybrowser.cn/invite/A4YZ2O"><img src="public/sponsors/roxy-wordmark.jpg" width="140" alt="Roxy Browser"></a> | **[Roxy Browser \| Multi-account farming & anti-ban](https://roxybrowser.cn/invite/A4YZ2O)** (10% off promo code)<br>Thanks to Roxy Browser for sponsoring this project! Built to bypass AI-platform risk-control checks: fully masks Canvas, WebGL and other low-level fingerprints, gives every account absolute physical isolation, and keeps batch account farming stable and ban-free. |
-| <a href="https://nexsms.net/en/"><img src="public/sponsors/nexsms-wordmark-340x126.png" width="170" alt="NexSMS"></a> | **[NexSMS — Global SMS verification platform](https://nexsms.net/en/)**<br>Thanks to NexSMS for sponsoring this project! Instant SMS verification covering 200+ countries with 500k+ active numbers — no KYC, supports ChatGPT, Telegram, WhatsApp & 10k+ platforms. Real local SIM cards, developer-friendly API, pay-as-you-go. [Try free](https://nexsms.net/en/). |
 | <a href="https://www.energy-rent.work/"><img src="public/sponsors/flashrent-wordmark.png" width="170" alt="FlashRent"></a> | **[FlashRent — TRON Energy Rental](https://www.energy-rent.work/)**<br>Thanks to FlashRent for sponsoring this project! Save up to 80% on USDT transfer gas fees on TRON. Instant delegation without freezing TRX — supports single rentals, bulk orders, and Telegram bot integration. [Try free](https://www.energy-rent.work/). |
 
 ## Detected signals & weights
@@ -192,7 +191,6 @@ Claude Code 标记为中国用户。点击后会有逐项检测的扫描动效,�
 | 🏆 赞助商 🏆 | 介绍 |
 | --- | --- |
 | <a href="https://roxybrowser.cn/invite/A4YZ2O"><img src="public/sponsors/roxy-wordmark.jpg" width="140" alt="Roxy 浏览器"></a> | **[Roxy 浏览器 \| 养号&多账号防封号](https://roxybrowser.cn/invite/A4YZ2O)**(优惠码 9 折)<br>感谢 Roxy 浏览器 赞助本项目!专为绕过 AI 平台风控检测而生!完美屏蔽 Canvas、WebGL 等底层指纹,实现多账号绝对物理隔离,批量养号稳定防封。 |
-| <a href="https://nexsms.net/"><img src="public/sponsors/nexsms-wordmark-340x126.png" width="170" alt="NexSMS"></a> | **[NexSMS — 全球号码接码平台](https://nexsms.net/)**<br>感谢 NexSMS 赞助本项目!全球号码即刻接收验证码,覆盖 200+ 国家,50 万+ 活跃号码,无需 KYC,支持 ChatGPT / Telegram / WhatsApp 等上万种平台。实体本地卡号,开发者友好 API,按量计费。欢迎[免费体验](https://nexsms.net/)。 |
 | <a href="https://www.energy-rent.work/"><img src="public/sponsors/flashrent-wordmark.png" width="170" alt="FlashRent"></a> | **[FlashRent — 波场能量租用平台](https://www.energy-rent.work/)**<br>感谢 FlashRent 赞助本项目！波场 TRON 能量租用，USDT 转账手续费立省高达 80%。秒级到账，无需冻结 TRX，支持单笔租用、批量派发与 Telegram Bot 集成。欢迎[免费体验](https://www.energy-rent.work/)。 |
 
 ## 检测信号与权重

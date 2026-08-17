@@ -49,29 +49,6 @@ export const SPONSORS: Sponsor[] = [
     },
   },
   {
-    id: 'nexsms',
-    name: 'NexSMS',
-    url: {
-      zh: 'https://nexsms.net/',
-      en: 'https://nexsms.net/en/',
-    },
-    logo: '/sponsors/nexsms-wordmark-340x126.png',
-    logoWidth: 340,
-    logoHeight: 126,
-    headline: {
-      zh: '全球号码即刻接收验证码。',
-      en: 'Global numbers, instant SMS verification.',
-    },
-    tagline: {
-      zh: '覆盖 200+ 国家，50 万+ 活跃号码，无需 KYC，支持 ChatGPT / Telegram / WhatsApp 等上万种平台',
-      en: '200+ countries, 500k+ active numbers, no KYC — supports ChatGPT, Telegram, WhatsApp & 10k+ platforms',
-    },
-    cta: {
-      zh: '免费体验',
-      en: 'Try free',
-    },
-  },
-  {
     id: 'flashrent',
     name: 'FlashRent',
     url: {
