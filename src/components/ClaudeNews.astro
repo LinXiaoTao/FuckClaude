@@ -1,0 +1,153 @@
+---
+import { getLatestNews, NEWS_CATEGORIES, type NewsCategory } from '../config/news';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  limit?: number;
+  showMoreLink?: boolean;
+}
+
+const { lang, limit, showMoreLink = false } = Astro.props;
+const t = useTranslations(lang);
+const items = getLatestNews(limit);
+const newsHub = lang === 'zh' ? '/zh/news/' : '/news/';
+
+function formatDate(iso: string, locale: Lang): string {
+  return new Date(iso).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
+function categoryLabel(category: NewsCategory, locale: Lang): string {
+  return NEWS_CATEGORIES[category][locale];
+}
+---
+
+<section class="news-block" aria-labelledby="news-block-title">
+  <div class="news-block__head">
+    <div>
+      <h2 id="news-block-title">{t('news.title')}</h2>
+      <p>{t('news.sub')}</p>
+    </div>
+    {
+      showMoreLink && (
+        <a class="nav__link" href={newsHub}>
+          <span>{t('news.viewAll')} →</span>
+        </a>
+      )
+    }
+  </div>
+  <ol class="news-list">
+    {
+      items.map((item) => (
+        <li class="news-item">
+          <div class="news-item__meta">
+            <span class="news-item__tag">{categoryLabel(item.category, lang)}</span>
+            <time class="news-item__date" datetime={item.publishedAt}>
+              {formatDate(item.publishedAt, lang)}
+            </time>
+          </div>
+          <h3 class="news-item__title">
+            <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer">
+              {item.title[lang]}
+            </a>
+          </h3>
+          <p class="news-item__summary">{item.summary[lang]}</p>
+          <span class="news-item__source">
+            {t('news.source')}: {item.sourceName}
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .news-block__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+  .news-block__head h2 {
+    font-family: var(--serif);
+    font-size: 1.55rem;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .news-block__head p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .news-list {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .news-item {
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.18s, box-shadow 0.18s;
+  }
+  .news-item:hover {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    box-shadow: var(--shadow-md);
+  }
+  .news-item__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .news-item__tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-strong);
+    background: var(--accent-soft);
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .news-item__date {
+    font-size: 0.78rem;
+    color: var(--muted-2);
+    font-family: var(--mono);
+  }
+  .news-item__title {
+    font-size: 1.05rem;
+    margin: 0 0 8px;
+    line-height: 1.35;
+  }
+  .news-item__title a {
+    color: var(--text);
+  }
+  .news-item__title a:hover {
+    color: var(--accent-strong);
+    text-decoration: none;
+  }
+  .news-item__summary {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0 0 10px;
+  }
+  .news-item__source {
+    font-size: 0.78rem;
+    color: var(--muted-2);
+  }
+</style>

@@ -9,6 +9,7 @@ import Sponsors from './Sponsors.astro';
 import CnModels from './CnModels.astro';
 import SocialLinks from './SocialLinks.astro';
 import Footer from './Footer.astro';
+import ClaudeNews from './ClaudeNews.astro';
 
 interface Props {
   lang: Lang;
@@ -18,7 +19,12 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const home = lang === 'zh' ? '/zh/' : '/';
 const guidesHub = lang === 'zh' ? '/zh/guides/' : '/guides/';
+const newsHub = lang === 'zh' ? '/zh/news/' : '/news/';
 const guideUrl = (slug: string) => (lang === 'zh' ? `/zh/guides/${slug}/` : `/guides/${slug}/`);
+const featuredGuides = [
+  GUIDES.find((g) => g.slug === 'antiban-essentials'),
+  ...GUIDES.filter((g) => g.slug !== 'antiban-essentials').slice(0, 2),
+].filter((g): g is (typeof GUIDES)[number] => g !== undefined);
 const reduceSteps = [t('reduce.s1'), t('reduce.s2'), t('reduce.s3'), t('reduce.s4'), t('reduce.s5')];
 
 const API_BASE = 'https://fuck-claude.vercel.app/api/check';
@@ -45,13 +51,22 @@ const apiExamples = [
       <span class="brand__text">{t('nav.title')}</span>
     </a>
     <nav class="nav__actions">
-      <a class="nav__link" href={lang === 'zh' ? '/zh/guides/' : '/guides/'}>
+      <a class="nav__link" href={guidesHub}>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
           <path d="M6 6h10"></path>
           <path d="M6 10h10"></path>
         </svg>
         <span>{t('nav.guides')}</span>
+      </a>
+      <a class="nav__link" href={newsHub}>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path>
+          <path d="M18 14h-8"></path>
+          <path d="M15 18h-5"></path>
+          <path d="M10 6h8v4h-8V6Z"></path>
+        </svg>
+        <span>{t('nav.news')}</span>
       </a>
       <LangToggle lang={lang} />
       <SocialLinks lang={lang} />
@@ -250,6 +265,10 @@ const apiExamples = [
     </div>
   </section>
 
+  <section id="news-sec">
+    <ClaudeNews lang={lang} limit={3} showMoreLink />
+  </section>
+
   <section id="guides-sec" aria-labelledby="guides-title">
     <div class="section-head" style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
       <div>
@@ -262,8 +281,8 @@ const apiExamples = [
     </div>
     <div class="guides-showcase">
       {
-        GUIDES.slice(0, 3).map((guide) => (
-          <a class="guide-box" href={lang === 'zh' ? `/zh/guides/${guide.slug}/` : `/guides/${guide.slug}/`}>
+        featuredGuides.map((guide) => (
+          <a class="guide-box" href={guideUrl(guide.slug)}>
             <h3>{guide.title[lang]}</h3>
             <p>{guide.summary[lang]}</p>
             <span class="guide-box__more">{t('guides.readMore')} →</span>

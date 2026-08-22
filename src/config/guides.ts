@@ -50,6 +50,20 @@ export const GUIDE_CATEGORIES = {
 
 export const GUIDES: GuideArticle[] = [
   {
+    slug: 'antiban-essentials',
+    category: 'account',
+    title: {
+      en: 'Claude Anti-Ban Essentials: Quick Safety Checklist',
+      zh: 'Claude 防封速查手册：账号、API 与频率控制要点',
+    },
+    summary: {
+      en: 'A concise, actionable checklist covering account & payment safety, environment hygiene, API rate limits, usage patterns, and recovery steps — with links to in-depth guides.',
+      zh: '涵盖账号支付、环境/browser 卫生、API 速率限制、使用模式与封号自救的简明实操清单，附深度指南链接。',
+    },
+    readTime: '6 min',
+    updatedAt: '2026-08',
+  },
+  {
     slug: 'claude-steganography-and-risk-model',
     category: 'analysis',
     title: {

@@ -19,6 +19,7 @@ import { payment_methods_comparison_content } from './guides/payment-methods-com
 import { regional_access_strategy_content } from './guides/regional-access-strategy';
 import { automation_safety_practices_content } from './guides/automation-safety-practices';
 import { claude_ai_content_watermarking_content } from './guides/claude-ai-content-watermarking';
+import { antiban_essentials_content } from './guides/antiban-essentials';
 
 export interface ArticleContent {
   slug: string;
@@ -33,6 +34,17 @@ export interface ArticleContent {
 }
 
 export const ARTICLES_DATA: Record<string, ArticleContent> = {
+  'antiban-essentials': {
+    slug: 'antiban-essentials',
+    category: { en: 'Account & Payment Safety', zh: '账号注册与支付避坑' },
+    title: {
+      en: 'Claude Anti-Ban Essentials: Quick Safety Checklist',
+      zh: 'Claude 防封速查手册：账号、API 与频率控制要点',
+    },
+    readTime: '6 min',
+    updatedAt: '2026-08',
+    content: antiban_essentials_content,
+  },
   'claude-steganography-and-risk-model': {
     slug: 'claude-steganography-and-risk-model',
     category: { en: 'Risk Model & Steganography', zh: '风控解密与隐写原理' },

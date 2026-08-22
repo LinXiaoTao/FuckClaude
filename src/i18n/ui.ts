@@ -19,7 +19,17 @@ export const ui = {
 
     'nav.title': 'Fuck Claude',
     'nav.guides': 'Anti-Ban Guides',
+    'nav.news': 'News',
     'nav.home': 'Home',
+
+    'news.title': 'Claude Latest News',
+    'news.sub':
+      'Curated updates on Claude products, API changes, regional policy, and community-reported security trends.',
+    'news.note':
+      'Items are manually curated from official Anthropic announcements and community reports. Links open external sources.',
+    'news.backHome': '← Back to Home',
+    'news.viewAll': 'View all news',
+    'news.source': 'Source',
     'credit': 'Built with Claude Fable 5',
 
     'guides.title': 'Claude Anti-Ban & Safety Knowledge Base',
@@ -34,6 +44,9 @@ export const ui = {
       'This knowledge base collects everything we have learned about how Claude Code fingerprints users and how bans actually happen — from the low-level Unicode steganography and Anthropic’s multi-layer risk model, through practical environment cleanup, account and payment safety, all the way to what to do once an account is already flagged. Every article is bilingual, sourced from public reverse-engineering and community reports, and written to be read on its own or as part of a longer path below.',
     'guides.paths.title': 'Where to start',
     'guides.paths.sub': 'Not sure which article to open first? Pick the path that matches your situation.',
+    'guides.path0.title': '0 · Quick anti-ban checklist',
+    'guides.path0.desc': 'Need the essentials fast? Account safety, API limits, and frequency rules in one short guide.',
+    'guides.path0.cta': 'Open the checklist',
     'guides.path1.title': '1 · Understand the risk',
     'guides.path1.desc': 'New here? Start with how the fingerprinting and 4-layer risk model actually work before you change anything.',
     'guides.path1.cta': 'Read the risk model',
@@ -240,7 +253,17 @@ export const ui = {
 
     'nav.title': 'Fuck Claude',
     'nav.guides': '防封指南',
+    'nav.news': '最新动态',
     'nav.home': '首页',
+
+    'news.title': 'Claude 最新动态',
+    'news.sub':
+      '精选 Claude 产品更新、API 变更、地区政策与社区风控趋势，助你及时调整使用策略。',
+    'news.note':
+      '条目由本站人工整理，来源为 Anthropic 官方公告与社区反馈。点击标题将在新标签页打开外部链接。',
+    'news.backHome': '← 返回首页',
+    'news.viewAll': '查看全部动态',
+    'news.source': '来源',
     'credit': '此网站使用 Claude Fable 5 开发',
 
     'guides.title': 'Claude 防封避坑与环境纯化资料库',
@@ -255,6 +278,9 @@ export const ui = {
       '这个资料库汇总了我们对 Claude Code 如何给用户打指纹、封号究竟如何发生的全部理解 —— 从底层的 Unicode 隐写与 Anthropic 多维风控模型,到环境纯化、账号与支付避坑的实操,再到账号已经被盯上之后该怎么办。每篇文章都是中英双语,取材自公开逆向分析与社区反馈,既可以单独阅读,也可以按照下方的阅读路径循序渐进。',
     'guides.paths.title': '从哪里开始',
     'guides.paths.sub': '不知道先看哪一篇?挑一条最贴合你当前处境的路径。',
+    'guides.path0.title': '0 · 防封速查手册',
+    'guides.path0.desc': '想快速上手?账号安全、API 限制与频率控制要点，一篇搞定。',
+    'guides.path0.cta': '打开速查手册',
     'guides.path1.title': '1 · 先搞懂风控',
     'guides.path1.desc': '刚接触?动手改任何东西之前,先看懂指纹检测与四维风控模型到底是怎么运作的。',
     'guides.path1.cta': '阅读风控原理',

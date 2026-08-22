@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LangToggle from '../../components/LangToggle.astro';
+import SocialLinks from '../../components/SocialLinks.astro';
+import Footer from '../../components/Footer.astro';
+import ClaudeNews from '../../components/ClaudeNews.astro';
+import { useTranslations } from '../../i18n/ui';
+
+const lang = 'en';
+const t = useTranslations(lang);
+const home = '/';
+---
+
+<BaseLayout
+  lang={lang}
+  path="/news/"
+  title={`${t('news.title')} | Fuck Claude`}
+  description={t('news.sub')}
+  enPath="/news/"
+  zhPath="/zh/news/"
+  omitFaq
+>
+  <header class="nav">
+    <div class="wrap nav__inner">
+      <a class="brand" href={home}>
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <rect width="64" height="64" rx="14" fill="currentColor"></rect>
+          <g fill="#FAF9F5">
+            <rect x="26.9" y="8" width="7.6" height="29" rx="3.8"></rect>
+            <rect x="18.9" y="24.5" width="6.4" height="11" rx="3.2"></rect>
+            <rect x="36.1" y="24.5" width="6.4" height="11" rx="3.2"></rect>
+            <rect x="16.9" y="30" width="27.6" height="24" rx="9"></rect>
+            <rect x="40.6" y="32.5" width="7.6" height="16" rx="3.8" transform="rotate(-24 44.4 40.5)"></rect>
+          </g>
+        </svg>
+        <span class="brand__text">{t('nav.title')}</span>
+      </a>
+      <nav class="nav__actions">
+        <a class="nav__link" href={home}>{t('nav.home')}</a>
+        <a class="nav__link" href="/guides/">{t('nav.guides')}</a>
+        <LangToggle lang={lang} />
+        <SocialLinks lang={lang} />
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="news-hero">
+      <a class="back-link" href={home}>{t('news.backHome')}</a>
+      <h1>{t('news.title')}</h1>
+      <p class="news-sub">{t('news.sub')}</p>
+      <p class="news-note">{t('news.note')}</p>
+    </section>
+
+    <ClaudeNews lang={lang} />
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>
+
+<style>
+  .news-hero {
+    padding: 36px 0 12px;
+  }
+  .back-link {
+    display: inline-block;
+    margin-bottom: 12px;
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .back-link:hover {
+    color: var(--accent-strong);
+  }
+  .news-hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin: 0 0 10px;
+    line-height: 1.2;
+  }
+  .news-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 65ch;
+    margin: 0;
+  }
+  .news-note {
+    font-size: 0.88rem;
+    color: var(--muted-2);
+    max-width: 65ch;
+    margin: 12px 0 0;
+    line-height: 1.55;
+  }
+</style>

@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import LangToggle from '../../components/LangToggle.astro';
 import SocialLinks from '../../components/SocialLinks.astro';
 import Footer from '../../components/Footer.astro';
+import ClaudeNews from '../../components/ClaudeNews.astro';
 import { GUIDES, GUIDE_CATEGORIES } from '../../config/guides';
 import { useTranslations } from '../../i18n/ui';
 
@@ -11,6 +12,7 @@ const t = useTranslations(lang);
 const home = '/';
 
 const readingPaths = [
+  { slug: 'antiban-essentials', key: 'path0' },
   { slug: 'claude-steganography-and-risk-model', key: 'path1' },
   { slug: 'environment-cleanup-and-ip-setup', key: 'path2' },
   { slug: 'account-registration-and-payment-antiban', key: 'path3' },
@@ -44,6 +46,7 @@ const readingPaths = [
       </a>
       <nav class="nav__actions">
         <a class="nav__link" href={home}>{t('nav.home')}</a>
+        <a class="nav__link" href="/news/">{t('nav.news')}</a>
         <LangToggle lang={lang} />
         <SocialLinks lang={lang} />
       </nav>
@@ -75,6 +78,10 @@ const readingPaths = [
           ))
         }
       </div>
+    </section>
+
+    <section class="news-section">
+      <ClaudeNews lang={lang} limit={3} showMoreLink />
     </section>
 
     <section class="guides-grid">
@@ -158,6 +165,9 @@ const readingPaths = [
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 14px;
+  }
+  .news-section {
+    padding: 8px 0 20px;
   }
   .path-card {
     display: flex;
