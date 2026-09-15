@@ -82,16 +82,16 @@ export const SPONSORS: Sponsor[] = [
     logoWidth: 360,
     logoHeight: 120,
     headline: {
-      zh: 'AgentEarth 一键聚合 1,400+ 专业 API 工具库',
-      en: 'AgentEarth — 1,400+ Professional APIs & Tools for AI Agents',
+      zh: '新用户注册即赠 5,000 积分（价值 $5）',
+      en: 'Sign up to get 5,000 credits ($5 value) free',
     },
     tagline: {
-      zh: '全面支持 MCP 与 Skill 协议接入，注册即送 5,000 积分，稳定高效',
-      en: 'Seamless integration via MCP & Skill protocols. Sign up to get 5,000 free credits',
+      zh: '1,400+ 专业 API 工具库，MCP & Skill 协议一键接入',
+      en: '1,400+ pro APIs for AI Agents — ready via MCP & Skill',
     },
     cta: {
-      zh: '免费体验',
-      en: 'Try free',
+      zh: '立即注册',
+      en: 'Sign up free',
     },
   },
 ];
