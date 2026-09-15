@@ -20,6 +20,9 @@ alwaysApply: true
 - **Social / X Community Posts**: Maintained in `src/config/community-posts.ts` and rendered via `src/components/CommunityPosts.astro`. Must retain direct links to original X posts, author name, handle, profile link, tags, and practical takeaways.
 - **Guides**: Guide metadata lives in `src/config/guides.ts`, while in-depth content articles live in `src/content/guides/`.
 
+## Sponsors
+- **Sponsors Config**: Maintained in `src/config/sponsors.ts` and rendered via `src/components/Sponsors.astro`. Logos live under `public/sponsors/`. Entries include bilingual headlines, taglines, CTAs, and referral URLs.
+
 ## Detection Signals
 - Fingerprint detection signals live in `src/config/signals.ts` with sum of weights = 100.
 - Detection must run client-side only without uploading user data. Follow `skills/detection-signals/SKILL.md`.
