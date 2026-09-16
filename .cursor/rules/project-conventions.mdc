@@ -14,6 +14,8 @@ alwaysApply: true
 - Supported languages: `zh` (paths prefixed with `/zh/`) and `en` (paths at `/`).
 - All user-facing strings must be defined in `src/i18n/ui.ts` for both languages.
 - Breadcrumbs, alternate hreflang links, and JSON-LD must stay in sync across `/zh/` and root versions.
+- Automatic client/server redirects based on browser language are strictly forbidden per Google SEO guidelines.
+- Use `src/components/LocaleSuggestBanner.astro` to render a non-blocking suggestion banner when browser language differs from current page language.
 
 ## News & Community Content
 - **Official News**: Maintained in `src/config/news.ts`. Items include bilingual title, summary, takeaway, category tag, and source link.
