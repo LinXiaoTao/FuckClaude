@@ -258,6 +258,10 @@ export const ui = {
     'ui.claudeBadge': 'Claude Same',
     'ui.retest': 'Scan again',
     'ui.start': 'Start scan',
+
+    'banner.prompt': 'Choose another language to browse content adapted for your browser language preference.',
+    'banner.continue': 'Continue',
+    'banner.dismiss': 'Close',
   },
 
   zh: {
@@ -497,6 +501,10 @@ export const ui = {
     'ui.claudeBadge': 'Claude 同款',
     'ui.retest': '重新扫描',
     'ui.start': '开始检测',
+
+    'banner.prompt': '选择另一语言以浏览适用于你浏览器语言偏好的内容。',
+    'banner.continue': '继续',
+    'banner.dismiss': '关闭',
   },
 } as const;
 

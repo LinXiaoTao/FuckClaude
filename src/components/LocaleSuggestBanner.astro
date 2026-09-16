@@ -1,0 +1,248 @@
+---
+import { languages, type Lang } from '../i18n/ui';
+
+interface Props {
+  currentLang: Lang;
+  enPath?: string;
+  zhPath?: string;
+}
+
+const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
+---
+
+<aside
+  id="locale-banner"
+  class="locale-banner"
+  role="region"
+  aria-label="Language recommendation banner"
+  data-current-lang={currentLang}
+  data-en-url={enPath}
+  data-zh-url={zhPath}
+  style="display: none;"
+>
+  <div class="locale-banner-inner">
+    <div class="locale-banner-text">
+      <span id="locale-banner-message">
+        {currentLang === 'zh'
+          ? '选择另一语言以浏览适用于你浏览器语言偏好的内容。'
+          : 'Choose another language to browse content adapted for your browser language preference.'}
+      </span>
+    </div>
+
+    <div class="locale-banner-controls">
+      <div class="locale-banner-select-wrapper">
+        <svg class="locale-banner-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <select id="locale-banner-select" class="locale-banner-select" aria-label="Select preferred language">
+          <option value="en" selected={currentLang !== 'en'}>English</option>
+          <option value="zh" selected={currentLang !== 'zh'}>中文</option>
+        </select>
+        <svg class="locale-banner-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+
+      <a id="locale-banner-continue" href={currentLang === 'zh' ? enPath : zhPath} class="locale-banner-button">
+        {currentLang === 'zh' ? '继续' : 'Continue'}
+      </a>
+
+      <button id="locale-banner-close" class="locale-banner-close" aria-label="Close suggestion banner" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+</aside>
+
+<script is:inline>
+  (() => {
+    try {
+      const banner = document.getElementById('locale-banner');
+      if (!banner) return;
+
+      const DISMISSED_KEY = 'apple_style_lang_banner_dismissed';
+      if (sessionStorage.getItem(DISMISSED_KEY) === '1') {
+        return;
+      }
+
+      const currentLang = banner.getAttribute('data-current-lang') || 'en';
+      const enUrl = banner.getAttribute('data-en-url') || '/';
+      const zhUrl = banner.getAttribute('data-zh-url') || '/zh/';
+
+      const primary = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+      const userWantsZh = /^zh/i.test(primary);
+      const detectedLang = userWantsZh ? 'zh' : 'en';
+
+      // Only display the banner when detected browser language differs from current page language
+      if (detectedLang === currentLang) {
+        return;
+      }
+
+      const select = document.getElementById('locale-banner-select');
+      const continueBtn = document.getElementById('locale-banner-continue');
+      const closeBtn = document.getElementById('locale-banner-close');
+      const msg = document.getElementById('locale-banner-message');
+
+      if (select) {
+        select.value = detectedLang;
+      }
+
+      function updateContinueTarget() {
+        if (!select || !continueBtn) return;
+        const target = select.value === 'zh' ? zhUrl : enUrl;
+        continueBtn.setAttribute('href', target);
+      }
+
+      if (select) {
+        select.addEventListener('change', updateContinueTarget);
+      }
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          banner.style.display = 'none';
+          sessionStorage.setItem(DISMISSED_KEY, '1');
+        });
+      }
+
+      updateContinueTarget();
+      banner.style.display = 'block';
+    } catch (e) {}
+  })();
+</script>
+
+<style>
+  .locale-banner {
+    width: 100%;
+    background-color: #f5f5f7;
+    border-bottom: 1px solid #d2d2d7;
+    color: #1d1d1f;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.4;
+    position: relative;
+    z-index: 100;
+  }
+
+  .locale-banner-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .locale-banner-text {
+    flex: 1 1 320px;
+    color: #1d1d1f;
+    font-weight: 400;
+  }
+
+  .locale-banner-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .locale-banner-select-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #d2d2d7;
+    border-radius: 8px;
+    padding: 4px 28px 4px 28px;
+    min-height: 32px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+
+  .locale-banner-check {
+    position: absolute;
+    left: 8px;
+    width: 13px;
+    height: 13px;
+    color: #1d1d1f;
+    pointer-events: none;
+  }
+
+  .locale-banner-chevron {
+    position: absolute;
+    right: 8px;
+    width: 12px;
+    height: 12px;
+    color: #86868b;
+    pointer-events: none;
+  }
+
+  .locale-banner-select {
+    appearance: none;
+    background: transparent;
+    border: none;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1d1d1f;
+    outline: none;
+    cursor: pointer;
+    padding-right: 4px;
+  }
+
+  .locale-banner-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1d1d1f;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+    min-height: 32px;
+  }
+
+  .locale-banner-button:hover {
+    background-color: #333336;
+  }
+
+  .locale-banner-close {
+    background: transparent;
+    border: none;
+    padding: 4px;
+    margin-left: 4px;
+    color: #1d1d1f;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+  }
+
+  .locale-banner-close svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .locale-banner-close:hover {
+    color: #000000;
+  }
+
+  @media (max-width: 640px) {
+    .locale-banner-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .locale-banner-controls {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+</style>

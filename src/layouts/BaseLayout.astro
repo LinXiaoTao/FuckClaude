@@ -1,6 +1,7 @@
 ---
 import { useTranslations, type Lang } from '../i18n/ui';
 import { ADSENSE_PUB_ID } from '../config/site';
+import LocaleSuggestBanner from '../components/LocaleSuggestBanner.astro';
 
 interface Props {
   lang: Lang;
@@ -108,30 +109,6 @@ const jsonLd = {
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="generator" content={Astro.generator} />
 
-    {/* Homepage default language: follow the browser, fall back to English.
-        Runs before paint on the English root only; an explicit choice wins. */}
-    <script is:inline>
-      (function () {
-        try {
-          var p = location.pathname;
-          if (p !== '/' && p !== '/index.html') return;
-          var stored = null;
-          try {
-            stored = localStorage.getItem('fc-lang');
-          } catch (e) {}
-          var wantZh;
-          if (stored === 'zh' || stored === 'en') {
-            wantZh = stored === 'zh';
-          } else {
-            var primary =
-              (navigator.languages && navigator.languages[0]) || navigator.language || '';
-            wantZh = /^zh/i.test(primary);
-          }
-          if (wantZh) location.replace('/zh/');
-        } catch (e) {}
-      })();
-    </script>
-
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
@@ -184,6 +161,7 @@ const jsonLd = {
     </script>
   </head>
   <body>
+    <LocaleSuggestBanner currentLang={lang} enPath={enPath} zhPath={zhPath} />
     <slot />
 
     <script>
