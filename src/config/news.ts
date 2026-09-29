@@ -26,6 +26,205 @@ export const NEWS_CATEGORIES: Record<NewsCategory, { en: string; zh: string }> =
 
 export const CLAUDE_NEWS: NewsItem[] = [
   {
+    id: 'claude-code-2-1-283-managed-models',
+    category: 'product',
+    publishedAt: '2026-09-25',
+    title: {
+      en: 'Claude Code 2.1.283 adds enterprise model allow/deny lists and third-party auto mode default',
+      zh: 'Claude Code 2.1.283：Enterprise 模型白/黑名单与第三方默认 auto mode',
+    },
+    summary: {
+      en: 'Claude Code 2.1.283 introduces managed `availableModelsMatch` (`exact` pins a listed model version until admins update the list) and `deniedModels` (blocks specific models even when otherwise allowed). Third-party API, Vertex, Bedrock, or Foundry sessions with telemetry off now start in auto mode when no `permissions.defaultMode` is set. Other highlights: `/doctor prompt-audit` scans CLAUDE.md and skills for stale patterns, MCP tool images are saved to disk for follow-up tools, and `claude plugin validate` rejects install-unsafe marketplace names.',
+      zh: 'Claude Code 2.1.283 新增托管设置 `availableModelsMatch`（`exact` 仅允许列表中的具体模型版本，直至管理员更新）与 `deniedModels`（可单独封禁某模型）。在第三方 API、Vertex、Bedrock 或 Foundry 且关闭 telemetry 时，若未配置 `permissions.defaultMode`，新会话默认进入 auto mode。其他要点：`/doctor prompt-audit` 审计 CLAUDE.md 与 skill 是否沿用旧模型写法；MCP 返回的图片会落盘供后续工具读取；`claude plugin validate` 会拒绝无法安装的 marketplace 命名。',
+    },
+    takeaway: {
+      en: 'Enterprise admins should pair `deniedModels` with explicit `permissions.defaultMode` on sensitive repos — auto mode now applies outside claude.ai subscriptions too.',
+      zh: 'Enterprise 建议在敏感仓库同时配置 `deniedModels` 与明确的 `permissions.defaultMode`——auto mode 已不仅限于 claude.ai 订阅环境。',
+    },
+    relatedGuideSlug: 'claude-code-and-api-safety',
+    sourceUrl: 'https://github.com/anthropics/claude-code/releases/tag/v2.1.283',
+    sourceName: 'Anthropic',
+  },
+  {
+    id: 'api-refusal-billing-resume-sep-2026',
+    category: 'api',
+    publishedAt: '2026-09-24',
+    title: {
+      en: 'Anthropic resumes billing for pre-output refusals in bio, frontier LLM, and reasoning-extraction categories',
+      zh: 'Anthropic 恢复对生物、前沿 LLM 与推理提取类「零输出拒答」的 API 计费',
+    },
+    summary: {
+      en: 'From September 24, 2026, Messages API requests that refuse before any output are billed again when `stop_details.category` is `bio`, `frontier_llm`, or `reasoning_extraction` — the categories Anthropic says have the lowest false-positive rates. Mid-stream refusals were already charged. Other pre-output refusal categories stay free; fallback credits are unchanged. Charges use the executing model’s normal rates on all platforms.',
+      zh: '自 2026 年 9 月 24 日起，当 `stop_details.category` 为 `bio`、`frontier_llm` 或 `reasoning_extraction` 时，Messages API 在尚未输出任何内容即拒答的请求将重新计入账单——Anthropic 称这三类误报率最低。中途拒答此前已计费；其余类别的「零输出拒答」仍免费，fallback 额度规则不变。费用按实际执行模型的常规定价，全平台生效。',
+    },
+    takeaway: {
+      en: 'Budget for classifier-triggered hard stops on biology- or capability-probing prompts — they can cost full input tokens even with empty assistant output.',
+      zh: '涉及生物或能力探测的 prompt 若触发分类器硬拒，即使 assistant 为空也可能按完整输入计费，请在成本模型里预留这部分。',
+    },
+    relatedGuideSlug: 'api-advanced-optimization',
+    sourceUrl: 'https://platform.claude.com/docs/en/release-notes/overview',
+    sourceName: 'Anthropic Docs',
+  },
+  {
+    id: 'compliance-activity-feed-redaction-sep-2026',
+    category: 'api',
+    publishedAt: '2026-09-24',
+    title: {
+      en: 'Compliance API Activity Feed strips filenames and artifact titles from events',
+      zh: 'Compliance API Activity Feed 不再返回文件名与 artifact 标题',
+    },
+    summary: {
+      en: 'The Compliance API Activity Feed no longer exposes file names, project document names, or artifact titles. The `filename` and `title` fields on file, project-document, and artifact activities are always empty or omitted, including for historical records. Enterprise teams that need human-readable names must resolve IDs with a Compliance Access Key scoped to `read:compliance_user_data`.',
+      zh: 'Compliance API Activity Feed 已停止在事件中暴露文件名、项目文档名与 artifact 标题。文件、项目文档与 artifact 类活动的 `filename`、`title` 字段现恒为空或省略，历史记录亦同。Enterprise 若需可读名称，须用带 `read:compliance_user_data` 范围的 Compliance Access Key 按 ID 另行查询。',
+    },
+    takeaway: {
+      en: 'Update SIEM parsers and audit dashboards that relied on inline titles — store only activity IDs unless you call the compliance user-data endpoints.',
+      zh: '若 SIEM 或审计面板曾依赖 Activity Feed 内嵌标题，请改为只存 activity ID，或额外调用 compliance 用户数据端点解析。',
+    },
+    relatedGuideSlug: 'automation-safety-practices',
+    sourceUrl: 'https://platform.claude.com/docs/en/release-notes/overview',
+    sourceName: 'Anthropic Docs',
+  },
+  {
+    id: 'cache-diagnostics-ga-sep-2026',
+    category: 'api',
+    publishedAt: '2026-09-23',
+    title: {
+      en: 'Prompt cache diagnostics exit beta on the Messages API',
+      zh: 'Messages API 缓存诊断（cache diagnostics）转正 GA',
+    },
+    summary: {
+      en: 'Cache diagnostics is GA on the Claude API and no longer needs the `cache-diagnosis-2026-04-07` beta header. Opt in by sending a `diagnostics` object on Messages requests; every `POST /v1/messages` response now includes a `diagnostics` field (`null` when you did not opt in). Requests that still send the old beta header behave as before.',
+      zh: 'Claude API 上的缓存诊断已 GA，不再需要 `cache-diagnosis-2026-04-07` beta 头。在 Messages 请求中加入 `diagnostics` 对象即可启用；所有 `POST /v1/messages` 响应现均含 `diagnostics` 字段（未启用时为 `null`）。仍发送旧 beta 头的请求保持原有行为。',
+    },
+    takeaway: {
+      en: 'Send `diagnostics` on every turn in multi-step agents — header-only requests no longer store fingerprints for later `previous_message_id` checks.',
+      zh: '多轮 Agent 请在每一轮都带上 `diagnostics`；仅发 beta 头不再写入 fingerprint，后续 `previous_message_id` 诊断会失效。',
+    },
+    relatedGuideSlug: 'api-advanced-optimization',
+    sourceUrl: 'https://platform.claude.com/docs/en/release-notes/overview',
+    sourceName: 'Anthropic Docs',
+  },
+  {
+    id: 'claude-opus-5-5-launch',
+    category: 'product',
+    publishedAt: '2026-09-22',
+    title: {
+      en: 'Claude Opus 5.5 launches at $4/$20 with ~40% lower typical cost than Opus 5',
+      zh: 'Claude Opus 5.5 发布：$4/$20 定价，典型 workload 较 Opus 5 约省 40%',
+    },
+    summary: {
+      en: 'Anthropic released Claude Opus 5.5 (`claude-opus-5-5`) as the first Claude 5.5-family model: 1M context, 128k max output, always-on adaptive thinking, priced at $4 / $20 per MTok with cache reads at $0.20 / MTok (vs $5 / $25 and $0.50 on Opus 5). Anthropic positions it near Claude Fable 5.1 on most agentic coding and knowledge work while using fewer tokens per task. API constraints mirror Fable 5.1: `thinking` cannot be disabled, and `tool_choice` types `any`/`tool` return 400. Fast mode is available in research preview. Pro, Max, Team, and seat-based Enterprise plans get higher five-hour limits plus a user-chosen rate-limit reset.',
+      zh: 'Anthropic 发布 Claude Opus 5.5（`claude-opus-5-5`），为 Claude 5.5 系列首款：1M 上下文、128k 最大输出、始终开启 adaptive thinking，定价 $4 / $20 per MTok，缓存读取 $0.20 / MTok（Opus 5 为 $5 / $25 与 $0.50）。官方称其多数 agentic 编程与知识工作接近 Fable 5.1，且单任务 token 更少。API 限制与 Fable 5.1 类似：不可关闭 `thinking`，`tool_choice` 的 `any`/`tool` 返回 400。Fast mode 为 research preview。Pro / Max / Team 与按席位 Enterprise 提升五小时额度，并提供可自选时机的 rate limit 重置。',
+    },
+    takeaway: {
+      en: 'Migrate long-horizon coding agents from Opus 5 for cost; drop disabled-thinking and forced-tool `tool_choice` patterns before switching model IDs.',
+      zh: '长周期编程 Agent 可从 Opus 5 迁来降本；切换 model ID 前请移除关闭 thinking 与强制 `tool_choice` 的写法。',
+    },
+    relatedGuideSlug: 'api-advanced-optimization',
+    sourceUrl: 'https://www.anthropic.com/news/claude-opus-5-5',
+    sourceName: 'Anthropic',
+  },
+  {
+    id: 'claude-code-2-1-277-agents-md',
+    category: 'product',
+    publishedAt: '2026-09-18',
+    title: {
+      en: 'Claude Code 2.1.277 reads AGENTS.md, removes TaskOutput, and hardens headless sessions',
+      zh: 'Claude Code 2.1.277 支持 AGENTS.md、移除 TaskOutput，并修复无头会话',
+    },
+    summary: {
+      en: 'Claude Code 2.1.277 uses `AGENTS.md` as project instructions when no `CLAUDE.md` exists (configurable under “Project instructions”; not yet on Bedrock, Vertex, or Foundry). The deprecated TaskOutput tool is removed — use Read on background task output files instead. Gateway egress can set `CLAUDE_GATEWAY_PROXY_IS_EGRESS_BOUNDARY=1` so proxies receive hostnames instead of local DNS resolution. Dozens of fixes cover `claude -p` hangs, empty text-block resume failures, plugin reinstall races, and headless cost totals resetting to zero on resume.',
+      zh: 'Claude Code 2.1.277 在无 `CLAUDE.md` 的项目中改读 `AGENTS.md`（可在「Project instructions」配置；Bedrock / Vertex / Foundry 尚未支持）。已弃用的 TaskOutput 工具被移除，请用 Read 读取后台任务输出文件。网关 egress 可设 `CLAUDE_GATEWAY_PROXY_IS_EGRESS_BOUNDARY=1`，让代理收到主机名而非本地解析结果。另含大量修复：`claude -p` 挂起、空 text block 导致 resume 失败、插件重装竞态，以及无头 resume 后费用统计归零等。',
+    },
+    takeaway: {
+      en: 'Standardize on either CLAUDE.md or AGENTS.md per repo — mixed or empty instruction files now change which rules Claude loads at session start.',
+      zh: '每个仓库固定选用 CLAUDE.md 或 AGENTS.md 之一；混用或留空会改变会话启动时加载的项目指令。',
+    },
+    relatedGuideSlug: 'automation-safety-practices',
+    sourceUrl: 'https://github.com/anthropics/claude-code/releases/tag/v2.1.277',
+    sourceName: 'Anthropic',
+  },
+  {
+    id: 'life-sciences-verification-program',
+    category: 'security',
+    publishedAt: '2026-09-17',
+    title: {
+      en: 'Life Sciences Verification Program opens for vetted biology workloads on Mythos, Opus, and Sonnet',
+      zh: 'Life Sciences Verification Program 开放，向合规生命科学团队放宽生物类护栏',
+    },
+    summary: {
+      en: 'Anthropic opened the Life Sciences Verification Program (LSVP) for teams vetted on credentials, security posture, and research oversight. Standard Use grants cover most R&D workflows on Mythos 5.1, Opus 5, Sonnet 5, and future models via API, Claude Science, claude.ai, and Claude Code, with classifiers tuned for legitimate biology. High-risk Use add-ons remove life-science blocks for single projects on six-month renewal. Enforcement shifts toward offline monitoring with mandatory 30-day retention on LSVP traffic; cyber classifiers stay active.',
+      zh: 'Anthropic 正式开放 Life Sciences Verification Program（LSVP），面向通过资质、安全与科研监督审查的团队。Standard Use 授权覆盖 API、Claude Science、claude.ai 与 Claude Code 上多数研发流程，可在 Mythos 5.1、Opus 5、Sonnet 5 及后续模型上使用针对合规生物任务调优的分类器。High-risk Use 附加授权针对单个项目移除生命科学拦截，每半年续期。执法更多转向离线行为监测，LSVP 流量强制 30 天留存；网络安全类分类器仍生效。',
+    },
+    takeaway: {
+      en: 'Routine biology Q&A blocked on consumer Fable is not a bypass bug — legitimate labs need LSVP verification instead of prompt jailbreaks.',
+      zh: '消费级 Fable 上被拦的常规生物问答并非 bypass 漏洞；合规实验室应走 LSVP 审核，而非 prompt 越狱。',
+    },
+    sourceUrl: 'https://www.anthropic.com/news/life-sciences-verification-program',
+    sourceName: 'Anthropic',
+  },
+  {
+    id: 'messages-api-on-demand-compaction-beta',
+    category: 'api',
+    publishedAt: '2026-09-14',
+    title: {
+      en: 'On-demand conversation compaction enters beta on the Messages API',
+      zh: 'Messages API 按需会话压缩（compaction）进入 beta',
+    },
+    summary: {
+      en: 'With the `compact-2026-09-04` beta header, Messages API callers can compact a thread on demand via the top-level `compaction` parameter. The API returns a signed `compaction` block summarizing the messages you sent; later turns send that block instead of the full history. You choose when to compact, can run compaction in the background, and may keep recent turns verbatim after the summary — preserved thinking in those turns can remain valid on supported models.',
+      zh: '在 `compact-2026-09-04` beta 头下，Messages API 可通过顶层 `compaction` 参数按需压缩会话。API 返回带签名的 `compaction` 块以概括已发送消息；后续轮次用该块替代完整历史。调用方自行决定压缩时机，可后台执行，并可在摘要之后保留最近若干轮原文——在支持的模型上，这些轮次中的 preserved thinking 仍可保持有效。',
+    },
+    takeaway: {
+      en: 'Use compaction for long agent loops instead of hand-rolling summaries — unsigned DIY summaries still break thinking-block binding on post–Aug 31 accounts.',
+      zh: '长 Agent 循环优先用官方 compaction，勿手写未签名摘要——在 8 月 31 日后新建账号上，自制摘要仍会破坏 thinking block 绑定。',
+    },
+    relatedGuideSlug: 'api-advanced-optimization',
+    sourceUrl: 'https://platform.claude.com/docs/en/release-notes/overview',
+    sourceName: 'Anthropic Docs',
+  },
+  {
+    id: 'anthropic-threat-intelligence-sep-2026',
+    category: 'security',
+    publishedAt: '2026-09-10',
+    title: {
+      en: 'September 2026 threat report: agentic cyber ops, distillation, and Claude Code in state campaigns',
+      zh: '2026 年 9 月威胁情报：Agent 化网络行动、蒸馏滥用与 Claude Code 参与国家级行动',
+    },
+    summary: {
+      en: 'Anthropic’s September 2026 Threat Intelligence report covers misuse disrupted from December 2025 through August 2026 across cyber operations, influence ops, scams, surveillance, biology, weapons, and distillation. Haiku, Sonnet, and Opus were abused; Fable and Mythos-class models were not, except one illicit distillation case. Case studies describe multi-agent kill chains — including operators refining Claude Code skills to rebuild malware when detections fire — and reinforce that high-volume automated extraction remains an enforcement priority.',
+      zh: 'Anthropic 2026 年 9 月威胁情报报告汇总 2025 年 12 月至 2026 年 8 月间被处置的滥用，涵盖网络行动、影响操作、诈骗、监控、生物、武器与蒸馏等七类。Haiku、Sonnet、Opus 曾被滥用；Fable 与 Mythos 级模型未卷入（仅一起非法蒸馏例外）。案例包括多 Agent 网络杀伤链——有行动者通过调整 Claude Code skill 在检测触发后自动重构恶意软件——并再次表明高并发自动化能力提取仍是执法重点。',
+    },
+    takeaway: {
+      en: 'Treat Claude Code auto mode and stolen API keys as high-risk surfaces — Anthropic explicitly links skill-driven workflows to espionage-scale operations.',
+      zh: 'Claude Code 的 auto mode 与泄露 API Key 均属高风险面——官方已将 skill 驱动工作流与国家级间谍行动关联披露。',
+    },
+    relatedGuideSlug: 'claude-code-and-api-safety',
+    sourceUrl: 'https://www.anthropic.com/threat-intelligence-report-september-2026',
+    sourceName: 'Anthropic Threat Intelligence',
+  },
+  {
+    id: 'managed-agents-auto-permission-sep-2026',
+    category: 'product',
+    publishedAt: '2026-09-10',
+    title: {
+      en: 'Claude Managed Agents gain server-side `auto` permission evaluation; `ant beta:sessions connect` ships',
+      zh: 'Claude Managed Agents 支持服务端 `auto` 权限评估；`ant beta:sessions connect` 上线',
+    },
+    summary: {
+      en: 'Managed Agents permission policies now accept `auto`: the server evaluates each agent or MCP tool call and runs, denies, or pauses for approval. `agent.tool_use` and `agent.mcp_tool_use` events include an `evaluation` field beside `evaluated_permission`. Anthropic CLI 1.32.0 adds `ant beta:sessions connect` to attach a terminal to a Managed Agents session, send messages, and approve pending tool calls; pass `--web` to open the Console session viewer locally.',
+      zh: 'Managed Agents 权限策略新增 `auto`：服务端逐条评估 agent 或 MCP 工具调用并执行、拒绝或暂停待审批。`agent.tool_use` 与 `agent.mcp_tool_use` 事件在 `evaluated_permission` 旁新增 `evaluation` 字段。Anthropic CLI 1.32.0 提供 `ant beta:sessions connect`，可在终端接入 Managed Agents 会话、发送消息并审批挂起工具调用；加 `--web` 可在本地打开 Console 会话查看器。',
+    },
+    takeaway: {
+      en: 'Prefer server-side `auto` over client-only allowlists when running untrusted MCP tools in managed sandboxes.',
+      zh: '在托管沙箱中运行不可信 MCP 时，优先用服务端 `auto` 评估，而非仅依赖客户端 allowlist。',
+    },
+    relatedGuideSlug: 'automation-safety-practices',
+    sourceUrl: 'https://platform.claude.com/docs/en/release-notes/overview',
+    sourceName: 'Anthropic Docs',
+  },
+  {
     id: 'anthropic-transparency-report-h1-2026',
     category: 'security',
     publishedAt: '2026-09-04',
