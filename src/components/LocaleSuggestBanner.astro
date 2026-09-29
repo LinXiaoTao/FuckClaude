@@ -233,16 +233,67 @@ const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
     color: #000000;
   }
 
+  .locale-banner-select:focus-visible,
+  .locale-banner-button:focus-visible,
+  .locale-banner-close:focus-visible {
+    outline: 2px solid #0071e3;
+    outline-offset: 2px;
+  }
+
   @media (max-width: 640px) {
     .locale-banner-inner {
+      position: relative;
       flex-direction: column;
       align-items: flex-start;
+      padding: 10px max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left));
       gap: 10px;
+    }
+
+    .locale-banner-text {
+      flex: 0 1 auto;
+      width: 100%;
+      padding-right: 44px;
     }
 
     .locale-banner-controls {
       width: 100%;
-      justify-content: space-between;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .locale-banner-select-wrapper {
+      flex: 1;
+      min-height: 40px;
+      padding: 6px 30px 6px 28px;
+    }
+
+    .locale-banner-select {
+      font-size: 16px;
+      width: 100%;
+    }
+
+    .locale-banner-button {
+      flex-shrink: 0;
+      min-height: 40px;
+      padding: 8px 18px;
+      font-size: 14px;
+    }
+
+    .locale-banner-close {
+      position: absolute;
+      top: 2px;
+      right: max(4px, env(safe-area-inset-right));
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      margin-left: 0;
+      border-radius: 50%;
     }
   }
 </style>
