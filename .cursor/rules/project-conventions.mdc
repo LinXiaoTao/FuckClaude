@@ -9,6 +9,8 @@ alwaysApply: true
 - **Framework**: Astro (SSG/SSR hybrid via `@astrojs/vercel`) + TypeScript.
 - **Production Domain**: `https://fuck-claude.vercel.app` (canonical). Custom domains (`fuckclaude.tech`, `www.fuckclaude.tech`) 308 redirect to this origin.
 - **Styling**: Scoped CSS using site-wide CSS variables (`var(--surface)`, `var(--border)`, `var(--accent)`, `var(--mono)`, etc.).
+- **Mobile header**: The shared `.nav` / `.nav__actions` / `.brand__text` styles live in `src/layouts/BaseLayout.astro`. At `max-width: 560px` the brand collapses to the logo and `.nav__actions` wraps onto a second row. New header items must not break this; verify `documentElement.scrollWidth === viewport width` at 320/360/375/414px on `/`, `/zh/`, `/guides/`, `/news/`.
+- **Grids and long tokens**: Use `minmax(min(Npx, 100%), 1fr)` for `auto-fill` grids, and `overflow-wrap: anywhere` on cards that render user-facing text with long identifiers (env vars, model names).
 
 ## Bilingual & i18n
 - Supported languages: `zh` (paths prefixed with `/zh/`) and `en` (paths at `/`).

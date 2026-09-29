@@ -340,10 +340,23 @@ const jsonLd = {
       }
       @media (max-width: 560px) {
         .nav__inner {
+          height: auto;
+          min-height: 60px;
           gap: 8px;
-          padding: 0 14px;
+          padding: 8px 14px;
+        }
+        .brand {
+          flex: none;
+        }
+        /* Logo-only brand on small screens — the action row needs the width. */
+        .brand__text {
+          display: none;
         }
         .nav__actions {
+          flex: 1;
+          min-width: 0;
+          flex-wrap: wrap;
+          justify-content: flex-end;
           gap: 6px;
         }
         .lang-toggle a {
