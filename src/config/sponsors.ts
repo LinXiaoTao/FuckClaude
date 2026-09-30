@@ -26,6 +26,29 @@ export interface Sponsor {
 
 export const SPONSORS: Sponsor[] = [
   {
+    id: 'apimart',
+    name: 'APIMart.AI',
+    url: {
+      zh: 'https://go.apimart.ai/s-fuck-claude',
+      en: 'https://go.apimart.ai/s-fuck-claude',
+    },
+    logo: '/sponsors/apimart-wordmark.jpg',
+    logoWidth: 360,
+    logoHeight: 120,
+    headline: {
+      zh: 'GPT-Image-2 低至 $0.006/张，1 美元可出图 160+ 张。',
+      en: 'GPT-Image-2 from $0.006 per image — 160+ images per $1.',
+    },
+    tagline: {
+      zh: 'APIMart 专注 AI 图片/视频生成的低价 API 平台，长期稳定、响应快',
+      en: 'APIMart is a low-cost API platform for AI image and video generation — stable and fast',
+    },
+    cta: {
+      zh: '立即体验',
+      en: 'Try now',
+    },
+  },
+  {
     id: 'roxy',
     name: 'Roxy浏览器',
     url: {
