@@ -100,7 +100,7 @@ export const ui = {
     'hero.badge.openSource': 'Open source',
     'hero.scoreOutOf': '/ 100',
 
-    'sponsors.label': 'Sponsors',
+    'sponsors.label': 'Sponsored',
     'sponsors.cta': 'Want to be listed here?',
 
     'cnModels.label': 'Chinese AI models',
@@ -416,7 +416,7 @@ export const ui = {
     'hero.badge.openSource': '开源代码',
     'hero.scoreOutOf': '/ 100',
 
-    'sponsors.label': '赞助商',
+    'sponsors.label': '赞助',
     'sponsors.cta': '想显示在下方？',
 
     'cnModels.label': '国产大模型',
