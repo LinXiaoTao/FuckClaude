@@ -156,6 +156,15 @@ export const TRUST_CONTENT: Record<TrustPageId, { en: string; zh: string }> = {
   <li>Observed Output vs Expected Output</li>
 </ul>
 
+<h2>Privacy and Data Requests</h2>
+<p>The scanner runs in your browser and we keep no scan logs, so in most cases there is no personal data for us to export or delete. If you believe we hold information about you, or you want to ask about cookies used by Google AdSense or Google Analytics on this site, email us with the subject line "Privacy request". See the <a href="/privacy/">Privacy Policy</a> for details and opt-out links.</p>
+
+<h2>Advertising and Sponsorship</h2>
+<p>Ads on this site are served by Google AdSense, and sponsor placements are labeled as sponsored. For sponsorship inquiries, email us with your product, the regions you target, and the placement you are interested in. Sponsorship never changes the content of our guides or the detector's scoring.</p>
+
+<h2>What We Cannot Help With</h2>
+<p>Fuck Claude is an independent project, not Anthropic. We cannot restore, unlock or review Claude accounts, process refunds, or change anything on your Anthropic subscription. For those, contact <a href="https://support.anthropic.com/" target="_blank" rel="noopener noreferrer">Anthropic Support</a>. Our <a href="/guides/account-appeal-and-recovery-sop/">appeal guide</a> explains how the official appeal process works.</p>
+
 <h2>Frequently Answered Topics</h2>
 <p>Before sending an inquiry, please note that common questions regarding timezone mechanics, virtual card BIN selection, API prompt caching, and account appeal templates are comprehensively covered in our <a href="/guides/">Anti-Ban Knowledge Base</a> and homepage FAQ.</p>
 `.trim(),
@@ -178,6 +187,15 @@ export const TRUST_CONTENT: Record<TrustPageId, { en: string; zh: string }> = {
   <li>发生异常的具体检测项（如：系统时区、国产厂商字体、WebRTC 泄露等）</li>
   <li>实际检测值与预期值的差异说明</li>
 </ul>
+
+<h2>隐私与数据请求</h2>
+<p>检测器完全在你的浏览器内运行，我们不保存检测日志，因此大多数情况下我们并不持有可以导出或删除的个人数据。如果你认为我们保存了与你有关的信息，或想咨询本站 Google AdSense、Google Analytics 使用的 Cookie，请发邮件并在标题注明“隐私请求”。详细说明与退出个性化广告的方式见 <a href="/zh/privacy/">隐私政策</a>。</p>
+
+<h2>广告与赞助</h2>
+<p>本站广告由 Google AdSense 投放，赞助位会明确标注为赞助内容。赞助合作请发邮件说明产品、目标地区和希望的展示位置。赞助不会影响指南内容或检测器的评分。</p>
+
+<h2>我们无法处理的事项</h2>
+<p>Fuck Claude 是独立项目，不是 Anthropic。我们无法恢复、解封或审核 Claude 账号，无法处理退款，也无法修改你的 Anthropic 订阅。这些问题请联系 <a href="https://support.anthropic.com/" target="_blank" rel="noopener noreferrer">Anthropic 官方支持</a>。官方申诉流程可参考本站的 <a href="/zh/guides/account-appeal-and-recovery-sop/">申诉指南</a>。</p>
 
 <h2>常见疑问先行解答</h2>
 <p>在致信之前，关于时区判定原理、虚拟卡 BIN 挑选、API Prompt Cache 优化实战以及封号英文申诉模板等问题，在 <a href="/zh/guides/">防封指南知识库</a> 和首页常见问题中均有详尽阐述，建议先查阅参考。</p>

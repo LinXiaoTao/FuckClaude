@@ -1,7 +1,7 @@
 export const multi_account_management_content = {
   en: `
 <h2>1. Physical vs Software Isolation Comparison</h2>
-<p>Managing multiple Claude accounts safely requires isolation at the browser fingerprint, IP, and payment levels. Choose the appropriate isolation strategy based on your risk tolerance and budget:</p>
+<p>This guide is for legitimate cases such as separate work and personal accounts or individual team seats. It is not a way to evade a ban or get around per-account limits, which Anthropic's terms prohibit. Keeping separate accounts clean means separating browser profiles, network sessions and billing. Choose the level of separation that fits your needs and budget:</p>
 
 <table>
   <thead>
@@ -138,7 +138,7 @@ google-chrome --user-data-dir="/path/to/profile-accountB"</code></pre>
 `,
   zh: `
 <h2>一、 物理隔离 vs 软件隔离方案对比</h2>
-<p>安全管理多个 Claude 账号需要在浏览器指纹、IP 和支付层面进行隔离。根据风险承受能力和预算选择合适的隔离策略：</p>
+<p>本文面向合规场景，例如分开的工作与个人账号、团队成员各自的席位；不适用于规避封禁或绕过单账号限制，这些行为违反 Anthropic 条款。要让多个账号互不干扰，需要分开浏览器 Profile、网络会话与账单。请根据需求与预算选择合适的隔离程度：</p>
 
 <table>
   <thead>
