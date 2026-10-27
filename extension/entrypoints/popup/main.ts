@@ -189,7 +189,7 @@ function renderSites(): void {
     });
     sub.append(box, document.createTextNode(t('includeSub')));
     row.append(sub);
-    if (site.host === 'fuck-claude.vercel.app') row.append(el('span', 'tag', t('selfTest')));
+    if (site.host === 'fuckclaude.tech' || site.host === 'fuck-claude.vercel.app') row.append(el('span', 'tag', t('selfTest')));
     else if (site.suggested) row.append(el('span', 'tag', t('suggested')));
     const remove = el('button', undefined, t('remove'));
     remove.type = 'button';

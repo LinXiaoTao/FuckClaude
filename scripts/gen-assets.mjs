@@ -49,7 +49,7 @@ const ogSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"
   <text x="525" y="370" font-family="Georgia, 'Times New Roman', serif" font-size="70" font-weight="700" font-style="italic" fill="${ORANGE}">“China user”?</text>
   <text x="530" y="442" font-family="Helvetica, Arial, sans-serif" font-size="25" fill="${MUTED}">Timezone · Language · Fonts · Locale</text>
   <text x="530" y="482" font-family="Helvetica, Arial, sans-serif" font-size="25" fill="${MUTED}">Checked 100% locally in your browser</text>
-  <text x="530" y="556" font-family="Menlo, monospace" font-size="23" fill="${FAINT}">fuck-claude.vercel.app</text>
+  <text x="530" y="556" font-family="Menlo, monospace" font-size="23" fill="${FAINT}">fuckclaude.tech</text>
 </svg>`;
 
 const px = (svg, size) =>

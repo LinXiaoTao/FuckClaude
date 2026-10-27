@@ -11,8 +11,9 @@ export const TRUST_CONTENT: Record<TrustPageId, { en: string; zh: string }> = {
 <h2>2. Google AdSense & Third-Party Advertising Cookies</h2>
 <p>This website uses <strong>Google AdSense</strong> to display advertisements. Google and third-party advertising partners use cookies, web beacons, and similar technologies to serve and personalize ads based on a user's prior visits to this website and other websites across the Internet:</p>
 <ul>
-  <li>Google's use of advertising cookies enables it and its partners to serve ads to users based on their visit to this site and/or other sites on the Internet.</li>
-  <li>Third-party vendors and ad networks may also serve ads on this website.</li>
+  <li>Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites.</li>
+  <li>Google's use of advertising cookies, including the DoubleClick (DART) cookie, enables it and its partners to serve ads to users based on their visit to this site and/or other sites on the Internet.</li>
+  <li>Third-party vendors and ad networks may also serve ads on this website. Learn more in <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">How Google uses information from sites or apps that use its services</a>.</li>
   <li>Users may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.</li>
   <li>Alternatively, you can opt out of third-party vendor cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">AboutAds.info</a> or <a href="https://www.youronlinechoices.com/" target="_blank" rel="noopener noreferrer">Your Online Choices</a>.</li>
 </ul>
@@ -44,8 +45,9 @@ export const TRUST_CONTENT: Record<TrustPageId, { en: string; zh: string }> = {
 <h2>2. Google AdSense 与第三方广告 Cookie 说明</h2>
 <p>本站使用 <strong>Google AdSense</strong> 展示广告。Google 及第三方广告合作伙伴会使用 Cookie、网络信标和类似技术，根据用户对本站及互联网上其他网站的历史访问记录投放与个性化广告：</p>
 <ul>
-  <li>Google 对广告 Cookie 的使用使其及合作伙伴能够根据用户对本网站和/或互联网上其他网站的访问向用户投放广告。</li>
-  <li>第三方广告供应商和广告联盟也可能在本站投放广告。</li>
+  <li>包括 Google 在内的第三方供应商会使用 Cookie，根据用户此前对本网站或其他网站的访问情况投放广告。</li>
+  <li>Google 对广告 Cookie（包括 DoubleClick / DART Cookie）的使用，使其及合作伙伴能够根据用户对本网站和/或互联网上其他网站的访问向用户投放个性化广告。</li>
+  <li>第三方广告供应商和广告联盟也可能在本站投放广告。详见 <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">Google 如何使用来自使用其服务的网站或应用的信息</a>。</li>
   <li>你可以随时访问 <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google 广告设置</a> 停用个性化广告。</li>
   <li>你还可以访问 <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">AboutAds.info</a> 或 <a href="https://www.youronlinechoices.com/" target="_blank" rel="noopener noreferrer">Your Online Choices</a> 停用第三方供应商用于个性化广告的 Cookie。</li>
 </ul>

@@ -26,6 +26,7 @@ const optional = [
   'https://*.claude.ai/*',
   'https://claude.com/*',
   'https://*.claude.com/*',
+  'https://fuckclaude.tech/*',
   'https://fuck-claude.vercel.app/*',
   'https://*/*',
 ];

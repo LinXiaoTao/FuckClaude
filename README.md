@@ -55,8 +55,8 @@ weights sum to **100**, so the total score is the sum of contributions. Bands: L
 
 ## Anti-Ban Guides
 
-Bilingual knowledge base at [`/guides/`](https://fuck-claude.vercel.app/guides/)
-(English) and [`/zh/guides/`](https://fuck-claude.vercel.app/zh/guides/) (中文):
+Bilingual knowledge base at [`/guides/`](https://fuckclaude.tech/guides/)
+(English) and [`/zh/guides/`](https://fuckclaude.tech/zh/guides/) (中文):
 Claude Code steganography, environment cleanup, registration & payment, API
 safety, appeal SOP, and domestic / open-source failover.
 
@@ -79,13 +79,13 @@ safety, appeal SOP, and domestic / open-source failover.
 
 ```bash
 # Text report — replies in the language of your Accept-Language header
-curl https://fuck-claude.vercel.app/api/check
+curl https://fuckclaude.tech/api/check
 
 # Force a language via the request header
-curl -H "Accept-Language: zh" https://fuck-claude.vercel.app/api/check
+curl -H "Accept-Language: zh" https://fuckclaude.tech/api/check
 
 # JSON
-curl "https://fuck-claude.vercel.app/api/check?format=json"
+curl "https://fuckclaude.tech/api/check?format=json"
 ```
 
 > The API is an IP/header estimate and differs from the in-browser OS scan; the
@@ -223,8 +223,8 @@ Claude Code 标记为中国用户。点击后会有逐项检测的扫描动效,�
 
 ## 防封指南资料库
 
-中英双语资料库:[`/guides/`](https://fuck-claude.vercel.app/guides/)(英文)与
-[`/zh/guides/`](https://fuck-claude.vercel.app/zh/guides/)(中文),覆盖 Claude Code
+中英双语资料库:[`/guides/`](https://fuckclaude.tech/guides/)(英文)与
+[`/zh/guides/`](https://fuckclaude.tech/zh/guides/)(中文),覆盖 Claude Code
 隐写原理、环境纯化、注册支付避坑、API 安全、申诉 SOP 与国产 / 开源灾备。
 
 ## 分享与 API
@@ -241,13 +241,13 @@ Claude Code 标记为中国用户。点击后会有逐项检测的扫描动效,�
 
 ```bash
 # 纯文本报告 —— 语言自动跟随 Accept-Language 请求头
-curl https://fuck-claude.vercel.app/api/check
+curl https://fuckclaude.tech/api/check
 
 # 通过请求头指定语言
-curl -H "Accept-Language: zh" https://fuck-claude.vercel.app/api/check
+curl -H "Accept-Language: zh" https://fuckclaude.tech/api/check
 
 # JSON
-curl "https://fuck-claude.vercel.app/api/check?format=json"
+curl "https://fuckclaude.tech/api/check?format=json"
 ```
 
 > 该接口是基于 IP / 请求头的估算,与浏览器端读取操作系统的检测结果不同;geo 头仅在
