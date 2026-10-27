@@ -24,7 +24,6 @@ export function suggestedSites(): SiteEntry[] {
   const sites: SiteEntry[] = [
     { host: 'claude.ai', includeSubdomains: true, suggested: true },
     { host: 'claude.com', includeSubdomains: true, suggested: true },
-    { host: 'fuckclaude.tech', includeSubdomains: false, suggested: true },
     { host: 'fuck-claude.vercel.app', includeSubdomains: false, suggested: true },
   ];
   if (__SLC_E2E__) {

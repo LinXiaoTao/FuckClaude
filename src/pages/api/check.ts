@@ -40,7 +40,7 @@ import { useTranslations, type Lang } from '../../i18n/ui';
 
 export const prerender = false;
 
-const SITE = 'https://fuckclaude.tech';
+const SITE = 'https://fuck-claude.vercel.app';
 
 const CORS: Record<string, string> = {
   'Access-Control-Allow-Origin': '*',

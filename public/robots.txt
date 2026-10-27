@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://fuckclaude.tech/sitemap-index.xml
+Sitemap: https://fuck-claude.vercel.app/sitemap-index.xml

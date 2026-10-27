@@ -38,7 +38,7 @@ const { html, toc } = prepareArticleHtml(rawHtml, t('guides.tableLabel'));
 const readTime = t('guides.readTime').replace('{n}', String(estimateReadMinutes(rawHtml, lang)));
 const relatedGuides = getRelatedGuides(guide);
 
-const site = Astro.site ?? new URL('https://fuckclaude.tech');
+const site = Astro.site ?? new URL('https://fuck-claude.vercel.app');
 const currentUrl = new URL(articlePath, site).href;
 const homeUrl = new URL(home, site).href;
 const guidesHubUrl = new URL(guidesHub, site).href;

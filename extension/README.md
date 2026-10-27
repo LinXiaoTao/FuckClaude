@@ -25,7 +25,7 @@ pnpm build
 
 - `https://claude.ai/*` 与 `https://*.claude.ai/*`
 - `https://claude.com/*` 与 `https://*.claude.com/*`
-- `https://fuckclaude.tech/*` 与旧域名 `https://fuck-claude.vercel.app/*`
+- `https://fuck-claude.vercel.app/*`
 - `https://*/*`，只给用户手动添加的具体 HTTPS 站点用。运行时按该站点的 origin 申请，不会直接请求通配。
 
 正式构建没有 `host_permissions`，也没有 `<all_urls>`。

@@ -131,7 +131,7 @@ export async function renderResultCard(d: CardData): Promise<Blob | null> {
   ctx.textAlign = 'right';
   ctx.font = `500 24px ${SANS}`;
   ctx.fillStyle = C.muted2;
-  ctx.fillText('fuckclaude.tech', SIZE - 80, headY + 1);
+  ctx.fillText('fuck-claude.vercel.app', SIZE - 80, headY + 1);
 
   // Title.
   ctx.textAlign = 'center';
@@ -215,7 +215,7 @@ export async function renderResultCard(d: CardData): Promise<Blob | null> {
   ctx.font = `500 26px ${SANS}`;
   ctx.textAlign = 'center';
   ctx.fillText(
-    d.lang === 'zh' ? '在 fuckclaude.tech 测测你的' : 'Measure yours at fuckclaude.tech',
+    d.lang === 'zh' ? '在 fuck-claude.vercel.app 测测你的' : 'Measure yours at fuck-claude.vercel.app',
     SIZE / 2,
     SIZE - 68,
   );
