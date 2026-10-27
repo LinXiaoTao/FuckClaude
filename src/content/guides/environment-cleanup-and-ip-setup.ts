@@ -124,7 +124,7 @@ date
 </ul>
 
 <h2>3. Anti-Detect Browser Isolation Checklist</h2>
-<p>For teams managing multiple Claude accounts, anti-detect browsers (AdsPower, GoLogin, Multilogin, etc.) provide hardware-level fingerprint separation so each account presents a coherent regional identity. This is environment hygiene at scale—not an invitation to violate Anthropic's terms.</p>
+<p>Where a team legitimately operates separate accounts (for example, individual company seats), anti-detect browsers (AdsPower, GoLogin, Multilogin, etc.) keep each profile's settings separate and consistent. This is environment hygiene, not a way around Anthropic's terms: account sharing, ban evasion and access from unsupported regions remain against the rules.</p>
 
 <ol>
   <li><strong>One dedicated profile per account:</strong> Never share cookies or localStorage between Pro seats.</li>
@@ -293,7 +293,7 @@ date
 </ul>
 
 <h2>三、防指纹浏览器隔离清单</h2>
-<p>团队或多账号场景下，AdsPower、GoLogin 等防指纹浏览器可在同机为每账号维持连贯地区身份，属于规模化环境隔离，仍须遵守服务条款。</p>
+<p>团队合规使用多个独立账号（例如公司为每位成员开通的席位）时，AdsPower、GoLogin 等防指纹浏览器可让每个 Profile 的设置相互独立、保持一致。这属于环境卫生，而不是绕过 Anthropic 条款的手段：共享账号、规避封禁以及从不支持地区访问依然违反规则。</p>
 
 <ol>
   <li><strong>每账号独立 Profile：</strong> 禁止 Pro 席位间共享 Cookie 或 localStorage。</li>

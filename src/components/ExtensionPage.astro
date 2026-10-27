@@ -55,6 +55,9 @@ const downloadLabel = zipBytes
   ? t('ext.downloadWithSize').replace('{size}', formatBytes(zipBytes))
   : t('ext.download');
 const steps = [1, 2, 3, 4, 5, 6].map((i) => t(`ext.step${i}`));
+const features = [1, 2, 3, 4, 5, 6].map((i) => t(`ext.f${i}`));
+const privacyNotes = [1, 2, 3, 4].map((i) => t(`ext.p${i}`));
+const faqs = [1, 2, 3, 4].map((i) => ({ q: t(`ext.q${i}`), a: t(`ext.a${i}`) }));
 
 const site = Astro.site ?? new URL('https://fuck-claude.vercel.app');
 const currentUrl = new URL(extensionPage, site).href;
@@ -144,8 +147,33 @@ function formatBytes(bytes: number): string {
         <a class="ext-check" href={home}>{t('ext.checkCta')}</a>
       </p>
 
+      <h2>{t('ext.featuresTitle')}</h2>
+      <ul class="ext-steps">
+        {features.map((item) => <li>{item}</li>)}
+      </ul>
+
+      <h2>{t('ext.privacyTitle')}</h2>
+      <ul class="ext-steps">
+        {privacyNotes.map((item) => <li>{item}</li>)}
+      </ul>
+
+      <h2>{t('ext.useTitle')}</h2>
+      <p class="ext-update ext-block">{t('ext.use')}</p>
+
       <h2>{t('ext.updateTitle')}</h2>
-      <p class="ext-update">{t('ext.update')}</p>
+      <p class="ext-update ext-block">{t('ext.update')}</p>
+
+      <h2>{t('ext.faqTitle')}</h2>
+      <dl class="ext-faq">
+        {
+          faqs.map((item) => (
+            <>
+              <dt>{item.q}</dt>
+              <dd>{item.a}</dd>
+            </>
+          ))
+        }
+      </dl>
     </article>
   </main>
 
@@ -240,5 +268,23 @@ function formatBytes(bytes: number): string {
   }
   .ext-check {
     font-weight: 650;
+  }
+  .ext-block {
+    margin-bottom: 28px;
+  }
+  ul.ext-steps {
+    margin-bottom: 28px;
+  }
+  .ext-faq {
+    margin: 0;
+    max-width: 68ch;
+  }
+  .ext-faq dt {
+    font-weight: 650;
+    margin-top: 14px;
+  }
+  .ext-faq dd {
+    margin: 4px 0 0;
+    color: var(--muted);
   }
 </style>
