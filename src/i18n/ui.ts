@@ -108,7 +108,7 @@ export const ui = {
     'result.sponsor.sub':
       '100% official pass-through · Full power, zero injection · Domestic direct, unlimited concurrency · ~28% of list price',
     'result.sponsor.cta': 'Connect now →',
-    'result.sponsor.badge': '赞助',
+    'result.sponsor.badge': 'Sponsor',
 
     'cnModels.label': 'Chinese AI models',
     'cnModels.slogan': 'Chinese models are simply better',
