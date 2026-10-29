@@ -1,0 +1,160 @@
+---
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const titleTemplate = t('result.sponsor.title');
+---
+
+<a
+  class="result-sponsor"
+  id="result-sponsor"
+  href="https://cdnd.sh/from/fuck-claude"
+  target="_blank"
+  rel="sponsored nofollow noopener noreferrer"
+  data-ga-event="sponsor_click"
+  data-ga-id="cdnd"
+>
+  <span class="result-sponsor__badge">{t('result.sponsor.badge')}</span>
+  <span class="result-sponsor__brand">{t('result.sponsor.brand')}</span>
+  <div class="result-sponsor__row">
+    <img
+      class="result-sponsor__icon"
+      src="/sponsors/cdnd-icon.png"
+      width="48"
+      height="48"
+      alt="CDND"
+      loading="lazy"
+    />
+    <div class="result-sponsor__copy">
+      <strong
+        class="result-sponsor__title"
+        id="result-sponsor-title"
+        data-title-template={titleTemplate}
+      >
+        {titleTemplate.replace('{score}', '0')}
+      </strong>
+      <span class="result-sponsor__sub">{t('result.sponsor.sub')}</span>
+    </div>
+    <span class="result-sponsor__cta">{t('result.sponsor.cta')}</span>
+  </div>
+</a>
+
+<style>
+  .result-sponsor {
+    position: relative;
+    display: block;
+    margin: 18px auto 0;
+    max-width: 640px;
+    padding: 14px 16px 14px 18px;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--accent) 11%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+    border-left: 3px solid var(--accent);
+    color: var(--text);
+    text-align: left;
+    box-shadow: var(--shadow-sm);
+    transition:
+      border-color 0.18s,
+      box-shadow 0.18s,
+      transform 0.18s;
+  }
+  .result-sponsor:hover {
+    text-decoration: none;
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  .result-sponsor__badge {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-size: 0.62rem;
+    font-weight: 650;
+    letter-spacing: 0.04em;
+    color: var(--muted-2);
+  }
+  .result-sponsor__brand {
+    display: block;
+    margin: 0 28px 8px 0;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .result-sponsor__row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .result-sponsor__icon {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: #111;
+    object-fit: cover;
+  }
+  .result-sponsor__copy {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .result-sponsor__title {
+    font-size: 0.98rem;
+    font-weight: 750;
+    line-height: 1.35;
+    color: var(--text);
+  }
+  .result-sponsor:hover .result-sponsor__title {
+    color: var(--accent-strong);
+  }
+  .result-sponsor__sub {
+    font-size: 0.78rem;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+  .result-sponsor__cta {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: background 0.18s;
+  }
+  .result-sponsor:hover .result-sponsor__cta {
+    background: var(--accent-strong);
+  }
+  @media (max-width: 640px) {
+    .result-sponsor__row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px 12px;
+    }
+    .result-sponsor__icon {
+      grid-row: 1;
+      grid-column: 1;
+    }
+    .result-sponsor__copy {
+      grid-row: 1;
+      grid-column: 2;
+    }
+    .result-sponsor__cta {
+      grid-row: 2;
+      grid-column: 1 / -1;
+      width: 100%;
+    }
+  }
+</style>

@@ -103,6 +103,13 @@ export const ui = {
     'sponsors.label': 'Sponsored',
     'sponsors.cta': 'Want to be listed here?',
 
+    'result.sponsor.brand': 'CDND · CODE NEVER DIE',
+    'result.sponsor.title': '{score}? Stop grinding — switch to pure Claude direct access',
+    'result.sponsor.sub':
+      '100% official pass-through · Full power, zero injection · Domestic direct, unlimited concurrency · ~28% of list price',
+    'result.sponsor.cta': 'Connect now →',
+    'result.sponsor.badge': 'Ad',
+
     'cnModels.label': 'Chinese AI models',
     'cnModels.slogan': 'Chinese models are simply better',
 
@@ -418,6 +425,12 @@ export const ui = {
 
     'sponsors.label': '赞助',
     'sponsors.cta': '想显示在下方？',
+
+    'result.sponsor.brand': 'CDND · CODE NEVER DIE',
+    'result.sponsor.title': '{score} 分？别折腾了，换纯血 Claude 直连',
+    'result.sponsor.sub': '100% 官方透传 · 满血零注入 · 国内直连不限并发 · 约官价 2.8 折',
+    'result.sponsor.cta': '立即接入 →',
+    'result.sponsor.badge': '广告',
 
     'cnModels.label': '国产大模型',
     'cnModels.slogan': '模型还是中国的好',

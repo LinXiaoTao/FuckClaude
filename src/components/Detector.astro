@@ -6,6 +6,7 @@ import LangToggle from './LangToggle.astro';
 import ScoreRing from './ScoreRing.astro';
 import Mascot from './Mascot.astro';
 import Sponsors from './Sponsors.astro';
+import ResultSponsor from './ResultSponsor.astro';
 import CnModels from './CnModels.astro';
 import SocialLinks from './SocialLinks.astro';
 import Footer from './Footer.astro';
@@ -119,6 +120,8 @@ const apiExamples = [
       <div class="result" id="result" hidden>
         <p class="result__title" id="result-title"></p>
         <div class="result__hits" id="result-hits"></div>
+
+        <ResultSponsor lang={lang} />
 
         <div class="share" id="share" hidden>
           <span class="share__label">{t('share.label')}</span>
