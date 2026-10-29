@@ -47,6 +47,14 @@ function setMascot(state: MascotState) {
   q('#mascot')?.setAttribute('data-state', state);
 }
 
+
+function updateResultSponsor(total: number) {
+  const title = q('#result-sponsor-title');
+  if (!title) return;
+  const tpl = title.getAttribute('data-title-template') ?? '';
+  title.textContent = tpl.replace('{score}', String(total));
+}
+
 function setRing(total: number) {
   const ring = q<SVGCircleElement>('#score-ring');
   const valueEl = q('#score-value');
@@ -156,6 +164,7 @@ function finalize(total: number, hits: Hit[]) {
 
   updateShare(total, band);
   void buildCard(total, band, cardHits);
+  updateResultSponsor(total);
 
   const result = q('#result');
   if (result) result.hidden = false;
