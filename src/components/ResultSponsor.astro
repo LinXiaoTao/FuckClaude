@@ -72,10 +72,15 @@ const titleTemplate = t('result.sponsor.title');
     position: absolute;
     top: 8px;
     right: 10px;
-    font-size: 0.62rem;
-    font-weight: 650;
-    letter-spacing: 0.04em;
-    color: var(--muted-2);
+    font-size: 0.58rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: color-mix(in srgb, var(--muted-2) 58%, var(--border));
+    opacity: 0.72;
+  }
+  .result-sponsor:hover .result-sponsor__badge {
+    color: color-mix(in srgb, var(--muted-2) 58%, var(--border));
+    opacity: 0.72;
   }
   .result-sponsor__brand {
     display: block;
