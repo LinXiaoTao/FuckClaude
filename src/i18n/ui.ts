@@ -108,7 +108,7 @@ export const ui = {
     'result.sponsor.sub':
       '100% official pass-through · Full power, zero injection · Domestic direct, unlimited concurrency · ~28% of list price',
     'result.sponsor.cta': 'Connect now →',
-    'result.sponsor.badge': 'Ad',
+    'result.sponsor.badge': 'Sponsor',
 
     'cnModels.label': 'Chinese AI models',
     'cnModels.slogan': 'Chinese models are simply better',
@@ -430,7 +430,7 @@ export const ui = {
     'result.sponsor.title': '{score} 分？别折腾了，换纯血 Claude 直连',
     'result.sponsor.sub': '100% 官方透传 · 满血零注入 · 国内直连不限并发 · 约官价 2.8 折',
     'result.sponsor.cta': '立即接入 →',
-    'result.sponsor.badge': '广告',
+    'result.sponsor.badge': '赞助',
 
     'cnModels.label': '国产大模型',
     'cnModels.slogan': '模型还是中国的好',
