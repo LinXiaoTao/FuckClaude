@@ -370,9 +370,10 @@ const jsonLd = {
         .brand {
           flex: none;
         }
-        /* Logo-only brand on small screens — the action row needs the width. */
+        /* Keep the “Fuck Claude” wordmark at 390px; actions wrap instead. */
         .brand__text {
-          display: none;
+          display: inline;
+          font-size: 0.9rem;
         }
         .nav__actions {
           flex: 1;
@@ -530,9 +531,12 @@ const jsonLd = {
         font-size: clamp(2rem, 5.2vw, 3.1rem);
         line-height: 1.16;
         margin: 0 auto;
-        max-width: 22ch;
+        max-width: 26ch;
         letter-spacing: -0.01em;
         font-weight: 700;
+        /* Prefer phrase boundaries over mid-CJK breaks (e.g. 用|户). */
+        line-break: strict;
+        overflow-wrap: anywhere;
       }
       .hero .accent {
         color: var(--accent-strong);

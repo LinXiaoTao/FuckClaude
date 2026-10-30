@@ -386,7 +386,9 @@ async function run() {
   if (running) return;
   running = true;
   const btn = q<HTMLButtonElement>('#retest');
+  const label = q('#retest-label');
   if (btn) btn.disabled = true;
+  if (label) label.textContent = t('ui.scanning');
 
   setMascot('search');
   resetUI();
@@ -429,7 +431,6 @@ async function run() {
   }
 
   finalize(Math.min(100, total), hits);
-  const label = q('#retest-label');
   if (label) label.textContent = t('ui.retest');
   if (btn) btn.disabled = false;
   running = false;

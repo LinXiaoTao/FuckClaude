@@ -94,7 +94,7 @@ export const ui = {
 
     'community.relatedGuide': 'Related guide',
 
-    'hero.title': 'Are you a Claude “China user”?',
+    'hero.title': 'Are you a Claude “China\u00A0user”?',
     'hero.badge.local': '100% local scan',
     'hero.badge.noUpload': 'Results never uploaded',
     'hero.badge.openSource': 'Open source',
@@ -284,9 +284,10 @@ export const ui = {
     'api.ex2': '# Force a language via header',
     'api.ex3': '# JSON output',
 
-    'ui.claudeBadge': 'Claude Same',
+    'ui.claudeBadge': 'Same as Claude',
     'ui.retest': 'Scan again',
     'ui.start': 'Start scan',
+    'ui.scanning': 'Scanning…',
 
     'ext.title': 'Site Locale Control',
     'ext.description':
@@ -417,7 +418,7 @@ export const ui = {
 
     'community.relatedGuide': '相关指南',
 
-    'hero.title': '你是「Claude 中国用户」吗',
+    'hero.title': '你是「Claude 中国用\u2060户」\u2060吗',
     'hero.badge.local': '纯本地检测',
     'hero.badge.noUpload': '结果零上传',
     'hero.badge.openSource': '开源代码',
@@ -600,6 +601,7 @@ export const ui = {
     'ui.claudeBadge': 'Claude 同款',
     'ui.retest': '重新扫描',
     'ui.start': '开始检测',
+    'ui.scanning': '检测中…',
 
     'ext.title': '站点区域控制',
     'ext.description':
