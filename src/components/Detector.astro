@@ -7,6 +7,7 @@ import ScoreRing from './ScoreRing.astro';
 import Mascot from './Mascot.astro';
 import Sponsors from './Sponsors.astro';
 import ResultSponsor from './ResultSponsor.astro';
+import IpPurityCard from './IpPurityCard.astro';
 import CnModels from './CnModels.astro';
 import SocialLinks from './SocialLinks.astro';
 import Footer from './Footer.astro';
@@ -122,6 +123,8 @@ const apiExamples = [
         <div class="result__hits" id="result-hits"></div>
 
         <ResultSponsor lang={lang} />
+
+        <IpPurityCard lang={lang} />
 
         <div class="share" id="share" hidden>
           <span class="share__label">{t('share.label')}</span>

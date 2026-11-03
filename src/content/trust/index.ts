@@ -5,10 +5,15 @@ export type TrustPageId = 'privacy' | 'about' | 'contact' | 'terms';
 export const TRUST_CONTENT: Record<TrustPageId, { en: string; zh: string }> = {
   privacy: {
     en: `
-<h2>1. Local Scan Architecture — Zero Data Upload</h2>
-<p>Every client-side fingerprinting and environmental risk test on <strong>Fuck Claude</strong> runs 100% inside your local web browser. Your scan results, detected locale signals, IP observations from WebRTC, and computed risk scores are processed in memory on your device. They are <strong>never uploaded</strong> to our servers, never stored in any remote database, and never shared with or sold to third parties.</p>
+<h2>1. Browser China-user scan — stays on your device</h2>
+<p>The China-user fingerprint scan on <strong>Fuck Claude</strong> (timezone, language, fonts, WebRTC candidates, and the weighted 0–100 China-user score) runs inside your browser. Those scan results and signal values are processed in memory on your device. They are <strong>not uploaded</strong> to our servers, not stored in a remote database, and not sold. That local scan is separate from the IP purity check below. The two scores are never combined.</p>
 
-<h2>2. Google AdSense & Third-Party Advertising Cookies</h2>
+<h2>2. IP purity check</h2>
+<p>The homepage IP card and the <a href="/ip/">IP purity page</a> call our <code>/api/ip</code> endpoint with your egress IP address. The server then queries third-party reputation and geo sources — proxycheck.io, AbuseIPDB, and ipwho.is — with that IP. API keys, when configured, stay on the server and are never sent to the browser.</p>
+<p>A short in-memory cache (about 5–10 minutes) holds the aggregated result so repeated views do not hammer those providers. The cache lives only in the serverless instance that handled the request, is not written to a long-term database, and is not a visitor profile. The check does not look up an IP you type in, and it does not publish a shareable result page.</p>
+<p>The purity score runs from 0 to 100. Higher means the egress looks cleaner and more residential. It is a heuristic, not Anthropic’s model, and not a guarantee that an account will pass or be blocked. If reputation API keys are not configured, the check does not invent a high purity score.</p>
+
+<h2>3. Google AdSense & Third-Party Advertising Cookies</h2>
 <p>This website uses <strong>Google AdSense</strong> to display advertisements. Google and third-party advertising partners use cookies, web beacons, and similar technologies to serve and personalize ads based on a user's prior visits to this website and other websites across the Internet:</p>
 <ul>
   <li>Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites.</li>
@@ -18,31 +23,36 @@ export const TRUST_CONTENT: Record<TrustPageId, { en: string; zh: string }> = {
   <li>Alternatively, you can opt out of third-party vendor cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">AboutAds.info</a> or <a href="https://www.youronlinechoices.com/" target="_blank" rel="noopener noreferrer">Your Online Choices</a>.</li>
 </ul>
 
-<h2>3. Google Analytics (GA4) & Aggregated Metrics</h2>
+<h2>4. Google Analytics (GA4) & Aggregated Metrics</h2>
 <p>We use Google Analytics 4 (GA4) with IP anonymization enabled to collect aggregate, non-personally identifiable traffic metrics (such as page views, referrer domains, browser user-agent families, and general geographic regions). Google Analytics collects telemetry strictly to help us understand content performance and improve user experience. Analytics telemetry is completely decoupled from the local fingerprint scanner and does not receive your individual scan results.</p>
 
-<h2>4. WebRTC STUN Probing</h2>
+<h2>5. WebRTC STUN Probing</h2>
 <p>When you run the optional WebRTC leak test, your browser establishes a temporary connection to public STUN (Session Traversal Utilities for NAT) servers to discover local and public ICE candidates. This is a standard, client-initiated WebRTC protocol operation. The discovered candidate strings are evaluated locally within your browser and are not transmitted to our backend.</p>
 
-<h2>5. User Privacy Rights (GDPR & CCPA / CPRA)</h2>
+<h2>6. User Privacy Rights (GDPR & CCPA / CPRA)</h2>
 <p>We respect international privacy frameworks including the EU/UK General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA / CPRA):</p>
 <ul>
-  <li><strong>Right to Know & Access:</strong> Since we do not collect personal profiles, accounts, or scan logs, we do not hold personal identification records on our visitors.</li>
-  <li><strong>Right to Deletion:</strong> Any local scan state is cleared upon refreshing the page or clearing your browser storage.</li>
+  <li><strong>Right to Know & Access:</strong> We do not keep accounts or China-user scan logs. The IP purity check briefly processes your egress IP and may hold that aggregated result in a short in-memory cache, described above. We do not build a visitor profile from it.</li>
+  <li><strong>Right to Deletion:</strong> Local China-user scan state is cleared when you refresh the page or clear browser storage. The IP cache expires on its own within minutes and is dropped when the serverless instance goes idle.</li>
   <li><strong>Do Not Sell My Personal Information:</strong> We do not sell, rent, or trade your personal data. Advertising partners handle cookie preferences through the opt-out links provided above.</li>
 </ul>
 
-<h2>6. Data Security & Storage</h2>
-<p>The website is deployed over secure HTTPS encryption (TLS 1.3). Static assets are served via global edge CDNs. We do not maintain server-side session databases or personal data caches.</p>
+<h2>7. Data Security & Storage</h2>
+<p>The website is deployed over secure HTTPS encryption (TLS 1.3). Static assets are served via global edge CDNs. We do not maintain a long-term database of scan results or IP lookups. The only server-side hold is the short IP-purity cache described above.</p>
 
-<h2>7. Policy Updates & Contact</h2>
+<h2>8. Policy Updates & Contact</h2>
 <p>We may update this Privacy Policy periodically to reflect technological changes or regulatory requirements. For privacy inquiries or data rights requests, please contact our data controller at <a href="mailto:${SITE_AUTHOR.email}">${SITE_AUTHOR.email}</a>.</p>
 `.trim(),
     zh: `
-<h2>1. 本地检测架构 — 零数据上传承诺</h2>
-<p><strong>Fuck Claude</strong> 上的所有客户端指纹检测与环境风控评估均 100% 在你的浏览器本地内存中运行。你的检测结果、命中的区域设置信号、WebRTC 探测到的网络信息以及最终计算出的风险分，<strong>绝不会上传</strong>到我们的服务器，不会存入任何远程数据库，更不会分享或出售给任何第三方。</p>
+<h2>1. 浏览器中国用户检测 — 留在你的设备上</h2>
+<p><strong>Fuck Claude</strong> 的中国用户指纹检测（时区、语言、字体、WebRTC 候选，以及加权后的 0–100 中国用户分）在你的浏览器里运行。这些检测结果和信号值只在设备内存中处理，<strong>不会上传</strong>到我们的服务器，不会写入远程数据库，也不会出售。这项本地检测与下面的 IP 纯净度检查是分开的，两个分数绝不会合并。</p>
 
-<h2>2. Google AdSense 与第三方广告 Cookie 说明</h2>
+<h2>2. IP 纯净度检查</h2>
+<p>首页的 IP 卡片和 <a href="/zh/ip/">IP 纯净度页面</a> 会请求本站的 <code>/api/ip</code>，并把你的出口 IP 发给服务器。服务器再用这个 IP 查询第三方信誉与地理来源：proxycheck.io、AbuseIPDB 和 ipwho.is。API 密钥若已配置，只留在服务端，不会下发到浏览器。</p>
+<p>汇总结果会在内存里短暂缓存（大约 5–10 分钟），避免重复访问反复请求这些服务。缓存只存在于处理该请求的 serverless 实例中，不会写入长期数据库，也不是访客档案。本检查不提供自行输入任意 IP 的查询，也不会生成可分享的结果页。</p>
+<p>纯净度为 0–100，越高表示出口越接近干净的住宅网络。它是启发式判断，不是 Anthropic 的模型，也不保证账号能通过或一定会被拦截。若信誉 API 密钥未配置，检查不会编造一个很高的纯净度。</p>
+
+<h2>3. Google AdSense 与第三方广告 Cookie 说明</h2>
 <p>本站使用 <strong>Google AdSense</strong> 展示广告。Google 及第三方广告合作伙伴会使用 Cookie、网络信标和类似技术，根据用户对本站及互联网上其他网站的历史访问记录投放与个性化广告：</p>
 <ul>
   <li>包括 Google 在内的第三方供应商会使用 Cookie，根据用户此前对本网站或其他网站的访问情况投放广告。</li>
@@ -52,24 +62,24 @@ export const TRUST_CONTENT: Record<TrustPageId, { en: string; zh: string }> = {
   <li>你还可以访问 <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">AboutAds.info</a> 或 <a href="https://www.youronlinechoices.com/" target="_blank" rel="noopener noreferrer">Your Online Choices</a> 停用第三方供应商用于个性化广告的 Cookie。</li>
 </ul>
 
-<h2>3. Google Analytics (GA4) 匿名统计</h2>
+<h2>4. Google Analytics (GA4) 匿名统计</h2>
 <p>本站加载启用了 IP 匿名化的 Google Analytics 4 (GA4)，用于统计完全匿名的宏观访问数据（如页面浏览量、引荐来源、浏览器类型及粗略国家地区）。这些统计仅用于评估内容质量和优化网站体验。Analytics 系统与本地检测工具完全隔离，不会接收任何具体的扫描结果或设备指纹详情。</p>
 
-<h2>4. WebRTC STUN 探测机制</h2>
+<h2>5. WebRTC STUN 探测机制</h2>
 <p>在进行可选的 WebRTC 泄露检测时，浏览器会短暂与公共 STUN（NAT 会话周转实用程序）服务器建立握手以发现本地与公网 ICE 候选。这是标准的客户端 WebRTC 探测行为，获取到的候选信息仅在浏览器本地进行对比分析，不会发送至后端服务器。</p>
 
-<h2>5. 用户隐私权益（GDPR 与 CCPA / CPRA 合规）</h2>
+<h2>6. 用户隐私权益（GDPR 与 CCPA / CPRA 合规）</h2>
 <p>我们严格尊重包括欧盟/英国通用数据保护条例（GDPR）与美国加州消费者隐私法案（CCPA / CPRA）在内的全球隐私保护标准：</p>
 <ul>
-  <li><strong>知情权与访问权：</strong>由于本站不设用户账号、不收集个人身份信息、不记录检测日志，我们并不持有任何访问者的个人档案。</li>
-  <li><strong>删除权：</strong>本地扫描状态在刷新网页或清除浏览器缓存后即彻底销毁。</li>
+  <li><strong>知情权与访问权：</strong>本站不设账号，也不保存中国用户检测日志。IP 纯净度检查会短暂处理你的出口 IP，并可能把汇总结果放在上文所述的短时内存缓存中。我们不会据此建立访客档案。</li>
+  <li><strong>删除权：</strong>本地的中国用户检测状态在刷新网页或清除浏览器存储后即消失。IP 缓存会在数分钟内自行过期，serverless 实例空闲后也会丢掉。</li>
   <li><strong>不兜售个人信息承诺：</strong>我们绝不兜售、出租或交易用户的个人信息。广告合作伙伴的 Cookie 偏好可通过上方提供的渠道进行自主管理。</li>
 </ul>
 
-<h2>6. 数据安全与传输</h2>
-<p>本站全站强制启用 HTTPS（TLS 1.3）安全传输协议，静态资源由全球边缘 CDN 节点加速分发。我们不设立任何服务端用户会话库或敏感数据持久化组件。</p>
+<h2>7. 数据安全与传输</h2>
+<p>本站全站强制启用 HTTPS（TLS 1.3）安全传输协议，静态资源由全球边缘 CDN 节点加速分发。我们不设立检测结果或 IP 查询的长期数据库。服务端仅保留上文所述的短时 IP 纯净度缓存。</p>
 
-<h2>7. 政策更新与隐私咨询</h2>
+<h2>8. 政策更新与隐私咨询</h2>
 <p>本隐私政策可能会随技术方案迭代或法律法规要求适时修订。如对隐私保护有任何疑问或请求，欢迎通过邮件联系：<a href="mailto:${SITE_AUTHOR.email}">${SITE_AUTHOR.email}</a>。</p>
 `.trim(),
   },
@@ -97,6 +107,7 @@ export const TRUST_CONTENT: Record<TrustPageId, { en: string; zh: string }> = {
   <li>Anthropic's complete risk engine incorporates server-side signals such as IP autonomous system number (ASN) classification, datacenter vs residential reputation scores, payment-card Bank Identification Number (BIN) velocity, account lifecycle metadata, and token consumption patterns.</li>
   <li>A clean 0/100 scan score confirms that your client-side browser and OS environment exhibit no obvious leakage tells; it is not an absolute warranty against platform rate limits or administrative account reviews.</li>
 </ul>
+<p>Separately, the homepage and <a href="/ip/">/ip</a> show an IP purity heuristic (0–100, higher means more residential-like). It is not part of the China-user score, the two numbers are never merged, and it is not Anthropic’s risk model. The check sends the visitor’s egress IP through our server to third-party reputation sources. Details are in the <a href="/privacy/">privacy policy</a>.</p>
 
 <h2>Open Source & Community Collaboration</h2>
 <p>We believe in open knowledge and software transparency. The project source code is available at <a href="${SITE_AUTHOR.githubUrl}/FuckClaude" target="_blank" rel="noopener noreferrer">${SITE_AUTHOR.github}/FuckClaude</a>. For technical bug reports, algorithm suggestions, or editorial corrections, visit our <a href="/contact/">contact page</a> or submit an issue on GitHub.</p>
@@ -126,6 +137,7 @@ export const TRUST_CONTENT: Record<TrustPageId, { en: string; zh: string }> = {
   <li>Anthropic 完整的后端风控体系还包括 IP 自治系统（ASN）评级、数据中心与住宅 IP 信誉库、支付卡发卡行 BIN 码与欺诈风控模型、账号注册生命周期及 API 异常调用模式等。</li>
   <li>获得低风险评分意味着你的客户端本地环境不存在明显的指纹泄露；但这不能替代合规的 IP 质量与正规支付手段，亦不构成对任何第三方账号状态的绝对保证。</li>
 </ul>
+<p>另外，首页和 <a href="/zh/ip/">/zh/ip</a> 会给出一项 IP 纯净度启发式分数（0–100，越高越接近住宅网络）。它不属于中国用户分，两个数字绝不会合并，也不是 Anthropic 的风控模型。该检查会把访客的出口 IP 经我们的服务器发给第三方信誉源。细节见 <a href="/zh/privacy/">隐私政策</a>。</p>
 
 <h2>开源协议与社区协作</h2>
 <p>我们坚信开源透明的力量。项目仓库地址：<a href="${SITE_AUTHOR.githubUrl}/FuckClaude" target="_blank" rel="noopener noreferrer">${SITE_AUTHOR.github}/FuckClaude</a>。欢迎通过 <a href="/zh/contact/">联系我们</a> 页面或 GitHub Issues 提交技术探讨、算法优化建议及勘误。</p>
@@ -157,7 +169,7 @@ export const TRUST_CONTENT: Record<TrustPageId, { en: string; zh: string }> = {
 </ul>
 
 <h2>Privacy and Data Requests</h2>
-<p>The scanner runs in your browser and we keep no scan logs, so in most cases there is no personal data for us to export or delete. If you believe we hold information about you, or you want to ask about cookies used by Google AdSense or Google Analytics on this site, email us with the subject line "Privacy request". See the <a href="/privacy/">Privacy Policy</a> for details and opt-out links.</p>
+<p>The China-user scanner runs in your browser and we keep no logs of those signals. The separate IP purity check (<a href="/ip/">/ip</a>) sends your egress IP to <code>/api/ip</code>, which queries third-party reputation sources and keeps only a short in-memory cache. If you believe we hold information about you, or you want to ask about cookies used by Google AdSense or Google Analytics on this site, email us with the subject line "Privacy request". See the <a href="/privacy/">Privacy Policy</a> for details and opt-out links.</p>
 
 <h2>Advertising and Sponsorship</h2>
 <p>Ads on this site are served by Google AdSense, and sponsor placements are labeled as sponsored. For sponsorship inquiries, email us with your product, the regions you target, and the placement you are interested in. Sponsorship never changes the content of our guides or the detector's scoring.</p>
@@ -189,7 +201,7 @@ export const TRUST_CONTENT: Record<TrustPageId, { en: string; zh: string }> = {
 </ul>
 
 <h2>隐私与数据请求</h2>
-<p>检测器完全在你的浏览器内运行，我们不保存检测日志，因此大多数情况下我们并不持有可以导出或删除的个人数据。如果你认为我们保存了与你有关的信息，或想咨询本站 Google AdSense、Google Analytics 使用的 Cookie，请发邮件并在标题注明“隐私请求”。详细说明与退出个性化广告的方式见 <a href="/zh/privacy/">隐私政策</a>。</p>
+<p>中国用户检测在浏览器内运行，我们不保存这些信号的日志。单独的 IP 纯净度检查（<a href="/zh/ip/">/zh/ip</a>）会把出口 IP 发到 <code>/api/ip</code>，由第三方信誉源查询，并且只做短时内存缓存。如果你认为我们保存了与你有关的信息，或想咨询本站 Google AdSense、Google Analytics 使用的 Cookie，请发邮件并在标题注明“隐私请求”。详细说明与退出个性化广告的方式见 <a href="/zh/privacy/">隐私政策</a>。</p>
 
 <h2>广告与赞助</h2>
 <p>本站广告由 Google AdSense 投放，赞助位会明确标注为赞助内容。赞助合作请发邮件说明产品、目标地区和希望的展示位置。赞助不会影响指南内容或检测器的评分。</p>

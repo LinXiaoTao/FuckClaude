@@ -15,7 +15,7 @@ export const ui = {
   en: {
     'meta.title': 'Fuck Claude | Are You a Claude "China User"?',
     'meta.description':
-      'One-click check of your browser timezone, language, Chinese fonts and locale to see if Claude Code would flag you as a China user. 100% local, nothing uploaded.',
+      'Check browser timezone, language, Chinese fonts and locale to see if Claude Code would flag you as a China user. That scan stays in your browser. The separate IP purity check sends your egress IP through /api/ip.',
 
     'nav.title': 'Fuck Claude',
     'nav.guides': 'Anti-Ban Guides',
@@ -95,8 +95,8 @@ export const ui = {
     'community.relatedGuide': 'Related guide',
 
     'hero.title': 'Are you a Claude “China\u00A0user”?',
-    'hero.badge.local': '100% local scan',
-    'hero.badge.noUpload': 'Results never uploaded',
+    'hero.badge.local': 'China scan stays local',
+    'hero.badge.noUpload': 'China score stays on-device',
     'hero.badge.openSource': 'Open source',
     'hero.scoreOutOf': '/ 100',
 
@@ -208,10 +208,10 @@ export const ui = {
       'Switch your OS timezone away from China zones such as Asia/Shanghai, move zh-CN off the top of your browser language list, block WebRTC leaks, and avoid routing Claude Code through proxies whose hostnames contain flagged domains or AI-lab keywords. The “How to lower your risk score” checklist above walks through it in order.',
     'faq.q4': 'Is any data uploaded?',
     'faq.a4':
-      'No. Every check runs locally in your browser and none of the detected signals are ever sent anywhere. The site loads Google Analytics for anonymous page-view stats and Google AdSense for advertising (ads may use cookies). WebRTC leak detection may briefly contact a public STUN server to gather ICE candidates.',
+      'The China-user scan runs in your browser, and those signals are not uploaded. The separate IP purity check (homepage card and /ip) sends your egress IP to our /api/ip endpoint, which queries proxycheck.io, AbuseIPDB, and ipwho.is. That score is never merged into the China-user score. The site also loads Google Analytics for anonymous page-view stats and Google AdSense for advertising (ads may use cookies). WebRTC leak detection may briefly contact a public STUN server to gather ICE candidates.',
     'faq.q5': 'Will a low score guarantee I won’t get banned?',
     'faq.a5':
-      'No guarantee. This tool only measures browser-visible fingerprints. Anthropic’s real risk model also weighs your IP reputation, payment-card BIN, account age and usage patterns — none of which a web page can see. A low score removes obvious local tells, but a datacenter IP or a high-risk virtual card can still get an account flagged.',
+      'No guarantee. This tool’s China-user score only measures browser-visible fingerprints. Anthropic’s real risk model also weighs IP reputation, payment-card BIN, account age and usage patterns. A low score removes obvious local tells, but a datacenter IP or a high-risk virtual card can still get an account flagged. The IP purity card is a separate heuristic for the egress question and does not change this score.',
     'faq.q6': 'Is using this tool or the guides against Anthropic’s terms?',
     'faq.a6':
       'The scanner just reads your own browser and reports what it sees — nothing about that is against any terms. The guides are educational reference material about how fingerprinting works. You are responsible for your own use of Claude and for complying with Anthropic’s policies and your local laws. Note that Anthropic’s Help Center lists account creation from an unsupported location as a ban reason, so no browser setting makes an ineligible account eligible.',
@@ -227,7 +227,7 @@ export const ui = {
 
     'privacy.title': 'Privacy',
     'privacy.body':
-      'Every check runs locally in your browser — your scan results never leave your device. The site loads Google Analytics for anonymous page-view stats and Google AdSense for ads; none of the detected signals are ever sent. WebRTC leak detection may briefly contact a public STUN server.',
+      'The China-user scan runs in your browser — those results stay on your device. The separate IP purity check sends your egress IP to /api/ip, which queries third-party reputation sources, and that score is not merged into the China-user score. The site loads Google Analytics for anonymous page-view stats and Google AdSense for ads. WebRTC leak detection may briefly contact a public STUN server.',
     'privacy.fullPolicy': 'Full privacy policy →',
 
     'author.by': 'Written by',
@@ -235,7 +235,7 @@ export const ui = {
 
     'trust.privacy.title': 'Privacy Policy',
     'trust.privacy.description':
-      'How Fuck Claude handles local scans, Google Analytics, Google AdSense, and WebRTC STUN probing.',
+      'How Fuck Claude handles the local China-user scan, the IP purity check, Google Analytics, Google AdSense, and WebRTC STUN probing.',
     'trust.terms.title': 'Terms of Service',
     'trust.terms.description':
       'Terms and conditions governing the educational and technical use of Fuck Claude.',
@@ -261,6 +261,7 @@ export const ui = {
     'footer.terms': 'Terms',
     'footer.about': 'About',
     'footer.contact': 'Contact',
+    'footer.ip': 'IP purity',
 
     'share.label': 'Share your result',
     'share.native': 'Share',
@@ -283,6 +284,64 @@ export const ui = {
     'api.ex1': '# Text report — follows your Accept-Language',
     'api.ex2': '# Force a language via header',
     'api.ex3': '# JSON output',
+
+    'ip.meta.title': 'IP purity',
+    'ip.meta.description':
+      'A separate 0–100 purity score for your egress IP, from proxycheck.io, AbuseIPDB and ipwho.is. Higher means more residential-like. Not part of the China-user score, and not a Claude guarantee.',
+    'ip.title': 'IP purity',
+    'ip.lead':
+      'This page scores the egress IP of this visit. Higher means cleaner and more residential-like. It is a heuristic for Claude account risk models, not an Anthropic check, and it is never merged into the China-user score.',
+    'ip.separate': 'Separate from the China-user score. The two numbers are never combined.',
+    'ip.loading': 'Checking this visit’s egress IP…',
+    'ip.error': 'The IP purity check failed.',
+    'ip.rateLimited': 'Too many checks from this IP. Wait a minute and try again.',
+    'ip.retry': 'Try again',
+    'ip.scoreLabel': 'Purity',
+    'ip.scoreUnknown': '—',
+    'ip.outOf': '/ 100',
+    'ip.band.high': 'High',
+    'ip.band.medium': 'Medium',
+    'ip.band.low': 'Low',
+    'ip.type.Residential': 'Residential',
+    'ip.type.Datacenter': 'Datacenter',
+    'ip.type.Business': 'Business',
+    'ip.type.Unknown': 'Unknown',
+    'ip.flag.proxy': 'Proxy',
+    'ip.flag.vpn': 'VPN',
+    'ip.flag.tor': 'Tor',
+    'ip.flag.datacenter': 'Datacenter',
+    'ip.flag.abusive': 'Abusive',
+    'ip.flag.yes': 'Yes',
+    'ip.flag.no': 'No',
+    'ip.flag.unknown': 'Unknown',
+    'ip.yourIp': 'Egress IP',
+    'ip.geo': 'Location',
+    'ip.network': 'Network',
+    'ip.deductions': 'Why this score',
+    'ip.noDeductions': 'No deductions. A missing score means the check refused to guess, not that the IP is clean.',
+    'ip.sources': 'Sources',
+    'ip.source.proxycheck': 'proxycheck.io',
+    'ip.source.abuseipdb': 'AbuseIPDB',
+    'ip.source.ipwho': 'ipwho.is',
+    'ip.source.ok': 'Answered',
+    'ip.source.unavailable': 'Unavailable',
+    'ip.source.unconfigured': 'Not configured',
+    'ip.source.error': 'Error',
+    'ip.source.ipwhoNote': 'Geo only',
+    'ip.details': 'Full breakdown',
+    'ip.cta.extension': 'Locale extension',
+    'ip.cta.guide': 'Environment and IP setup',
+    'ip.disclaimer': 'Not official and not a guarantee of passing Claude.',
+    'ip.deduction.datacenter': 'Datacenter or hosting network',
+    'ip.deduction.business': 'Business or other non-residential network',
+    'ip.deduction.proxy': 'Proxy',
+    'ip.deduction.vpn': 'VPN',
+    'ip.deduction.proxy_vpn': 'Proxy and VPN',
+    'ip.deduction.tor': 'Tor exit',
+    'ip.deduction.abuse': 'AbuseIPDB confidence',
+    'ip.deduction.abuser': 'Listed as an abuser',
+    'ip.deduction.proxycheck_risk': 'proxycheck risk',
+    'ip.deduction.conflict': 'Sources disagree; the higher-risk reading is kept',
 
     'ui.claudeBadge': 'Same as Claude',
     'ui.retest': 'Scan again',
@@ -339,7 +398,7 @@ export const ui = {
   zh: {
     'meta.title': 'Fuck Claude ｜ 你是「Claude 中国用户」吗',
     'meta.description':
-      '一键检测浏览器时区、语言、中文字体与 locale 等信号，评估你是否会被 Claude Code 判定为中国用户并有封号风险。纯本地运行，零数据上传。',
+      '检测浏览器时区、语言、中文字体与 locale，评估是否会被 Claude Code 视为中国用户。这项检测留在浏览器本地。单独的 IP 纯净度检查会把出口 IP 经 /api/ip 发给信誉接口。',
 
     'nav.title': 'Fuck Claude',
     'nav.guides': '防封指南',
@@ -419,8 +478,8 @@ export const ui = {
     'community.relatedGuide': '相关指南',
 
     'hero.title': '你是「Claude 中国用\u2060户」\u2060吗',
-    'hero.badge.local': '纯本地检测',
-    'hero.badge.noUpload': '结果零上传',
+    'hero.badge.local': '中国用户检测留在本地',
+    'hero.badge.noUpload': '中国用户分不上传',
     'hero.badge.openSource': '开源代码',
     'hero.scoreOutOf': '/ 100',
 
@@ -527,10 +586,10 @@ export const ui = {
       '把系统时区改出 Asia/Shanghai 等中国时区，把 zh-CN 从浏览器语言列表首位移除，禁用 WebRTC 泄露，并避免让 Claude Code 走 hostname 含敏感域名 / AI 实验室关键词的中转。上方「如何降低你的风险分」清单按顺序完整讲了一遍。',
     'faq.q4': '会上传我的数据吗？',
     'faq.a4':
-      '不会。所有检测都在浏览器本地完成，检测到的任何信号都不会被发送。网站加载 Google Analytics 统计匿名访问量，并通过 Google AdSense 展示广告(广告可能使用 Cookie)。WebRTC 泄露检测可能短暂连接公共 STUN 服务器以收集 ICE 候选。',
+      '中国用户检测在浏览器本地完成，这些信号不会上传。单独的 IP 纯净度检查（首页卡片和 /zh/ip）会把你的出口 IP 发到本站 /api/ip，由服务端查询 proxycheck.io、AbuseIPDB 和 ipwho.is。该分数绝不会并入中国用户分。网站还会加载 Google Analytics 统计匿名访问量，并通过 Google AdSense 展示广告（广告可能使用 Cookie）。WebRTC 泄露检测可能短暂连接公共 STUN 服务器以收集 ICE 候选。',
     'faq.q5': '分数低就一定不会被封吗？',
     'faq.a5':
-      '不能保证。本工具只衡量浏览器可见的指纹。Anthropic 真实的风控模型还会权衡你的 IP 信誉、支付卡 BIN、账号资历与使用模式 —— 这些网页都看不到。低分能消除明显的本地破绽，但一个数据中心 IP 或高风险虚拟卡照样可能让账号被标记。',
+      '不能保证。本工具的中国用户分只衡量浏览器可见的指纹。Anthropic 真实的风控模型还会权衡 IP 信誉、支付卡 BIN、账号资历与使用模式。低分能消除明显的本地破绽，但一个数据中心 IP 或高风险虚拟卡照样可能让账号被标记。IP 纯净度卡片是针对出口地址的另一项启发式判断，不会改动这个分数。',
     'faq.q6': '用这个工具或看这些指南会违反 Anthropic 条款吗？',
     'faq.a6':
       '检测器只是读取你自己的浏览器并如实报告 —— 这本身不违反任何条款。指南是关于指纹检测原理的教育性参考资料。你需要为自己如何使用 Claude、以及是否遵守 Anthropic 政策与当地法律负责。另请注意：Anthropic 帮助中心把「从不受支持的地区创建账户」列为封禁原因，任何浏览器设置都不会让不符合资格的账号变得合规。',
@@ -546,7 +605,7 @@ export const ui = {
 
     'privacy.title': '隐私说明',
     'privacy.body':
-      '所有检测都在你的浏览器本地完成，扫描结果不会离开你的设备。网站加载 Google Analytics 统计匿名页面访问量，并通过 Google AdSense 展示广告；检测到的信号不会被发送。WebRTC 泄露检测可能短暂连接公共 STUN 服务器。',
+      '中国用户检测在你的浏览器本地完成，这些结果留在设备上。单独的 IP 纯净度检查会把出口 IP 发到 /api/ip，由第三方信誉源查询，且该分数不会并入中国用户分。网站加载 Google Analytics 统计匿名页面访问量，并通过 Google AdSense 展示广告。WebRTC 泄露检测可能短暂连接公共 STUN 服务器。',
     'privacy.fullPolicy': '完整隐私政策 →',
 
     'author.by': '作者',
@@ -554,7 +613,7 @@ export const ui = {
 
     'trust.privacy.title': '隐私政策',
     'trust.privacy.description':
-      'Fuck Claude 如何处理本地检测、Google Analytics、Google AdSense 与 WebRTC STUN 探测。',
+      'Fuck Claude 如何处理本地中国用户检测、IP 纯净度检查、Google Analytics、Google AdSense 与 WebRTC STUN 探测。',
     'trust.terms.title': '服务条款',
     'trust.terms.description':
       '使用 Fuck Claude 诊断工具与知识库的法律条款、用户责任与免责声明。',
@@ -576,6 +635,7 @@ export const ui = {
     'footer.terms': '服务条款',
     'footer.about': '关于',
     'footer.contact': '联系',
+    'footer.ip': 'IP 纯净度',
 
     'share.label': '分享你的结果',
     'share.native': '分享',
@@ -597,6 +657,64 @@ export const ui = {
     'api.ex1': '# 文本报告 —— 跟随 Accept-Language',
     'api.ex2': '# 通过请求头指定语言',
     'api.ex3': '# JSON 输出',
+
+    'ip.meta.title': 'IP 纯净度',
+    'ip.meta.description':
+      '对本次访问的出口 IP 给出独立的 0–100 纯净度。分数越高越接近住宅网络，数据来自 proxycheck.io、AbuseIPDB 与 ipwho.is。不并入中国用户分，也不保证能通过 Claude。',
+    'ip.title': 'IP 纯净度',
+    'ip.lead':
+      '本页只评估这次访问的出口 IP。分数越高，越接近干净的住宅网络。这是对 Claude 账号风控模型的启发式参考，不是 Anthropic 的检测，也绝不会并入中国用户分。',
+    'ip.separate': '与中国用户分相互独立，两个分数不会合并。',
+    'ip.loading': '正在查看这次访问的出口 IP…',
+    'ip.error': 'IP 纯净度检查失败。',
+    'ip.rateLimited': '这个 IP 的检查太频繁。请稍等一分钟再试。',
+    'ip.retry': '再试一次',
+    'ip.scoreLabel': '纯净度',
+    'ip.scoreUnknown': '—',
+    'ip.outOf': '/ 100',
+    'ip.band.high': '高',
+    'ip.band.medium': '中',
+    'ip.band.low': '低',
+    'ip.type.Residential': '住宅',
+    'ip.type.Datacenter': '数据中心',
+    'ip.type.Business': '企业',
+    'ip.type.Unknown': '未知',
+    'ip.flag.proxy': '代理',
+    'ip.flag.vpn': 'VPN',
+    'ip.flag.tor': 'Tor',
+    'ip.flag.datacenter': '机房',
+    'ip.flag.abusive': '滥用',
+    'ip.flag.yes': '是',
+    'ip.flag.no': '否',
+    'ip.flag.unknown': '未知',
+    'ip.yourIp': '出口 IP',
+    'ip.geo': '位置',
+    'ip.network': '网络',
+    'ip.deductions': '扣分原因',
+    'ip.noDeductions': '没有扣分项。没有分数表示这次检查拒绝猜测，不代表 IP 很干净。',
+    'ip.sources': '数据来源',
+    'ip.source.proxycheck': 'proxycheck.io',
+    'ip.source.abuseipdb': 'AbuseIPDB',
+    'ip.source.ipwho': 'ipwho.is',
+    'ip.source.ok': '已返回',
+    'ip.source.unavailable': '不可用',
+    'ip.source.unconfigured': '未配置',
+    'ip.source.error': '出错',
+    'ip.source.ipwhoNote': '仅地理信息',
+    'ip.details': '查看完整结果',
+    'ip.cta.extension': '区域扩展',
+    'ip.cta.guide': '环境纯化与 IP 设置',
+    'ip.disclaimer': '非官方，不保证能通过 Claude。',
+    'ip.deduction.datacenter': '数据中心或托管网络',
+    'ip.deduction.business': '企业或其他非住宅网络',
+    'ip.deduction.proxy': '代理',
+    'ip.deduction.vpn': 'VPN',
+    'ip.deduction.proxy_vpn': '代理与 VPN',
+    'ip.deduction.tor': 'Tor 出口',
+    'ip.deduction.abuse': 'AbuseIPDB 置信度',
+    'ip.deduction.abuser': '被标为滥用地址',
+    'ip.deduction.proxycheck_risk': 'proxycheck 风险',
+    'ip.deduction.conflict': '来源不一致，采用风险更高的读数',
 
     'ui.claudeBadge': 'Claude 同款',
     'ui.retest': '重新扫描',

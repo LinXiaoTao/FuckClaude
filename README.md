@@ -91,11 +91,17 @@ curl "https://fuck-claude.vercel.app/api/check?format=json"
 > The API is an IP/header estimate and differs from the in-browser OS scan; the
 > geo headers only exist on the Vercel deployment.
 
+`GET /api/ip` (send `Accept: application/json`) is a separate purity score for
+the visitor’s own egress IP. Reputation comes from proxycheck.io and AbuseIPDB.
+ipwho.is is only the geo/ASN/org fallback. It ignores `?ip=`. Server keys:
+`PROXYCHECK_API_KEY`, `ABUSEIPDB_API_KEY` (see `.env.example`). This score is
+never merged into the China-user score. Missing keys do not produce a high score.
+
 ## Tech stack
 
 - [Astro](https://astro.build) `7.x`, static output (`output: 'static'`)
 - [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/)
-  adapter so the single on-demand route `/api/check` runs as a Vercel Function
+  adapter so the on-demand routes `/api/check` and `/api/ip` run as Vercel Functions
   (every page still prerenders to static HTML)
 - Built-in i18n: English at `/`, Chinese at `/zh/`, plus `@astrojs/sitemap`
 - No UI framework; the scan/scoring logic is a single bundled TypeScript module
@@ -118,7 +124,7 @@ src/
 ├── scripts/track.ts     # GA click tracking for outbound promo links
 ├── layouts/BaseLayout.astro  # <head> SEO + GA + global styles
 ├── components/          # Detector (+ share buttons), Sponsors, CnModels, ScoreRing, Mascot, LangToggle, SocialLinks (QR popovers), Footer
-└── pages/               # index.astro (en) + zh/index.astro + guides/ + zh/guides/ + api/check.ts
+└── pages/               # index.astro (en) + zh/index.astro + guides/ + zh/guides/ + api/check.ts + api/ip.ts
 public/mascot/           # cartoon CEO state images (doze / search / low / medium / high)
 public/sponsors/         # sponsor logos
 scripts/
@@ -139,10 +145,11 @@ pnpm preview
 ## Deploy
 
 Optimised for **Vercel** (`@astrojs/vercel`): every page prerenders to static
-HTML and only `/api/check` runs as a Vercel Function that reads the request's
-geo headers. It also works on any static host (Cloudflare Pages, Netlify,
-GitHub Pages) — the site is fully functional there, only the `/api/check`
-endpoint is Vercel-specific. Before deploying, set your real origin in
+HTML and only `/api/check` and `/api/ip` run as Vercel Functions. `/api/check`
+reads the request's geo headers; `/api/ip` scores the visitor's egress IP.
+It also works on any static host (Cloudflare Pages, Netlify,
+GitHub Pages) — the site is fully functional there, only those API
+endpoints are Vercel-specific. Before deploying, set your real origin in
 [`astro.config.mjs`](astro.config.mjs) (`site`) and
 [`public/robots.txt`](public/robots.txt) so canonical URLs, `hreflang` links and the
 sitemap point to the correct domain.
@@ -253,11 +260,13 @@ curl "https://fuck-claude.vercel.app/api/check?format=json"
 > 该接口是基于 IP / 请求头的估算,与浏览器端读取操作系统的检测结果不同;geo 头仅在
 > Vercel 部署上存在。
 
+`GET /api/ip`（请求头带 `Accept: application/json`）是另一项纯净度分数，只评估访客自己的出口 IP。信誉来自 proxycheck.io 与 AbuseIPDB，ipwho.is 只做地理 / ASN / 组织回退。它忽略 `?ip=`。服务端密钥为 `PROXYCHECK_API_KEY`、`ABUSEIPDB_API_KEY`（见 `.env.example`）。该分数不会并入中国用户分。缺少密钥时不会给出高分。
+
 ## 技术栈
 
 - [Astro](https://astro.build) `7.x`,静态输出(`output: 'static'`)
 - [`@astrojs/vercel`](https://docs.astro.build/en/guides/integrations-guide/vercel/)
-  适配器,让唯一的按需路由 `/api/check` 作为 Vercel Function 运行(其余页面仍全部
+  适配器,让按需路由 `/api/check` 与 `/api/ip` 作为 Vercel Function 运行(其余页面仍全部
   预渲染为静态 HTML)
 - 内置 i18n:英文在 `/`,中文在 `/zh/`,并使用 `@astrojs/sitemap`
 - 不依赖任何 UI 框架;扫描 / 打分逻辑是单个打包的 TypeScript 模块
@@ -280,7 +289,7 @@ src/
 ├── scripts/track.ts     # 出站推广链接的 GA 点击埋点
 ├── layouts/BaseLayout.astro  # <head> SEO + GA + 全局样式
 ├── components/          # Detector(含分享按钮)、Sponsors、CnModels、ScoreRing、Mascot、LangToggle、SocialLinks(二维码浮层)、Footer
-└── pages/               # index.astro(英)+ zh/index.astro + guides/ + zh/guides/ + api/check.ts
+└── pages/               # index.astro(英)+ zh/index.astro + guides/ + zh/guides/ + api/check.ts + api/ip.ts
 public/mascot/           # 卡通 CEO 各状态图(打瞌睡 / 检测中 / 低 / 中 / 高风险)
 public/sponsors/         # 赞助商 logo
 scripts/
@@ -301,9 +310,10 @@ pnpm preview
 ## 部署
 
 针对 **Vercel** 优化(`@astrojs/vercel`):所有页面都会预渲染为静态 HTML,只有
-`/api/check` 作为 Vercel Function 运行以读取请求的 geo 头。它同样支持任意静态托管
+`/api/check` 与 `/api/ip` 作为 Vercel Function 运行。`/api/check` 读取请求的 geo 头，
+`/api/ip` 评估访客出口 IP 的纯净度。它同样支持任意静态托管
 (Cloudflare Pages、Netlify、GitHub Pages)—— 网站在这些平台上完全可用,只有
-`/api/check` 接口是 Vercel 特有的。部署前请把 [`astro.config.mjs`](astro.config.mjs) 的
+这些 API 接口是 Vercel 特有的。部署前请把 [`astro.config.mjs`](astro.config.mjs) 的
 `site` 和 [`public/robots.txt`](public/robots.txt) 换成你的真实域名,以保证 canonical、
 `hreflang` 与 sitemap 指向正确。
 
