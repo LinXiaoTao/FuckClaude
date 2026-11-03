@@ -7,9 +7,10 @@ import vercel from '@astrojs/vercel';
 // hreflang links and the generated sitemap point to the correct domain.
 //
 // Output stays `static` (every page is prerendered); the Vercel adapter is
-// only here so the single on-demand route `src/pages/api/check.ts`
-// (`export const prerender = false`) can run as a Vercel Function and read the
-// request's geo headers for the curl/API endpoint.
+// only here so the on-demand routes `src/pages/api/check.ts` and
+// `src/pages/api/ip.ts` (`export const prerender = false`) can run as Vercel
+// Functions. `/api/check` reads geo headers for the China-user estimate.
+// `/api/ip` scores the visitor's own egress IP. The two scores stay separate.
 export default defineConfig({
   site: 'https://fuck-claude.vercel.app',
   output: 'static',

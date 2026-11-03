@@ -1,0 +1,297 @@
+---
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  /** `card` is the homepage secondary result. `page` is the full /ip report. */
+  variant?: 'card' | 'page';
+}
+
+const { lang, variant = 'card' } = Astro.props;
+const t = useTranslations(lang);
+const prefix = lang === 'zh' ? '/zh' : '';
+const detailsHref = `${prefix}/ip/`;
+const extensionHref = `${prefix}/extension/`;
+const guideHref = `${prefix}/guides/environment-cleanup-and-ip-setup/`;
+---
+
+<section
+  class:list={['ip-card', variant === 'page' && 'ip-card--page']}
+  data-ip-purity
+  data-variant={variant}
+  data-lang={lang}
+  data-details={detailsHref}
+  data-extension={extensionHref}
+  data-guide={guideHref}
+  aria-live="polite"
+>
+  {
+    variant === 'card' && (
+      <div class="ip-card__intro">
+        <h2>{t('ip.title')}</h2>
+        <p>{t('ip.separate')}</p>
+      </div>
+    )
+  }
+  <div data-ip-body>
+    <p class="ip-card__state">{t('ip.loading')}</p>
+  </div>
+</section>
+
+<script>
+  import { mountAllIpPurity } from '../scripts/ip-purity-ui';
+  mountAllIpPurity();
+</script>
+
+<style is:global>
+  .ip-card {
+    margin: 18px auto 0;
+    max-width: 640px;
+    padding: 16px 16px 14px;
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+  }
+  .ip-card--page {
+    max-width: none;
+    margin: 8px 0 0;
+  }
+  .ip-card__intro h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    letter-spacing: -0.01em;
+  }
+  .ip-card__intro p,
+  .ip-card__separate,
+  .ip-card__disclaimer,
+  .ip-card__muted,
+  .ip-card__notice {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+  .ip-card__notice {
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--medium) 10%, var(--surface));
+    color: var(--text);
+  }
+  .ip-card__state {
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .ip-card__scoreline {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .ip-card__kicker {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .ip-card__score {
+    margin: 2px 0 0;
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text);
+  }
+  .ip-card__score small {
+    margin-left: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .ip-card[data-band='high'] .ip-card__score {
+    color: var(--low);
+  }
+  .ip-card[data-band='medium'] .ip-card__score {
+    color: var(--medium);
+  }
+  .ip-card[data-band='low'] .ip-card__score {
+    color: var(--high);
+  }
+  .ip-card__band {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .ip-card__band--high {
+    color: var(--low);
+    background: color-mix(in srgb, var(--low) 12%, var(--surface));
+  }
+  .ip-card__band--medium {
+    color: var(--medium);
+    background: color-mix(in srgb, var(--medium) 12%, var(--surface));
+  }
+  .ip-card__band--low {
+    color: var(--high);
+    background: color-mix(in srgb, var(--high) 12%, var(--surface));
+  }
+  .ip-card__type {
+    flex: none;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    background: var(--bg);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .ip-card__meta {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 10px;
+    margin: 12px 0 0;
+    font-size: 0.86rem;
+  }
+  .ip-card__meta dt {
+    color: var(--muted);
+  }
+  .ip-card__meta dd {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+  }
+  .ip-card__flags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+  }
+  .ip-flag {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    font-size: 0.78rem;
+  }
+  .ip-flag__val {
+    font-weight: 750;
+  }
+  .ip-flag--yes {
+    color: var(--high);
+    border-color: color-mix(in srgb, var(--high) 35%, var(--border));
+    background: color-mix(in srgb, var(--high) 8%, var(--surface));
+  }
+  .ip-flag--no {
+    color: var(--low);
+  }
+  .ip-flag--unknown .ip-flag__val {
+    color: var(--muted);
+    font-weight: 650;
+  }
+  .ip-card__hint {
+    margin: 12px 0 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .ip-card__hint--risky {
+    color: var(--high);
+  }
+  .ip-card__hint--ok {
+    color: var(--low);
+  }
+  .ip-card__h {
+    margin: 16px 0 0;
+    font-size: 0.95rem;
+  }
+  .ip-card__deductions,
+  .ip-card__sources {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .ip-deduction,
+  .ip-source {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    font-size: 0.88rem;
+  }
+  .ip-deduction__pts {
+    flex: none;
+    min-width: 2.4rem;
+    font-family: var(--mono);
+    font-weight: 700;
+    color: var(--high);
+  }
+  .ip-deduction__label small,
+  .ip-source small {
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .ip-source__name {
+    min-width: 8.5rem;
+    font-weight: 650;
+  }
+  .ip-source__status--ok {
+    color: var(--low);
+  }
+  .ip-source__status--unconfigured,
+  .ip-source__status--unavailable,
+  .ip-source__status--error {
+    color: var(--medium);
+  }
+  .ip-card__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .ip-card__link,
+  .ip-card__retry {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 650;
+    cursor: pointer;
+  }
+  .ip-card__link:hover,
+  .ip-card__retry:hover {
+    text-decoration: none;
+    border-color: var(--accent);
+    color: var(--accent-strong);
+  }
+  .ip-card__link--primary {
+    background: var(--text);
+    border-color: var(--text);
+    color: #fff;
+  }
+  .ip-card__link--primary:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .ip-card__retry {
+    margin-top: 8px;
+  }
+</style>
