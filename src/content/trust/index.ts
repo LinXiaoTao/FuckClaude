@@ -9,7 +9,7 @@ export const TRUST_CONTENT: Record<TrustPageId, { en: string; zh: string }> = {
 <p>The China-user fingerprint scan on <strong>Fuck Claude</strong> (timezone, language, fonts, WebRTC candidates, and the weighted 0–100 China-user score) runs inside your browser. Those scan results and signal values are processed in memory on your device. They are <strong>not uploaded</strong> to our servers, not stored in a remote database, and not sold. That local scan is separate from the IP purity check below. The two scores are never combined.</p>
 
 <h2>2. IP purity check</h2>
-<p>The homepage IP card and the <a href="/ip/">IP purity page</a> call our <code>/api/ip</code> endpoint with your egress IP address. The server then queries third-party reputation and geo sources — ipapi.is, proxycheck.io, AbuseIPDB, and ipwho.is — with that IP. API keys, when configured, stay on the server and are never sent to the browser.</p>
+<p>The homepage IP card and the <a href="/ip/">IP purity page</a> call our <code>/api/ip</code> endpoint with your egress IP address. The server then queries third-party reputation and geo sources — proxycheck.io, AbuseIPDB, and ipwho.is — with that IP. API keys, when configured, stay on the server and are never sent to the browser.</p>
 <p>A short in-memory cache (about 5–10 minutes) holds the aggregated result so repeated views do not hammer those providers. The cache lives only in the serverless instance that handled the request, is not written to a long-term database, and is not a visitor profile. The check does not look up an IP you type in, and it does not publish a shareable result page.</p>
 <p>The purity score runs from 0 to 100. Higher means the egress looks cleaner and more residential. It is a heuristic, not Anthropic’s model, and not a guarantee that an account will pass or be blocked. If reputation API keys are not configured, the check does not invent a high purity score.</p>
 
@@ -48,7 +48,7 @@ export const TRUST_CONTENT: Record<TrustPageId, { en: string; zh: string }> = {
 <p><strong>Fuck Claude</strong> 的中国用户指纹检测（时区、语言、字体、WebRTC 候选，以及加权后的 0–100 中国用户分）在你的浏览器里运行。这些检测结果和信号值只在设备内存中处理，<strong>不会上传</strong>到我们的服务器，不会写入远程数据库，也不会出售。这项本地检测与下面的 IP 纯净度检查是分开的，两个分数绝不会合并。</p>
 
 <h2>2. IP 纯净度检查</h2>
-<p>首页的 IP 卡片和 <a href="/zh/ip/">IP 纯净度页面</a> 会请求本站的 <code>/api/ip</code>，并把你的出口 IP 发给服务器。服务器再用这个 IP 查询第三方信誉与地理来源：ipapi.is、proxycheck.io、AbuseIPDB 和 ipwho.is。API 密钥若已配置，只留在服务端，不会下发到浏览器。</p>
+<p>首页的 IP 卡片和 <a href="/zh/ip/">IP 纯净度页面</a> 会请求本站的 <code>/api/ip</code>，并把你的出口 IP 发给服务器。服务器再用这个 IP 查询第三方信誉与地理来源：proxycheck.io、AbuseIPDB 和 ipwho.is。API 密钥若已配置，只留在服务端，不会下发到浏览器。</p>
 <p>汇总结果会在内存里短暂缓存（大约 5–10 分钟），避免重复访问反复请求这些服务。缓存只存在于处理该请求的 serverless 实例中，不会写入长期数据库，也不是访客档案。本检查不提供自行输入任意 IP 的查询，也不会生成可分享的结果页。</p>
 <p>纯净度为 0–100，越高表示出口越接近干净的住宅网络。它是启发式判断，不是 Anthropic 的模型，也不保证账号能通过或一定会被拦截。若信誉 API 密钥未配置，检查不会编造一个很高的纯净度。</p>
 

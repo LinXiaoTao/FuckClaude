@@ -92,10 +92,10 @@ curl "https://fuck-claude.vercel.app/api/check?format=json"
 > geo headers only exist on the Vercel deployment.
 
 `GET /api/ip` (send `Accept: application/json`) is a separate purity score for
-the visitor’s own egress IP. It aggregates ipapi.is, proxycheck.io, AbuseIPDB
-and ipwho.is. It ignores `?ip=`. Server keys: `IPAPI_IS_KEY`,
+the visitor’s own egress IP. Reputation comes from proxycheck.io and AbuseIPDB.
+ipwho.is is only the geo/ASN/org fallback. It ignores `?ip=`. Server keys:
 `PROXYCHECK_API_KEY`, `ABUSEIPDB_API_KEY` (see `.env.example`). This score is
-never merged into the China-user score.
+never merged into the China-user score. Missing keys do not produce a high score.
 
 ## Tech stack
 
@@ -260,7 +260,7 @@ curl "https://fuck-claude.vercel.app/api/check?format=json"
 > 该接口是基于 IP / 请求头的估算,与浏览器端读取操作系统的检测结果不同;geo 头仅在
 > Vercel 部署上存在。
 
-`GET /api/ip`（请求头带 `Accept: application/json`）是另一项纯净度分数，只评估访客自己的出口 IP，汇总 ipapi.is、proxycheck.io、AbuseIPDB 与 ipwho.is。它忽略 `?ip=`。服务端密钥为 `IPAPI_IS_KEY`、`PROXYCHECK_API_KEY`、`ABUSEIPDB_API_KEY`（见 `.env.example`）。该分数不会并入中国用户分。
+`GET /api/ip`（请求头带 `Accept: application/json`）是另一项纯净度分数，只评估访客自己的出口 IP。信誉来自 proxycheck.io 与 AbuseIPDB，ipwho.is 只做地理 / ASN / 组织回退。它忽略 `?ip=`。服务端密钥为 `PROXYCHECK_API_KEY`、`ABUSEIPDB_API_KEY`（见 `.env.example`）。该分数不会并入中国用户分。缺少密钥时不会给出高分。
 
 ## 技术栈
 

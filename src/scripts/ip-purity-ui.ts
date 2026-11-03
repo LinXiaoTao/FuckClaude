@@ -40,7 +40,7 @@ interface IpPayload {
 }
 
 const FLAG_KEYS = ['proxy', 'vpn', 'tor', 'datacenter', 'abusive'] as const;
-const SOURCE_KEYS = ['ipapi', 'proxycheck', 'abuseipdb', 'ipwho'] as const;
+const SOURCE_KEYS = ['proxycheck', 'abuseipdb', 'ipwho'] as const;
 
 function isLang(value: string | null): value is Lang {
   return value === 'en' || value === 'zh';

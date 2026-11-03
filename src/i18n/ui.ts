@@ -208,7 +208,7 @@ export const ui = {
       'Switch your OS timezone away from China zones such as Asia/Shanghai, move zh-CN off the top of your browser language list, block WebRTC leaks, and avoid routing Claude Code through proxies whose hostnames contain flagged domains or AI-lab keywords. The “How to lower your risk score” checklist above walks through it in order.',
     'faq.q4': 'Is any data uploaded?',
     'faq.a4':
-      'The China-user scan runs in your browser, and those signals are not uploaded. The separate IP purity check (homepage card and /ip) sends your egress IP to our /api/ip endpoint, which queries ipapi.is, proxycheck.io, AbuseIPDB, and ipwho.is. That score is never merged into the China-user score. The site also loads Google Analytics for anonymous page-view stats and Google AdSense for advertising (ads may use cookies). WebRTC leak detection may briefly contact a public STUN server to gather ICE candidates.',
+      'The China-user scan runs in your browser, and those signals are not uploaded. The separate IP purity check (homepage card and /ip) sends your egress IP to our /api/ip endpoint, which queries proxycheck.io, AbuseIPDB, and ipwho.is. That score is never merged into the China-user score. The site also loads Google Analytics for anonymous page-view stats and Google AdSense for advertising (ads may use cookies). WebRTC leak detection may briefly contact a public STUN server to gather ICE candidates.',
     'faq.q5': 'Will a low score guarantee I won’t get banned?',
     'faq.a5':
       'No guarantee. This tool’s China-user score only measures browser-visible fingerprints. Anthropic’s real risk model also weighs IP reputation, payment-card BIN, account age and usage patterns. A low score removes obvious local tells, but a datacenter IP or a high-risk virtual card can still get an account flagged. The IP purity card is a separate heuristic for the egress question and does not change this score.',
@@ -287,7 +287,7 @@ export const ui = {
 
     'ip.meta.title': 'IP purity',
     'ip.meta.description':
-      'A separate 0–100 purity score for your egress IP, from ipapi.is, proxycheck.io, AbuseIPDB and ipwho.is. Higher means more residential-like. Not part of the China-user score, and not a Claude guarantee.',
+      'A separate 0–100 purity score for your egress IP, from proxycheck.io, AbuseIPDB and ipwho.is. Higher means more residential-like. Not part of the China-user score, and not a Claude guarantee.',
     'ip.title': 'IP purity',
     'ip.lead':
       'This page scores the egress IP of this visit. Higher means cleaner and more residential-like. It is a heuristic for Claude account risk models, not an Anthropic check, and it is never merged into the China-user score.',
@@ -320,7 +320,6 @@ export const ui = {
     'ip.deductions': 'Why this score',
     'ip.noDeductions': 'No deductions. A missing score means the check refused to guess, not that the IP is clean.',
     'ip.sources': 'Sources',
-    'ip.source.ipapi': 'ipapi.is',
     'ip.source.proxycheck': 'proxycheck.io',
     'ip.source.abuseipdb': 'AbuseIPDB',
     'ip.source.ipwho': 'ipwho.is',
@@ -587,7 +586,7 @@ export const ui = {
       '把系统时区改出 Asia/Shanghai 等中国时区，把 zh-CN 从浏览器语言列表首位移除，禁用 WebRTC 泄露，并避免让 Claude Code 走 hostname 含敏感域名 / AI 实验室关键词的中转。上方「如何降低你的风险分」清单按顺序完整讲了一遍。',
     'faq.q4': '会上传我的数据吗？',
     'faq.a4':
-      '中国用户检测在浏览器本地完成，这些信号不会上传。单独的 IP 纯净度检查（首页卡片和 /zh/ip）会把你的出口 IP 发到本站 /api/ip，由服务端查询 ipapi.is、proxycheck.io、AbuseIPDB 和 ipwho.is。该分数绝不会并入中国用户分。网站还会加载 Google Analytics 统计匿名访问量，并通过 Google AdSense 展示广告（广告可能使用 Cookie）。WebRTC 泄露检测可能短暂连接公共 STUN 服务器以收集 ICE 候选。',
+      '中国用户检测在浏览器本地完成，这些信号不会上传。单独的 IP 纯净度检查（首页卡片和 /zh/ip）会把你的出口 IP 发到本站 /api/ip，由服务端查询 proxycheck.io、AbuseIPDB 和 ipwho.is。该分数绝不会并入中国用户分。网站还会加载 Google Analytics 统计匿名访问量，并通过 Google AdSense 展示广告（广告可能使用 Cookie）。WebRTC 泄露检测可能短暂连接公共 STUN 服务器以收集 ICE 候选。',
     'faq.q5': '分数低就一定不会被封吗？',
     'faq.a5':
       '不能保证。本工具的中国用户分只衡量浏览器可见的指纹。Anthropic 真实的风控模型还会权衡 IP 信誉、支付卡 BIN、账号资历与使用模式。低分能消除明显的本地破绽，但一个数据中心 IP 或高风险虚拟卡照样可能让账号被标记。IP 纯净度卡片是针对出口地址的另一项启发式判断，不会改动这个分数。',
@@ -661,7 +660,7 @@ export const ui = {
 
     'ip.meta.title': 'IP 纯净度',
     'ip.meta.description':
-      '对本次访问的出口 IP 给出独立的 0–100 纯净度。分数越高越接近住宅网络，数据来自 ipapi.is、proxycheck.io、AbuseIPDB 与 ipwho.is。不并入中国用户分，也不保证能通过 Claude。',
+      '对本次访问的出口 IP 给出独立的 0–100 纯净度。分数越高越接近住宅网络，数据来自 proxycheck.io、AbuseIPDB 与 ipwho.is。不并入中国用户分，也不保证能通过 Claude。',
     'ip.title': 'IP 纯净度',
     'ip.lead':
       '本页只评估这次访问的出口 IP。分数越高，越接近干净的住宅网络。这是对 Claude 账号风控模型的启发式参考，不是 Anthropic 的检测，也绝不会并入中国用户分。',
@@ -694,7 +693,6 @@ export const ui = {
     'ip.deductions': '扣分原因',
     'ip.noDeductions': '没有扣分项。没有分数表示这次检查拒绝猜测，不代表 IP 很干净。',
     'ip.sources': '数据来源',
-    'ip.source.ipapi': 'ipapi.is',
     'ip.source.proxycheck': 'proxycheck.io',
     'ip.source.abuseipdb': 'AbuseIPDB',
     'ip.source.ipwho': 'ipwho.is',

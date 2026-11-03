@@ -6,8 +6,8 @@
  * must never be added to, averaged with, or written into that score.
  *
  * The scored IP is always the request egress. A client `?ip=` is ignored.
- * Reputation keys stay in server env (`IPAPI_IS_KEY`, `PROXYCHECK_API_KEY`,
- * `ABUSEIPDB_API_KEY`) and are never returned to the browser.
+ * Reputation keys stay in server env (`PROXYCHECK_API_KEY`, `ABUSEIPDB_API_KEY`)
+ * and are never returned to the browser. ipwho.is is geo/ASN fallback only.
  *
  * Cache and rate limit are in-memory on this instance only. Vercel can run
  * many isolates, and a cold start drops both. That is a short de-dupe, not a
@@ -78,7 +78,6 @@ export interface IpPurityResponse {
   claudeHint: ClaudeHint;
   deductions: Deduction[];
   sources: {
-    ipapi: SourceReport;
     proxycheck: SourceReport;
     abuseipdb: SourceReport;
     ipwho: SourceReport;
@@ -220,7 +219,7 @@ function envKey(name: string): string {
 }
 
 export function sourcesConfiguredFromEnv(): boolean {
-  return Boolean(envKey('IPAPI_IS_KEY') || envKey('PROXYCHECK_API_KEY') || envKey('ABUSEIPDB_API_KEY'));
+  return Boolean(envKey('PROXYCHECK_API_KEY') || envKey('ABUSEIPDB_API_KEY'));
 }
 
 export function normalizeIp(raw: string | null | undefined): string | null {
@@ -452,55 +451,6 @@ function failStatus(fail: FetchFail): ParsedSource {
   return blank('error', fail.http ? `HTTP ${fail.http}` : 'request failed');
 }
 
-function orgFromAsnText(value: unknown): string | null {
-  const text = asStr(value);
-  if (!text) return null;
-  const stripped = text.replace(/^AS\d+\s*/i, '').trim();
-  return stripped || null;
-}
-
-export function parseIpapi(json: unknown, keyless: boolean): ParsedSource {
-  const root = asObj(json);
-  if (!root) return blank('error', 'unreadable response');
-  if (typeof root.error === 'string' || root.success === false) return blank('error', 'provider rejected the lookup');
-  // Paid responses nest location/asn/company and include reputation flags.
-  // The keyless payload is flat (company and asn are strings) and has no flags.
-  // Flat geo is kept. A company name is not treated as a reputation signal.
-  const loc = asObj(root.location);
-  const asn = asObj(root.asn);
-  const company = asObj(root.company);
-  const asnType = mapNetworkType(asStr(asn?.type) ?? asStr(company?.type));
-  const datacenter = asBool(root.is_datacenter);
-  const proxy = asBool(root.is_proxy);
-  const vpn = asBool(root.is_vpn);
-  const tor = asBool(root.is_tor);
-  const abuser = asBool(root.is_abuser);
-  const sawFlag = [datacenter, proxy, vpn, tor, abuser].some((flag) => flag !== null);
-  const flatCountry = asStr(root.country);
-  if (!loc && !asn && !company && !sawFlag && !asStr(root.ip) && !flatCountry) {
-    return blank('error', 'provider rejected the lookup');
-  }
-  let type = asnType;
-  if (datacenter === true) type = 'Datacenter';
-  return {
-    status: 'ok',
-    detail: keyless ? 'keyless lookup' : undefined,
-    country: asStr(loc?.country) ?? flatCountry,
-    region: asStr(loc?.state) ?? asStr(root.region),
-    city: asStr(loc?.city) ?? asStr(root.city),
-    countryCode: (asStr(loc?.country_code) ?? asStr(root.country_code) ?? '').toUpperCase() || null,
-    asn: normalizeAsn(asn?.asn ?? root.asn),
-    org: asStr(asn?.org) ?? asStr(asn?.descr) ?? asStr(company?.name) ?? (company ? null : asStr(root.company)) ?? orgFromAsnText(root.asn),
-    isp: asStr(company?.name) ?? (company ? null : asStr(root.company)),
-    type,
-    proxy,
-    vpn,
-    tor,
-    datacenter,
-    abusive: abuser,
-  };
-}
-
 export function parseProxycheck(json: unknown, ip: string): ParsedSource {
   const root = asObj(json);
   if (!root) return blank('error', 'unreadable response');
@@ -675,7 +625,6 @@ export function buildPurity(input: {
   ip: string | null;
   sourcesConfigured: boolean;
   sources: {
-    ipapi: ParsedSource;
     proxycheck: ParsedSource;
     abuseipdb: ParsedSource;
     ipwho: ParsedSource;
@@ -683,9 +632,9 @@ export function buildPurity(input: {
   vercelGeo: Geo;
   notice: NoticeCode | null;
 }): IpPurityResponse {
-  const { ipapi, proxycheck, abuseipdb, ipwho } = input.sources;
-  const reputation = [ipapi, proxycheck, abuseipdb];
-  const geoOrder = [ipapi, proxycheck, abuseipdb, ipwho];
+  const { proxycheck, abuseipdb, ipwho } = input.sources;
+  const reputation = [proxycheck, abuseipdb];
+  const geoOrder = [proxycheck, abuseipdb, ipwho];
 
   const geo: Geo = {
     country: firstText(...geoOrder.map((source) => source.country), input.vercelGeo.country),
@@ -730,14 +679,13 @@ export function buildPurity(input: {
     disagreedBool(reputation.map((source) => source.datacenter));
 
   const deductions: Deduction[] = [];
-  const who = (pred: (source: ParsedSource) => boolean, ids: Array<['ipapi' | 'proxycheck' | 'abuseipdb', ParsedSource]>) =>
+  const who = (pred: (source: ParsedSource) => boolean, ids: Array<['proxycheck' | 'abuseipdb', ParsedSource]>) =>
     sourceNames(ids.filter(([, source]) => pred(source)).map(([id]) => id));
 
   const tagged = [
-    ['ipapi', ipapi],
     ['proxycheck', proxycheck],
     ['abuseipdb', abuseipdb],
-  ] as Array<['ipapi' | 'proxycheck' | 'abuseipdb', ParsedSource]>;
+  ] as Array<['proxycheck' | 'abuseipdb', ParsedSource]>;
 
   if (type === 'Datacenter' || flags.datacenter === true) {
     deductions.push({
@@ -847,7 +795,7 @@ export function buildPurity(input: {
     purity = Math.max(0, Math.min(100, total));
   }
 
-  // A keyless or unconfigured path must not present a clean 100 as if it were verified.
+  // Missing reputation keys must not present a clean 100 as if it were verified.
   if (!input.sourcesConfigured && purity !== null && !hasRisk) purity = null;
 
   let notice = input.notice;
@@ -865,9 +813,9 @@ export function buildPurity(input: {
   if (band === 'high' && hasRisk) band = 'medium';
 
   const network: Network = {
-    asn: firstText(ipapi.asn, proxycheck.asn, abuseipdb.asn, ipwho.asn),
-    org: firstText(ipapi.org, proxycheck.org, abuseipdb.org, ipwho.org),
-    isp: firstText(ipapi.isp, proxycheck.isp, abuseipdb.isp, ipwho.isp),
+    asn: firstText(proxycheck.asn, abuseipdb.asn, ipwho.asn),
+    org: firstText(proxycheck.org, abuseipdb.org, ipwho.org),
+    isp: firstText(proxycheck.isp, abuseipdb.isp, ipwho.isp),
     type,
   };
 
@@ -906,7 +854,6 @@ export function buildPurity(input: {
     claudeHint: hint,
     deductions: purity === null ? deductions.filter((row) => row.code === 'conflict') : deductions,
     sources: {
-      ipapi: report(ipapi),
       proxycheck: report(proxycheck),
       abuseipdb: report(abuseipdb),
       ipwho: report(ipwho),
@@ -930,29 +877,17 @@ async function lookupSource(
 }
 
 async function lookupPublic(ip: string): Promise<{
-  ipapi: ParsedSource;
   proxycheck: ParsedSource;
   abuseipdb: ParsedSource;
   ipwho: ParsedSource;
 }> {
-  const ipapiKey = envKey('IPAPI_IS_KEY');
   const proxyKey = envKey('PROXYCHECK_API_KEY');
   const abuseKey = envKey('ABUSEIPDB_API_KEY');
   const encoded = encodeURIComponent(ip);
   // Colons in an IPv6 path stay literal. Query values are fully encoded.
   const pathIp = ip.includes(':') ? ip : encoded;
 
-  const [ipapi, proxycheck, abuseipdb, ipwho] = await Promise.all([
-    lookupSource(
-      true,
-      '',
-      () =>
-        fetchJson(
-          `https://api.ipapi.is/?q=${encoded}${ipapiKey ? `&key=${encodeURIComponent(ipapiKey)}` : ''}`,
-          {},
-        ),
-      (json) => parseIpapi(json, !ipapiKey),
-    ),
+  const [proxycheck, abuseipdb, ipwho] = await Promise.all([
     lookupSource(
       Boolean(proxyKey),
       'API key not set',
@@ -975,7 +910,7 @@ async function lookupPublic(ip: string): Promise<{
     lookupSource(true, '', () => fetchJson(`https://ipwho.is/${pathIp}`, {}), (json) => parseIpwho(json)),
   ]);
 
-  return { ipapi, proxycheck, abuseipdb, ipwho };
+  return { proxycheck, abuseipdb, ipwho };
 }
 
 function skipped(detail: string): ParsedSource {
@@ -1046,7 +981,7 @@ export async function evaluateIp(headers: Headers, clientAddress: string | null)
       body: buildPurity({
         ip: null,
         sourcesConfigured: configured,
-        sources: { ipapi: missing, proxycheck: missing, abuseipdb: missing, ipwho: missing },
+        sources: { proxycheck: missing, abuseipdb: missing, ipwho: missing },
         vercelGeo: geo,
         notice: 'no_ip',
       }),
@@ -1058,7 +993,7 @@ export async function evaluateIp(headers: Headers, clientAddress: string | null)
     const body = buildPurity({
       ip,
       sourcesConfigured: configured,
-      sources: { ipapi: skippedPrivate, proxycheck: skippedPrivate, abuseipdb: skippedPrivate, ipwho: skippedPrivate },
+      sources: { proxycheck: skippedPrivate, abuseipdb: skippedPrivate, ipwho: skippedPrivate },
       vercelGeo: geo,
       notice: 'private_ip',
     });
@@ -1067,7 +1002,6 @@ export async function evaluateIp(headers: Headers, clientAddress: string | null)
   }
 
   let parsed: {
-    ipapi: ParsedSource;
     proxycheck: ParsedSource;
     abuseipdb: ParsedSource;
     ipwho: ParsedSource;
@@ -1076,7 +1010,7 @@ export async function evaluateIp(headers: Headers, clientAddress: string | null)
     parsed = await lookupPublic(ip);
   } catch {
     const failed = blank('unavailable', 'lookup failed');
-    parsed = { ipapi: failed, proxycheck: failed, abuseipdb: failed, ipwho: failed };
+    parsed = { proxycheck: failed, abuseipdb: failed, ipwho: failed };
   }
 
   const body = buildPurity({
