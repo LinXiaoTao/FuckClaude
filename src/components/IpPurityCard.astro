@@ -23,6 +23,7 @@ const guideHref = `${prefix}/guides/environment-cleanup-and-ip-setup/`;
   data-details={detailsHref}
   data-extension={extensionHref}
   data-guide={guideHref}
+  data-ip-defer={variant === 'card' ? '' : undefined}
   aria-live="polite"
 >
   {
@@ -34,7 +35,7 @@ const guideHref = `${prefix}/guides/environment-cleanup-and-ip-setup/`;
     )
   }
   <div data-ip-body>
-    <p class="ip-card__state">{t('ip.loading')}</p>
+    <p class="ip-card__state">{variant === 'card' ? t('ip.waitScan') : t('ip.loading')}</p>
   </div>
 </section>
 

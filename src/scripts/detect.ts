@@ -8,6 +8,7 @@ import { SIGNALS, riskBand, signalVerdict, type SignalDef, type RiskBand } from 
 import { CN_MODELS } from '../config/cn-models';
 import { useTranslations, type Lang } from '../i18n/ui';
 import { renderResultCard, type CardHit } from './share-card';
+import { startDeferredIpPurity, setIpPurityIdle } from './ip-purity-ui';
 
 /**
  * High-risk consolation links — "But you still have Kimi Code, DeepSeek and GLM".
@@ -86,6 +87,9 @@ function resetUI() {
   const save = q('#share-save');
   if (save) save.hidden = true;
   resetCard();
+  document.querySelectorAll<HTMLElement>('[data-ip-purity][data-ip-defer]').forEach((node) => {
+    setIpPurityIdle(node);
+  });
 
   for (const s of SIGNALS) {
     const row = q(`[data-signal="${s.id}"]`);
@@ -392,6 +396,8 @@ async function run() {
 
   setMascot('search');
   resetUI();
+  // B′: parallel IP purity with the China-user scan; never feeds the ring total.
+  const ipPurityJob = startDeferredIpPurity();
   await delay(SETTLE_MS);
 
   let total = 0;
@@ -431,6 +437,12 @@ async function run() {
   }
 
   finalize(Math.min(100, total), hits);
+  // IP may already have painted; await so a slow /api/ip cannot leak into the next scan.
+  try {
+    await ipPurityJob;
+  } catch {
+    /* startDeferredIpPurity already renders errors into the card */
+  }
   if (label) label.textContent = t('ui.retest');
   if (btn) btn.disabled = false;
   running = false;
