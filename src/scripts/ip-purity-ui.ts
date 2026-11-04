@@ -1,6 +1,9 @@
 /**
  * Client render for the IP purity card and the /ip page.
- * Fetches relative `/api/ip` once per mount. Does not touch the China-user score.
+ *
+ * Homepage cards use `data-ip-defer`: they wait for Start scan (detect.ts)
+ * to call `startDeferredIpPurity`. Full /ip pages still fetch on mount.
+ * Does not touch the China-user score.
  */
 import { useTranslations, type Lang } from '../i18n/ui';
 
@@ -16,7 +19,7 @@ interface SourceReport {
   detail?: string;
 }
 
-interface IpPayload {
+export interface IpPayload {
   ip?: string | null;
   purity?: number | null;
   band?: string | null;
@@ -38,6 +41,11 @@ interface IpPayload {
   error?: string;
   message?: string;
 }
+
+export type IpFetchResult =
+  | { kind: 'ok'; data: IpPayload }
+  | { kind: 'rate_limited'; message?: string }
+  | { kind: 'error'; message?: string };
 
 const FLAG_KEYS = ['proxy', 'vpn', 'tor', 'datacenter', 'abusive'] as const;
 const SOURCE_KEYS = ['proxycheck', 'abuseipdb', 'ipwho'] as const;
@@ -72,22 +80,16 @@ function hintText(data: IpPayload, lang: Lang): string {
   return lang === 'zh' ? hint.textZh || hint.textEn || '' : hint.textEn || hint.textZh || '';
 }
 
-export function mountAllIpPurity(root: ParentNode = document): void {
-  root.querySelectorAll<HTMLElement>('[data-ip-purity]').forEach((node) => {
-    if (node.dataset.ipReady === '1') return;
-    node.dataset.ipReady = '1';
-    void load(node);
-  });
+function langOf(root: HTMLElement): Lang {
+  return isLang(root.dataset.lang ?? null) ? (root.dataset.lang as Lang) : 'en';
 }
 
-async function load(root: HTMLElement): Promise<void> {
-  const lang: Lang = isLang(root.dataset.lang ?? null) ? (root.dataset.lang as Lang) : 'en';
-  const t = useTranslations(lang);
-  const body = root.querySelector('[data-ip-body]');
-  if (!body) return;
-  clear(body);
-  body.append(el('p', 'ip-card__state', t('ip.loading')));
-  root.removeAttribute('data-band');
+function bodyOf(root: HTMLElement): Element | null {
+  return root.querySelector('[data-ip-body]');
+}
+
+/** Relative `/api/ip` fetch. Never throws; callers decide how to render. */
+export async function fetchIpPurity(): Promise<IpFetchResult> {
   try {
     const res = await fetch('/api/ip', {
       headers: { Accept: 'application/json' },
@@ -100,17 +102,91 @@ async function load(root: HTMLElement): Promise<void> {
       data = {};
     }
     if (res.status === 429) {
-      renderMessage(root, body, t('ip.rateLimited'), t('ip.retry'), () => void load(root));
-      return;
+      return { kind: 'rate_limited', message: data.message };
     }
     if (!res.ok || data.error) {
-      renderMessage(root, body, data.message || t('ip.error'), t('ip.retry'), () => void load(root));
+      return { kind: 'error', message: data.message };
+    }
+    return { kind: 'ok', data };
+  } catch {
+    return { kind: 'error' };
+  }
+}
+
+export function setIpPurityIdle(root: HTMLElement): void {
+  // Invalidate in-flight fetch so a late response cannot paint over idle/pending.
+  root.dataset.ipGen = String((Number(root.dataset.ipGen || '0') || 0) + 1);
+  const body = bodyOf(root);
+  if (!body) return;
+  const t = useTranslations(langOf(root));
+  clear(body);
+  root.removeAttribute('data-band');
+  body.append(el('p', 'ip-card__state', t('ip.waitScan')));
+}
+
+export function setIpPurityPending(root: HTMLElement): void {
+  const body = bodyOf(root);
+  if (!body) return;
+  const t = useTranslations(langOf(root));
+  clear(body);
+  root.removeAttribute('data-band');
+  body.append(el('p', 'ip-card__state', t('ip.loading')));
+}
+
+export function applyIpPurityResult(root: HTMLElement, result: IpFetchResult): void {
+  const body = bodyOf(root);
+  if (!body) return;
+  const lang = langOf(root);
+  const t = useTranslations(lang);
+  if (result.kind === 'rate_limited') {
+    renderMessage(root, body, result.message || t('ip.rateLimited'), t('ip.retry'), () => {
+      void startIpPurityLoad(root);
+    });
+    return;
+  }
+  if (result.kind === 'error') {
+    renderMessage(root, body, result.message || t('ip.error'), t('ip.retry'), () => {
+      void startIpPurityLoad(root);
+    });
+    return;
+  }
+  renderResult(root, body, result.data, lang);
+}
+
+/** Fetch + render for one card (page mount, retry, or homepage Start scan). */
+export async function startIpPurityLoad(root: HTMLElement): Promise<void> {
+  const gen = String((Number(root.dataset.ipGen || '0') || 0) + 1);
+  root.dataset.ipGen = gen;
+  setIpPurityPending(root);
+  const result = await fetchIpPurity();
+  if (root.dataset.ipGen !== gen) return; // superseded by a newer scan/retry
+  applyIpPurityResult(root, result);
+}
+
+/**
+ * Wire every `[data-ip-purity]` once.
+ * Deferred homepage cards stay idle until `startDeferredIpPurity`.
+ * Full /ip pages fetch immediately.
+ */
+export function mountAllIpPurity(root: ParentNode = document): void {
+  root.querySelectorAll<HTMLElement>('[data-ip-purity]').forEach((node) => {
+    if (node.dataset.ipReady === '1') return;
+    node.dataset.ipReady = '1';
+    if (node.hasAttribute('data-ip-defer')) {
+      setIpPurityIdle(node);
       return;
     }
-    renderResult(root, body, data, lang);
-  } catch {
-    renderMessage(root, body, t('ip.error'), t('ip.retry'), () => void load(root));
-  }
+    void startIpPurityLoad(node);
+  });
+}
+
+/** Homepage: kick deferred cards when Start scan begins (parallel with signals). */
+export function startDeferredIpPurity(root: ParentNode = document): Promise<void> {
+  const jobs: Promise<void>[] = [];
+  root.querySelectorAll<HTMLElement>('[data-ip-purity][data-ip-defer]').forEach((node) => {
+    jobs.push(startIpPurityLoad(node));
+  });
+  return Promise.all(jobs).then(() => undefined);
 }
 
 function renderMessage(root: HTMLElement, body: Element, message: string, retryLabel: string, retry: () => void): void {

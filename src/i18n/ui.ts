@@ -292,6 +292,7 @@ export const ui = {
     'ip.lead':
       'This page scores the egress IP of this visit. Higher means cleaner and more residential-like. It is a heuristic for Claude account risk models, not an Anthropic check, and it is never merged into the China-user score.',
     'ip.separate': 'Separate from the China-user score. The two numbers are never combined.',
+    'ip.waitScan': 'Checked when you hit Start scan — not part of the score above.',
     'ip.loading': 'Checking this visit’s egress IP…',
     'ip.error': 'The IP purity check failed.',
     'ip.rateLimited': 'Too many checks from this IP. Wait a minute and try again.',
@@ -665,6 +666,7 @@ export const ui = {
     'ip.lead':
       '本页只评估这次访问的出口 IP。分数越高，越接近干净的住宅网络。这是对 Claude 账号风控模型的启发式参考，不是 Anthropic 的检测，也绝不会并入中国用户分。',
     'ip.separate': '与中国用户分相互独立，两个分数不会合并。',
+    'ip.waitScan': '点击「开始检测」后检查 — 不计入上方总分。',
     'ip.loading': '正在查看这次访问的出口 IP…',
     'ip.error': 'IP 纯净度检查失败。',
     'ip.rateLimited': '这个 IP 的检查太频繁。请稍等一分钟再试。',
