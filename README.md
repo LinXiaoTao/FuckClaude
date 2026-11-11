@@ -51,6 +51,8 @@ weights sum to **100**, so the total score is the sum of contributions. Bands: L
 `0–30`, Medium `31–60`, High `61–100`. A signal counts as a "hit" when its score
 ≥ 0.25.
 
+[Claude Cage](https://github.com/Lee-xeo/Claude-Cage) is an independent community virtual-machine desktop workbench. It provides network, time zone, and isolation checks. This is not an official endorsement, and it does not guarantee that an account stays unrestricted.
+
 ## Anti-Ban Guides
 
 Bilingual knowledge base at [`/guides/`](https://fuck-claude.vercel.app/guides/)
@@ -223,6 +225,8 @@ Claude Code 标记为中国用户。点击后会有逐项检测的扫描动效,�
 > 台湾不在 Anthropic 的封禁名单内,因此 `Asia/Taipei` 时区与 `zh-TW` 语言 / locale
 > **不计分**;繁体中文字体只保留极低的模糊分(无法区分台湾与港澳)。香港、澳门
 > 属于受限地区,相关信号保留部分风险分。
+
+[Claude Cage](https://github.com/Lee-xeo/Claude-Cage)：独立社区的虚拟机桌面工作台，提供网络、时区与隔离检查。不代表官方背书，也不保证账号不受限制。
 
 ## 防封指南资料库
 
