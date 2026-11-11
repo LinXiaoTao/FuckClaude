@@ -160,6 +160,9 @@ export const ui = {
 
     'signals.title': 'What gets scanned',
     'signals.sub': 'Ten locale & network fingerprints, weighted to a 0–100 risk score.',
+    'signals.relatedName': 'Claude Cage',
+    'signals.relatedBody':
+      ' is an independent community virtual-machine desktop workbench. It provides network, time zone, and isolation checks. This is not an official endorsement, and it does not guarantee that an account stays unrestricted.',
 
     'how.title': 'How the check works',
     'how.p1':
@@ -539,6 +542,9 @@ export const ui = {
 
     'signals.title': '检测哪些信号',
     'signals.sub': '十项区域与网络指纹，加权得出 0–100 风险分。',
+    'signals.relatedName': 'Claude Cage',
+    'signals.relatedBody':
+      '：独立社区的虚拟机桌面工作台，提供网络、时区与隔离检查。不代表官方背书，也不保证账号不受限制。',
 
     'how.title': '检测原理',
     'how.p1':
