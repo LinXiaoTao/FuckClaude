@@ -118,6 +118,23 @@ const apiExamples = [
         <ScoreRing lang={lang} />
       </div>
 
+      <aside class="tool-card" aria-labelledby="tool-card-title">
+        <p class="tool-card__label" id="tool-card-title">{t('tools.title')}</p>
+        <div class="tool-card__row">
+          <div class="tool-card__copy">
+            <strong>{t('tools.cageName')}</strong>
+            <p>{t('tools.cageBody')}</p>
+          </div>
+          <a
+            class="tool-card__btn"
+            href="https://github.com/Lee-xeo/Claude-Cage"
+            target="_blank"
+            rel="noopener noreferrer"
+          >{t('tools.cageCta')}</a>
+        </div>
+        <p class="tool-card__note">{t('tools.cageNote')}</p>
+      </aside>
+
       <div class="result" id="result" hidden>
         <p class="result__title" id="result-title"></p>
         <div class="result__hits" id="result-hits"></div>
@@ -208,13 +225,6 @@ const apiExamples = [
         ))
       }
     </ol>
-    <p class="reduce-cta">
-      <a
-        href="https://github.com/Lee-xeo/Claude-Cage"
-        target="_blank"
-        rel="noopener noreferrer"
-      >{t('signals.relatedName')}</a>{t('signals.relatedBody')}
-    </p>
   </section>
 
   <section id="how-sec" aria-labelledby="how-title">
@@ -504,6 +514,74 @@ const apiExamples = [
   .reduce-cta a {
     font-weight: 650;
     color: var(--accent-strong);
+  }
+
+  .tool-card {
+    margin: 22px auto 0;
+    max-width: 640px;
+    padding: 14px 16px 12px;
+    text-align: left;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .tool-card__label {
+    margin: 0 0 8px;
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+  .tool-card__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 16px;
+  }
+  .tool-card__copy {
+    min-width: 0;
+  }
+  .tool-card__copy strong {
+    display: block;
+    font-size: 1rem;
+    color: var(--text);
+  }
+  .tool-card__copy p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+  .tool-card__btn {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.88rem;
+    font-weight: 650;
+    text-decoration: none;
+  }
+  .tool-card__btn:hover {
+    border-color: var(--accent);
+    color: var(--accent-strong);
+  }
+  .tool-card__note {
+    margin: 10px 0 0;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    color: var(--muted-2);
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 560px) {
+    .tool-card__row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 
   /* ---------- guides showcase ---------- */
