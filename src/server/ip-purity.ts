@@ -1,3 +1,18 @@
+import {
+  BOOL_NO,
+  BOOL_UNKNOWN,
+  BOOL_YES,
+  IP_TEXT_DATACENTER,
+  IP_TEXT_HEADER,
+  IP_TEXT_NA,
+  IP_TEXT_PROXY,
+  IP_TEXT_PURITY,
+  IP_TEXT_TYPE,
+  IP_TEXT_UNKNOWN_IP,
+} from '../i18n/api-messages';
+import type { Lang } from '../i18n/locales';
+import { localize } from '../i18n/localize';
+
 /**
  * IP purity aggregation for `/api/ip`.
  *
@@ -145,7 +160,7 @@ const POINTS = {
 
 const EMPTY_GEO = (): Geo => ({ country: null, region: null, city: null, countryCode: null });
 
-const HINT = {
+export const HINT = {
   ok: {
     level: 'ok' as const,
     textEn:
@@ -176,7 +191,7 @@ const HINT = {
   },
 };
 
-const NOTICE: Record<NoticeCode, Notice> = {
+export const NOTICE: Record<NoticeCode, Notice> = {
   no_ip: {
     code: 'no_ip',
     textEn: 'No egress IP was visible on this request, so nothing was sent to reputation sources.',
@@ -1024,21 +1039,28 @@ export async function evaluateIp(headers: Headers, clientAddress: string | null)
   return { kind: 'ok', body };
 }
 
-export function renderText(body: IpPurityResponse, lang: 'en' | 'zh'): string {
-  const zh = lang === 'zh';
-  const purity = body.purity === null ? (zh ? '无' : 'n/a') : `${body.purity}/100`;
-  const band = body.band ?? (zh ? '无' : 'n/a');
-  const flag = (value: boolean | null) => (value === null ? '?' : value ? (zh ? '是' : 'yes') : (zh ? '否' : 'no'));
+export function renderText(body: IpPurityResponse, lang: Lang): string {
+  const na = localize(IP_TEXT_NA, lang);
+  const purity = body.purity === null ? na : `${body.purity}/100`;
+  const band = body.band ?? na;
+  const flag = (value: boolean | null) =>
+    value === null
+      ? localize(BOOL_UNKNOWN, lang)
+      : value
+        ? localize(BOOL_YES, lang)
+        : localize(BOOL_NO, lang);
   const lines = [
-    zh ? 'Fuck Claude · IP 纯净度（与中国用户分独立）' : 'Fuck Claude · IP purity (separate from the China-user score)',
-    `${zh ? 'IP' : 'IP'}  ${body.ip ?? (zh ? '未知' : 'unknown')}`,
-    `${zh ? '纯净度' : 'Purity'}  ${purity}  ${band}`,
-    `${zh ? '类型' : 'Type'}  ${body.network.type}`,
+    localize(IP_TEXT_HEADER, lang),
+    `IP  ${body.ip ?? localize(IP_TEXT_UNKNOWN_IP, lang)}`,
+    `${localize(IP_TEXT_PURITY, lang)}  ${purity}  ${band}`,
+    `${localize(IP_TEXT_TYPE, lang)}  ${body.network.type}`,
     `ASN  ${body.network.asn ?? '-'}  ${body.network.org ?? ''}`,
-    `${zh ? '代理' : 'Proxy'} ${flag(body.flags.proxy)}  VPN ${flag(body.flags.vpn)}  Tor ${flag(body.flags.tor)}  ${zh ? '机房' : 'Datacenter'} ${flag(body.flags.datacenter)}`,
-    body.notice ? body.notice[zh ? 'textZh' : 'textEn'] : '',
-    zh ? body.claudeHint.textZh : body.claudeHint.textEn,
-    DISCLAIMER[lang],
+    `${localize(IP_TEXT_PROXY, lang)} ${flag(body.flags.proxy)}  VPN ${flag(body.flags.vpn)}  Tor ${flag(body.flags.tor)}  ${localize(IP_TEXT_DATACENTER, lang)} ${flag(body.flags.datacenter)}`,
+    body.notice
+      ? localize({ en: body.notice.textEn, zh: body.notice.textZh }, lang)
+      : '',
+    localize({ en: body.claudeHint.textEn, zh: body.claudeHint.textZh }, lang),
+    localize(DISCLAIMER, lang),
     '',
   ];
   return lines.filter((line, index) => line !== '' || index === lines.length - 1).join('\n');

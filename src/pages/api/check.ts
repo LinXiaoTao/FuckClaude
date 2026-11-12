@@ -36,6 +36,24 @@ import {
   type RiskBand,
   type SignalId,
 } from '../../config/signals';
+import {
+  CHECK_CLI_BROWSER_ONLY,
+  CHECK_CLI_COVERAGE,
+  CHECK_CLI_FULL,
+  CHECK_CLI_GEO,
+  CHECK_CLI_HINT_JSON,
+  CHECK_CLI_HINT_LANG,
+  CHECK_CLI_MEASURED,
+  CHECK_CLI_NONE,
+  CHECK_CLI_NOTE,
+  CHECK_CLI_SCORE,
+  CHECK_CLI_SUBTITLE,
+  CHECK_CLI_TAGLINE,
+  CHECK_JSON_NOTE,
+} from '../../i18n/api-messages';
+import { localePath } from '../../i18n/locales';
+import { localize } from '../../i18n/localize';
+import { pickLangFromQueryOrHeader } from '../../i18n/pick-lang';
 import { useTranslations, type Lang } from '../../i18n/ui';
 
 export const prerender = false;
@@ -103,9 +121,7 @@ function fmtOffset(min: number | null): string {
 }
 
 function pickLang(url: URL, acceptLang: string[]): Lang {
-  const q = (url.searchParams.get('lang') || '').toLowerCase();
-  if (q === 'zh' || q === 'en') return q;
-  return (acceptLang[0] || '').toLowerCase().startsWith('zh') ? 'zh' : 'en';
+  return pickLangFromQueryOrHeader(url.searchParams.get('lang'), acceptLang.join(', '));
 }
 
 /**
@@ -213,11 +229,8 @@ function jsonBody(a: Analysis, lang: Lang) {
     coverage: { measuredWeight: a.measuredWeight, totalWeight: a.totalWeight },
     geo: a.geo,
     signals: a.signals,
-    note:
-      lang === 'zh'
-        ? '基于 IP 归属地与请求头的服务端估算,与浏览器端读取操作系统的检测结果可能不同;中文字体、厂商字体、Intl locale 与 WebRTC 泄露只能在浏览器里检测。'
-        : 'Server-side estimate from IP geo + request headers; it can differ from the in-browser OS scan. Chinese fonts, vendor fonts, Intl locale and WebRTC leaks can only be measured in a browser.',
-    docs: lang === 'zh' ? `${SITE}/zh/` : `${SITE}/`,
+    note: localize(CHECK_JSON_NOTE, lang),
+    docs: `${SITE.replace(/\/$/, '')}${localePath(lang, '/')}`,
   };
 }
 
@@ -233,38 +246,22 @@ function textBody(a: Analysis, lang: Lang, color: boolean): string {
     a.band
   ];
 
-  const L =
-    lang === 'zh'
-      ? {
-          subtitle: '「Claude 中国用户」检测',
-          tagline: '基于 IP 归属地 + 请求头的服务端估算',
-          score: '风险分',
-          measured: '服务端可见信号',
-          browserOnly: '仅浏览器可测(curl 看不到)',
-          coverage: '覆盖',
-          geo: '归属地',
-          noteBody: 'IP/请求头估算,与浏览器端系统检测结果可能不同。',
-          full: '完整检测',
-          hintJson: 'JSON      → 加 ?format=json',
-          hintLang: '语言      → 自动跟随 Accept-Language',
-          none: '无',
-        }
-      : {
-          subtitle: 'Claude "China user" check',
-          tagline: 'Server-side estimate from IP geo + request headers',
-          score: 'Score',
-          measured: 'Signals visible server-side',
-          browserOnly: 'Browser-only (invisible to curl)',
-          coverage: 'Coverage',
-          geo: 'Geo',
-          noteBody: 'IP/header estimate; differs from the in-browser OS scan.',
-          full: 'Full scan',
-          hintJson: 'JSON      → add ?format=json',
-          hintLang: 'Language  → follows Accept-Language',
-          none: 'none',
-        };
+  const L = {
+    subtitle: localize(CHECK_CLI_SUBTITLE, lang),
+    tagline: localize(CHECK_CLI_TAGLINE, lang),
+    score: localize(CHECK_CLI_SCORE, lang),
+    measured: localize(CHECK_CLI_MEASURED, lang),
+    browserOnly: localize(CHECK_CLI_BROWSER_ONLY, lang),
+    coverage: localize(CHECK_CLI_COVERAGE, lang),
+    geo: localize(CHECK_CLI_GEO, lang),
+    noteBody: localize(CHECK_CLI_NOTE, lang),
+    full: localize(CHECK_CLI_FULL, lang),
+    hintJson: localize(CHECK_CLI_HINT_JSON, lang),
+    hintLang: localize(CHECK_CLI_HINT_LANG, lang),
+    none: localize(CHECK_CLI_NONE, lang),
+  };
 
-  const home = lang === 'zh' ? `${SITE}/zh/` : `${SITE}/`;
+  const home = `${SITE.replace(/\/$/, '')}${localePath(lang, '/')}`;
   const geoStr = [a.geo.country, a.geo.timezone].filter(Boolean).join(' · ') || L.none;
   const browserOnly =
     a.signals
