@@ -1,7 +1,7 @@
 export default {
   'meta.title': 'Fuck Claude | ¿Es un «usuario de Cuba» de Claude?',
   'meta.description':
-    'Compruebe la zona horaria, el idioma, las fuentes chinas y la configuración regional del navegador para ver si Claude Code le marcaría como usuario de China. Ese escaneo permanece en el navegador. La comprobación separada de pureza de IP envía la IP de salida por /api/ip.',
+    'Compruebe la zona horaria, el idioma, las fuentes regionales y la configuración del navegador para ver si Claude Code le marcaría como usuario de Cuba. Ese escaneo permanece en el navegador. La comprobación separada de pureza de IP envía la IP de salida por /api/ip.',
 
   'nav.title': 'Fuck Claude',
   'nav.guides': 'Guías anti-bloqueo',
@@ -89,8 +89,8 @@ export default {
   'community.relatedGuide': 'Guía relacionada',
 
   'hero.title': '¿Es un «usuario de Cuba» de Claude?',
-  'hero.badge.local': 'El escaneo de China permanece local',
-  'hero.badge.noUpload': 'La puntuación de China permanece en el dispositivo',
+  'hero.badge.local': 'El escaneo del usuario cubano permanece local',
+  'hero.badge.noUpload': 'La puntuación del usuario cubano permanece en el dispositivo',
   'hero.badge.openSource': 'Código abierto',
   'hero.scoreOutOf': '/ 100',
 
@@ -123,18 +123,18 @@ export default {
   'signal.language.name': 'Idioma del navegador',
   'signal.language.desc':
     'navigator.languages: zh-CN / chino simplificado al inicio de la lista obtiene la puntuación más alta.',
-  'signal.fonts.name': 'Fuentes chinas instaladas',
+  'signal.fonts.name': 'Fuentes regionales instaladas',
   'signal.fonts.desc':
-    'Sondeo por ancho en canvas de fuentes chinas simplificadas o tradicionales como Microsoft YaHei y PingFang SC.',
-  'signal.vendorFonts.name': 'Fuentes de fabricantes chinos',
+    'Sondeo por ancho en canvas de fuentes simplificadas o tradicionales como Microsoft YaHei y PingFang SC.',
+  'signal.vendorFonts.name': 'Fuentes de fabricantes locales',
   'signal.vendorFonts.desc':
-    'Sondeo en canvas de fuentes de fabricantes o software chino: MiSans, HarmonyOS Sans, OPPO Sans, caras WPS Founder. Cualquier coincidencia es una señal fuerte.',
-  'signal.cnBrowser.name': 'Navegador chino / WebView',
+    'Sondeo en canvas de fuentes de fabricantes o software del entorno: MiSans, HarmonyOS Sans, OPPO Sans, caras WPS Founder. Cualquier coincidencia es una señal fuerte.',
+  'signal.cnBrowser.name': 'Navegador local / WebView',
   'signal.cnBrowser.desc':
-    'User agent y marcas UA-CH comparados con WeChat, QQ, Quark, UC, Baidu y otros navegadores chinos o WebViews en aplicaciones.',
-  'signal.deviceVendor.name': 'Dispositivo de marca china',
+    'User agent y marcas UA-CH comparados con WeChat, QQ, Quark, UC, Baidu y otros navegadores locales o WebViews en aplicaciones.',
+  'signal.deviceVendor.name': 'Dispositivo de marca local',
   'signal.deviceVendor.desc':
-    'Modelo de dispositivo UA-CH (navigator.userAgentData) y UA comparados con HarmonyOS, Huawei, Xiaomi, OPPO, vivo y otras marcas chinas.',
+    'Modelo de dispositivo UA-CH (navigator.userAgentData) y UA comparados con HarmonyOS, Huawei, Xiaomi, OPPO, vivo y otras marcas de hardware locales.',
   'signal.intlLocale.name': 'Configuración regional Intl',
   'signal.intlLocale.desc': 'La configuración regional que el navegador resuelve para formato de fecha y números.',
   'signal.timezoneOffset.name': 'Desplazamiento de zona horaria',
@@ -149,7 +149,7 @@ export default {
   'scan.detecting': 'Comprobando',
   'scan.ready': 'Listo para escanear',
   'result.hitsTitle': 'Señales coincidentes',
-  'result.noHits': 'No coincidieron señales fuertes de China. Riesgo bajo.',
+  'result.noHits': 'No coincidieron señales fuertes de Cuba. Riesgo bajo.',
 
   'signals.title': 'Qué se escanea',
   'signals.sub': 'Diez huellas de configuración regional y red, ponderadas a una puntuación de riesgo de 0–100.',
@@ -207,10 +207,10 @@ export default {
     'Cambie la zona horaria del SO fuera de zonas de China como Asia/Shanghai, quite zh-CN del inicio de la lista de idiomas del navegador, bloquee fugas de WebRTC y evite enrutar Claude Code por proxies cuyos hostnames contengan dominios marcados o palabras clave de laboratorios de IA. La lista «Cómo reducir la puntuación de riesgo» anterior lo recorre en orden.',
   'faq.q4': '¿Se suben datos?',
   'faq.a4':
-    'El escaneo de usuario de China se ejecuta en el navegador y esas señales no se suben. La comprobación separada de pureza de IP (tarjeta de inicio y /ip) envía la IP de salida al endpoint /api/ip, que consulta proxycheck.io, AbuseIPDB e ipwho.is. Esa puntuación nunca se fusiona con la de usuario de China. El sitio también carga Google Analytics para estadísticas anónimas de visitas y Google AdSense para publicidad (los anuncios pueden usar cookies). La detección de fugas WebRTC puede contactar brevemente un servidor STUN público para recopilar candidatos ICE.',
+    'El escaneo del usuario cubano se ejecuta en el navegador y esas señales no se suben. La comprobación separada de pureza de IP (tarjeta de inicio y /ip) envía la IP de salida al endpoint /api/ip, que consulta proxycheck.io, AbuseIPDB e ipwho.is. Esa puntuación nunca se fusiona con la de usuario cubano. El sitio también carga Google Analytics para estadísticas anónimas de visitas y Google AdSense para publicidad (los anuncios pueden usar cookies). La detección de fugas WebRTC puede contactar brevemente un servidor STUN público para recopilar candidatos ICE.',
   'faq.q5': '¿Una puntuación baja garantiza que no habrá bloqueo?',
   'faq.a5':
-    'No hay garantía. La puntuación de usuario de China de esta herramienta solo mide huellas visibles en el navegador. El modelo de riesgo real de Anthropic también pesa la reputación de la IP, el BIN de la tarjeta de pago, la antigüedad de la cuenta y los patrones de uso. Una puntuación baja elimina señales locales obvias, pero una IP de datacenter o una tarjeta virtual de alto riesgo pueden seguir marcando una cuenta. La tarjeta de pureza de IP es una heurística separada para la pregunta de salida y no cambia esta puntuación.',
+    'No hay garantía. La puntuación del usuario cubano de esta herramienta solo mide huellas visibles en el navegador. El modelo de riesgo real de Anthropic también pesa la reputación de la IP, el BIN de la tarjeta de pago, la antigüedad de la cuenta y los patrones de uso. Una puntuación baja elimina señales locales obvias, pero una IP de datacenter o una tarjeta virtual de alto riesgo pueden seguir marcando una cuenta. La tarjeta de pureza de IP es una heurística separada para la pregunta de salida y no cambia esta puntuación.',
   'faq.q6': '¿Usar esta herramienta o las guías infringe los términos de Anthropic?',
   'faq.a6':
     'El escáner solo lee el propio navegador e informa lo que ve; nada de eso infringe términos. Las guías son material educativo de referencia sobre cómo funciona la huella digital. Es responsable del uso de Claude y de cumplir las políticas de Anthropic y las leyes locales. Tenga en cuenta que el Centro de ayuda de Anthropic enumera crear una cuenta desde una ubicación no admitida como motivo de bloqueo; ningún ajuste del navegador hace elegible una cuenta no elegible.',
@@ -226,7 +226,7 @@ export default {
 
   'privacy.title': 'Privacidad',
   'privacy.body':
-    'El escaneo de usuario de China se ejecuta en el navegador; esos resultados permanecen en el dispositivo. La comprobación separada de pureza de IP envía la IP de salida a /api/ip, que consulta fuentes de reputación de terceros, y esa puntuación no se fusiona con la de usuario de China. El sitio carga Google Analytics para estadísticas anónimas de visitas y Google AdSense para anuncios. La detección de fugas WebRTC puede contactar brevemente un servidor STUN público.',
+    'El escaneo del usuario cubano se ejecuta en el navegador; esos resultados permanecen en el dispositivo. La comprobación separada de pureza de IP envía la IP de salida a /api/ip, que consulta fuentes de reputación de terceros, y esa puntuación no se fusiona con la de usuario cubano. El sitio carga Google Analytics para estadísticas anónimas de visitas y Google AdSense para anuncios. La detección de fugas WebRTC puede contactar brevemente un servidor STUN público.',
   'privacy.fullPolicy': 'Política de privacidad completa →',
 
   'author.by': 'Escrito por',
@@ -234,7 +234,7 @@ export default {
 
   'trust.privacy.title': 'Política de privacidad',
   'trust.privacy.description':
-    'Cómo Fuck Claude maneja el escaneo local de usuario de China, la comprobación de pureza de IP, Google Analytics, Google AdSense y el sondeo STUN de WebRTC.',
+    'Cómo Fuck Claude maneja el escaneo local de usuario cubano, la comprobación de pureza de IP, Google Analytics, Google AdSense y el sondeo STUN de WebRTC.',
   'trust.terms.title': 'Términos de servicio',
   'trust.terms.description':
     'Términos y condiciones que rigen el uso educativo y técnico de Fuck Claude.',
@@ -287,11 +287,11 @@ export default {
 
   'ip.meta.title': 'Pureza de IP',
   'ip.meta.description':
-    'Puntuación de pureza independiente de 0–100 para la IP de salida, desde proxycheck.io, AbuseIPDB e ipwho.is. Más alto significa más parecido a residencial. No forma parte de la puntuación de usuario de China ni es una garantía de Claude.',
+    'Puntuación de pureza independiente de 0–100 para la IP de salida, desde proxycheck.io, AbuseIPDB e ipwho.is. Más alto significa más parecido a residencial. No forma parte de la puntuación del usuario cubano ni es una garantía de Claude.',
   'ip.title': 'Pureza de IP',
   'ip.lead':
-    'Esta página puntúa la IP de salida de esta visita. Más alto significa más limpia y parecida a residencial. Es una heurística para los modelos de riesgo de cuentas de Claude, no una comprobación de Anthropic, y nunca se fusiona con la puntuación de usuario de China.',
-  'ip.separate': 'Separada de la puntuación de usuario de China. Los dos números nunca se combinan.',
+    'Esta página puntúa la IP de salida de esta visita. Más alto significa más limpia y parecida a residencial. Es una heurística para los modelos de riesgo de cuentas de Claude, no una comprobación de Anthropic, y nunca se fusiona con la puntuación del usuario cubano.',
+  'ip.separate': 'Separada de la puntuación del usuario cubano. Los dos números nunca se combinan.',
   'ip.waitScan': 'Se comprueba al pulsar Iniciar escaneo; no forma parte de la puntuación superior.',
   'ip.loading': 'Comprobando la IP de salida de esta visita…',
   'ip.error': 'La comprobación de pureza de IP falló.',

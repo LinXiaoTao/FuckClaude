@@ -1,7 +1,7 @@
 export default {
   'meta.title': 'Fuck Claude | Claude ရဲ့ "မြန်မာ အသုံးပြုသူ" လား?',
   'meta.description':
-    'Claude Code က သင့်ကို တရုတ် အသုံးပြုသူအဖြစ် မှတ်သားမလား ဆိုတာ အမြင်ရစေရန် browser ရဲ့ timezone၊ ဘာသာစကား၊ တရုတ် font များနဲ့ locale ကို စစ်ဆေးပါ။ ထို scan သည် browser အတွင်းမှာပဲ ရှိသည်။ IP purity စစ်ဆေးခြင်းက သင့် egress IP ကို /api/ip မှတဆင့် ပို့သည်။',
+    'Claude Code က သင့်ကို မြန်မာ အသုံးပြုသူအဖြစ် မှတ်သားမလား ဆိုတာ အမြင်ရစေရန် browser ရဲ့ timezone၊ ဘာသာစကား၊ တရုတ် font များနဲ့ locale ကို စစ်ဆေးပါ။ ထို စကင်သည် browser အတွင်းမှာပဲ ရှိသည်။ IP purity စစ်ဆေးခြင်းက သင့် egress IP ကို /api/ip မှတဆင့် ပို့သည်။',
 
   'nav.title': 'Fuck Claude',
   'nav.guides': 'ပိတ်ပင်မှု ရှောင်ရှား လမ်းညွှန်များ',
@@ -88,8 +88,8 @@ export default {
   'community.relatedGuide': 'ဆက်စပ် လမ်းညွှန်',
 
   'hero.title': 'သင်သည် Claude ရဲ့ "မြန်မာ\u00A0အသုံးပြုသူ" လား?',
-  'hero.badge.local': 'တရုတ် scan သည် ဒေသတွင်း၌သာ',
-  'hero.badge.noUpload': 'တရုတ် အမှတ်သည် ကိရိယာပေါ်မှာသာ',
+  'hero.badge.local': 'မြန်မာ အသုံးပြုသူ စကင်သည် ဒေသတွင်း၌သာ',
+  'hero.badge.noUpload': 'မြန်မာ အသုံးပြုသူ အမှတ်သည် ကိရိယာပေါ်မှာသာ',
   'hero.badge.openSource': 'Open source',
   'hero.scoreOutOf': '/ 100',
 
@@ -122,18 +122,18 @@ export default {
   'signal.language.name': 'Browser ဘာသာစကား',
   'signal.language.desc':
     'navigator.languages — စာရင်းထိပ်တွင် zh-CN / ရိုးရှင်းထုတ် တရုတ်ရှိလျှင် အမှတ်အကြီးဆုံး။',
-  'signal.fonts.name': 'တပ်ထားသော တရုတ် font',
+  'signal.fonts.name': 'တပ်ထားသော ဒေသဆိုင်ရာ font',
   'signal.fonts.desc':
-    'Microsoft YaHei၊ PingFang SC စသည့် ရိုးရှင်း/ရိုးရာ တရုတ် font များအတွက် canvas အနံ probing။',
-  'signal.vendorFonts.name': 'တရုတ် vendor font',
+    'Microsoft YaHei၊ PingFang SC စသည့် ရိုးရှင်း/ရိုးရာ font များအတွက် canvas အနံ probing။',
+  'signal.vendorFonts.name': 'ဒေသတွင်း vendor font',
   'signal.vendorFonts.desc':
-    'MiSans၊ HarmonyOS Sans၊ OPPO Sans၊ WPS Founder face စသည့် တရုတ် vendor/software font များကို canvas probing။ တစ်ခုခု တွေ့ရှိလျှင် signal အား။',
-  'signal.cnBrowser.name': 'တရုတ် browser / WebView',
+    'MiSans၊ HarmonyOS Sans၊ OPPO Sans၊ WPS Founder face စသည့် ဒေသတွင်း vendor/software font များကို canvas probing။ တစ်ခုခု တွေ့ရှိလျှင် signal အား။',
+  'signal.cnBrowser.name': 'ဒေသတွင်း browser / WebView',
   'signal.cnBrowser.desc':
-    'WeChat၊ QQ၊ Quark၊ UC၊ Baidu စသည့် တရုတ် browser သို့မဟုတ် in-app WebView များနှင့် user agent နှင့် UA-CH brands ကို နှိုင်းယှဉ်သည်။',
-  'signal.deviceVendor.name': 'တရုတ် brand ကိရိယာ',
+    'WeChat၊ QQ၊ Quark၊ UC၊ Baidu စသည့် ဒေသတွင်း browser သို့မဟုတ် in-app WebView များနှင့် user agent နှင့် UA-CH brands ကို နှိုင်းယှဉ်သည်။',
+  'signal.deviceVendor.name': 'ဒေသတွင်း brand ကိရိယာ',
   'signal.deviceVendor.desc':
-    'HarmonyOS၊ Huawei၊ Xiaomi၊ OPPO၊ vivo စသည့် တရုတ် brand များနှင့် UA-CH device model (navigator.userAgentData) နှင့် UA ကို နှိုင်းယှဉ်သည်။',
+    'HarmonyOS၊ Huawei၊ Xiaomi၊ OPPO၊ vivo စသည့် ဒေသတွင်း brand များနှင့် UA-CH device model (navigator.userAgentData) နှင့် UA ကို နှိုင်းယှဉ်သည်။',
   'signal.intlLocale.name': 'Intl locale',
   'signal.intlLocale.desc': 'ရက်စွဲနှင့် ဂဏန်းဖော်မတ်အတွက် browser ရှာဖွေသော locale။',
   'signal.timezoneOffset.name': 'Timezone offset',
@@ -145,9 +145,9 @@ export default {
   'signal.emoji.desc': 'user agent မှ OS vendor ခန့်မှန်းခြင်း။ အားနည်းပြီး ချိတ်ဆက်မှု လျော့သော signal။',
 
   'scan.detecting': 'စစ်ဆေးနေသည်',
-  'scan.ready': 'Scan အဆင်သင့်',
+  'scan.ready': 'စကင်စစ်ဆေးရန် အဆင်သင့်',
   'result.hitsTitle': 'တိုက်ဆိုင် signal များ',
-  'result.noHits': 'တရုတ် signal အား မတွေ့ပါ။ အန္တရာယ် နည်း။',
+  'result.noHits': 'မြန်မာ အသုံးပြုသူ လက္ခဏာ အားမရှိ။ အန္တရာယ် နည်း။',
 
   'signals.title': 'ဘာများကို scan လုပ်သလဲ',
   'signals.sub': 'locale နှင့် network fingerprint ၁၀ ခု၊ ၀–၁၀၀ အန္တရာယ် အမှတ်သို့ တန်ဖိုးချထားသည်။',
@@ -205,10 +205,10 @@ export default {
     'OS timezone ကို Asia/Shanghai စသည့် တရုတ် zone မှ ရွှေ့ပါ၊ browser ဘာသာစာရင်းထိပ်မှ zh-CN ကို ဖယ်ပါ၊ WebRTC leak ပိတ်ပါ၊ အလံပြထားသော domain သို့မဟုတ် AI lab keyword ပါသော proxy မှတဆင့် Claude Code မလမ်းကြောင်းသတ်မှတ်ပါ။ အထက်ပါ "အန္တရာယ် အမှတ် လျှော့နည်း" စာရင်းသည် အစဉ်လိုက် ပြသထားသည်။',
   'faq.q4': 'ဒေတာ upload လုပ်သလား?',
   'faq.a4':
-    'တရုတ် အသုံးပြုသူ scan သည် browser တွင်း လုပ်ဆောင်ပြီး ထို signal များကို upload မလုပ်ပါ။ IP purity စစ်ဆေးမှု (ပင်မစာမျက်နှာ card နှင့် /ip) သည် egress IP ကို /api/ip သို့ ပို့ပြီး proxycheck.io၊ AbuseIPDB၊ ipwho.is ကို မေးမြန်းသည်။ ထို အမှတ်ကို တရုတ် အသုံးပြုသူ အမှတ်နှင့် မပေါင်းဘဲ ခွဲထားသည်။ site သည် Google Analytics နှင့် Google AdSense လည်း တင်သည်။ WebRTC leak ရှာဖွေရာတွင် public STUN server သို့ ခဏ ဆက်သွားနိုင်သည်။',
+    'မြန်မာ အသုံးပြုသူ စကင်သည် browser တွင်း လုပ်ဆောင်ပြီး ထို signal များကို upload မလုပ်ပါ။ IP purity စစ်ဆေးမှု (ပင်မစာမျက်နှာ card နှင့် /ip) သည် egress IP ကို /api/ip သို့ ပို့ပြီး proxycheck.io၊ AbuseIPDB၊ ipwho.is ကို မေးမြန်းသည်။ ထို အမှတ်ကို မြန်မာ အသုံးပြုသူ အမှတ်နှင့် မပေါင်းဘဲ ခွဲထားသည်။ site သည် Google Analytics နှင့် Google AdSense လည်း တင်သည်။ WebRTC leak ရှာဖွေရာတွင် public STUN server သို့ ခဏ ဆက်သွားနိုင်သည်။',
   'faq.q5': 'အမှက် နည်းလျှင် ပိတ်ပင်မှု မရှိကြောင်း အာမခံနိုင်သလား?',
   'faq.a5':
-    'အာမမခံနိုင်ပါ။ ဤကိရိယာ၏ တရုတ် အသုံးပြုသူ အမှတ်သည် browser တွင် မြင်ရသော fingerprint သာ တိုင်းတာသည်။ Anthropic အစီအစဉ် အမှန် IP အသက်၊ ကတ်နှင့် အသုံးပြုမှုပုံစံ ထပ်တွေးသည်။ အမှက် နည်းလျှင် ဒေသတွင်း လက္ခဏာ လျော့ပါသည်။ သို့သော် datacenter IP သို့မဟုတ် အန္တရာယ်မြင့် virtual card ဖြင့် အကောင့် အလံပြနိုင်သည်။ IP purity card သည် egress မေးခွန်းအတွက် ခွဲထားသော heuristic ဖြစ်ပြီး ဤအမှတ်ကို မပြောင်း။',
+    'အာမမခံနိုင်ပါ။ ဤကိရိယာ၏ မြန်မာ အသုံးပြုသူ အမှတ်သည် browser တွင် မြင်ရသော fingerprint သာ တိုင်းတာသည်။ Anthropic အစီအစဉ် အမှန် IP အသက်၊ ကတ်နှင့် အသုံးပြုမှုပုံစံ ထပ်တွေးသည်။ အမှက် နည်းလျှင် ဒေသတွင်း လက္ခဏာ လျော့ပါသည်။ သို့သော် datacenter IP သို့မဟုတ် အန္တရာယ်မြင့် virtual card ဖြင့် အကောင့် အလံပြနိုင်သည်။ IP purity card သည် egress မေးခွန်းအတွက် ခွဲထားသော heuristic ဖြစ်ပြီး ဤအမှတ်ကို မပြောင်း။',
   'faq.q6': 'ဤကိရိယာ သို့မဟုတ် လမ်းညွှန်များ သုံးခြင်းသည် Anthropic စည်းမျဉ်းကို ချိုးဖောက်သလား?',
   'faq.a6':
     'scanner သည် သင့် browser ကိုသာ ဖတ်ပြီး မြင်ရသည်ကိုပါ ပြသည်။ ၎င်းကိုယ်တိုင် စည်းမျဉ်း ချိုးဖောက်မှု မဟုတ်။ လမ်းညွှန်များသည် fingerprinting လုပ်ပုံ အကြောင်း ပညာပေး ကိုးကားစာရွက်များ။ Claude သုံးစွဲမှုနှင့် Anthropic မူဝါဒ၊ ဒေသဆိုင်ရာ ဥပဒေ လိုက်နာမှုကို သင် တာဝန်ယူရသည်။ Anthropic Help Center သည် မထောက်ပံ့သော တည်နေရာမှ အကောင့် ဖန်တီးခြင်းကို ပိတ်ပင်ရခြင်း အကြောင်းပြချက်အဖြစ် ဖော်ပြထားသည်။ browser ဆက်တင် မည်သည့်အကောင့်ကိုမျှ သင့် criteria နှင့် မညီနိုင်စေရန် မပြောင်းနိုင်။',
@@ -224,7 +224,7 @@ export default {
 
   'privacy.title': 'ကိုယ်ရေးအချက်အလက်',
   'privacy.body':
-    'တရုတ် အသုံးပြုသူ scan သည် browser တွင် လုပ်ဆောင်ပြီး ရလဒ်များ ကိရိယာပေါ်တွင်သာ ရှိသည်။ IP purity စစ်ဆေးမှုက egress IP ကို /api/ip သို့ ပို့ပြီး ပြင်ပ အသက် အရင်းအမြစ်များကို မေးမြန်းသည်။ ထို အမှတ်ကို တရုတ် အသုံးပြုသူ အမှတ်နှင့် မပေါင်းပါ။ site သည် Google Analytics နှင့် Google AdSense လည်း တင်သည်။ WebRTC leak ရှာဖွေရာတွင် public STUN server သို့ ခဏ ဆက်သွားနိုင်သည်။',
+    'မြန်မာ အသုံးပြုသူ စကင်သည် browser တွင် လုပ်ဆောင်ပြီး ရလဒ်များ ကိရိယာပေါ်တွင်သာ ရှိသည်။ IP purity စစ်ဆေးမှုက egress IP ကို /api/ip သို့ ပို့ပြီး ပြင်ပ အသက် အရင်းအမြစ်များကို မေးမြန်းသည်။ ထို အမှတ်ကို မြန်မာ အသုံးပြုသူ အမှတ်နှင့် မပေါင်းပါ။ site သည် Google Analytics နှင့် Google AdSense လည်း တင်သည်။ WebRTC leak ရှာဖွေရာတွင် public STUN server သို့ ခဏ ဆက်သွားနိုင်သည်။',
   'privacy.fullPolicy': 'ကိုယ်ရေးအချက်အလက် မူဝါဒ အပြည့်အစုံ →',
 
   'author.by': 'ရေးသားသူ',
@@ -232,7 +232,7 @@ export default {
 
   'trust.privacy.title': 'ကိုယ်ရေးအချက်အလက် မူဝါဒ',
   'trust.privacy.description':
-    'Fuck Claude သည် ဒေသတွင်း တရုတ် အသုံးပြုသူ scan၊ IP purity စစ်ဆေးမှု၊ Google Analytics၊ Google AdSense နှင့် WebRTC STUN probing ကို ဘယ်လို ကိုင်တွယ်သလဲ။',
+    'Fuck Claude သည် ဒေသတွင်း မြန်မာ အသုံးပြုသူ စကင်၊ IP purity စစ်ဆေးမှု၊ Google Analytics၊ Google AdSense နှင့် WebRTC STUN probing ကို ဘယ်လို ကိုင်တွယ်သလဲ။',
   'trust.terms.title': 'ဝန်ဆောင်မှု စည်းမျဉ်းများ',
   'trust.terms.description': 'Fuck Claude ကို ပညာပေးနှင့် နည်းပညာဆိုင်ရာ သုံးစွဲမှုအတွက် စည်းမျဉ်းများ။',
   'trust.about.title': 'အကြောင်း',
@@ -284,11 +284,11 @@ export default {
 
   'ip.meta.title': 'IP သန့်ရှင်းမှု',
   'ip.meta.description':
-    'proxycheck.io၊ AbuseIPDB နှင့် ipwho.is မှ egress IP အတွက် ခွဲထားသော ၀–၁၀၀ သန့်ရှင်းမှု အမှတ်။ ပိုမြင့်လျှင် residential ပိုတူသည်။ တရုတ် အသုံးပြုသူ အမှတ်နှင့်မပါဘဲ Claude အာမမခံချက် မဟုတ်ပါ။',
+    'proxycheck.io၊ AbuseIPDB နှင့် ipwho.is မှ egress IP အတွက် ခွဲထားသော ၀–၁၀၀ သန့်ရှင်းမှု အမှတ်။ ပိုမြင့်လျှင် residential ပိုတူသည်။ မြန်မာ အသုံးပြုသူ အမှတ်နှင့်မပါဘဲ Claude အာမမခံချက် မဟုတ်ပါ။',
   'ip.title': 'IP သန့်ရှင်းမှု',
   'ip.lead':
-    'ဤစာမျက်နှာသည် ဤလည်ပတ်မှု၏ egress IP ကို အမှတ်ပေးသည်။ ပိုမြင့်လျှင် သန့်ရှင်းပြီး residential ပိုတူသည်။ Claude အကောင့် အန္တရာယ် မော်ဒယ်များအတွက် heuristic ဖြစ်ပြီး Anthropic စစ်ဆေးမှု မဟုတ်ဘဲ တရုတ် အသုံးပြုသူ အမှတ်နှင့် မပေါင်းပါ။',
-  'ip.separate': 'တရုတ် အသုံးပြုသူ အမှတ်နှင့် ခွဲထားသည်။ ဂဏန်း နှစ်လုံး မပေါင်းပါ။',
+    'ဤစာမျက်နှာသည် ဤလည်ပတ်မှု၏ egress IP ကို အမှတ်ပေးသည်။ ပိုမြင့်လျှင် သန့်ရှင်းပြီး residential ပိုတူသည်။ Claude အကောင့် အန္တရာယ် မော်ဒယ်များအတွက် heuristic ဖြစ်ပြီး Anthropic စစ်ဆေးမှု မဟုတ်ဘဲ မြန်မာ အသုံးပြုသူ အမှတ်နှင့် မပေါင်းပါ။',
+  'ip.separate': 'မြန်မာ အသုံးပြုသူ အမှတ်နှင့် ခွဲထားသည်။ ဂဏန်း နှစ်လုံး မပေါင်းပါ။',
   'ip.waitScan': 'Start scan နှိပ်သည့်အခါ စစ်ဆေးသည်။ အပေါ်အမှတ်သို့ မပါဝင်ပါ။',
   'ip.loading': 'ဤလည်ပတ်မှု egress IP ကို စစ်ဆေးနေသည်…',
   'ip.error': 'IP သန့်ရှင်းမှု စစ်ဆေးမှု မအောင်မြင်ပါ။',
