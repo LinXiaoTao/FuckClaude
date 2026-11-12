@@ -1,7 +1,7 @@
 /**
- * Sponsor list rendered by `src/components/Sponsors.astro` in the strip right
- * below the site nav. To add a sponsor, drop its logo into `public/sponsors/`
- * and append an entry here.
+ * Sponsor list rendered by `src/components/Sponsors.astro` beside the
+ * homepage detector, and under it on narrow screens. To add a sponsor, drop
+ * its logo into `public/sponsors/` and append an entry here.
  */
 
 import type { Lang } from '../i18n/ui';

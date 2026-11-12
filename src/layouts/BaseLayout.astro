@@ -408,19 +408,24 @@ const jsonLd = {
         }
       }
 
-      /* ---------- sponsors ---------- */
+      /* ---------- homepage stage + sponsors ---------- */
+      .home-stage {
+        width: 100%;
+      }
       .sponsors {
-        background: var(--bg-soft);
-        border-bottom: 1px solid var(--border);
+        width: min(100%, var(--maxw));
+        margin: 0 auto;
+        padding: 4px 20px 8px;
       }
       .sponsors__inner {
-        padding-block: 6px 7px;
+        padding: 0;
       }
       .sponsors__head {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 12px;
+        margin-bottom: 8px;
       }
       .sponsors__label {
         font-size: 0.68rem;
@@ -440,17 +445,23 @@ const jsonLd = {
       }
       .sponsors__list {
         list-style: none;
-        margin: 1px 0 0;
+        margin: 0;
         padding: 0;
-      }
-      .sponsors__list li + li {
-        border-top: 1px dashed var(--border-strong);
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
       }
       .sponsor {
         display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 5px 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        min-width: 0;
+        padding: 12px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow-sm);
         color: var(--muted);
       }
       .sponsor:hover {
@@ -459,14 +470,16 @@ const jsonLd = {
       .sponsor__logo {
         flex: none;
         display: block;
-        height: 26px;
+        height: 28px;
         width: auto;
+        max-width: 100%;
+        object-fit: contain;
       }
       .sponsor__text {
-        flex: 1;
         margin: 0;
-        font-size: 0.82rem;
-        line-height: 1.4;
+        font-size: 0.8rem;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
       }
       .sponsor__text strong {
         color: var(--text);
@@ -499,25 +512,33 @@ const jsonLd = {
         width: 11px;
         height: 11px;
       }
-      @media (max-width: 640px) {
-        .sponsor {
+      @media (min-width: 700px) and (max-width: 1279px) {
+        .sponsors__list {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (min-width: 1280px) {
+        .home-stage {
           display: grid;
-          grid-template-columns: 1fr auto;
-          gap: 3px 10px;
+          grid-template-columns: minmax(0, var(--maxw)) minmax(260px, 300px);
+          column-gap: 20px;
+          align-items: start;
+          width: min(100% - 40px, calc(var(--maxw) + 320px));
+          margin: 0 auto;
         }
-        .sponsor__logo {
-          grid-row: 1;
-          grid-column: 1;
-          justify-self: start;
+        .home-stage__main.wrap {
+          width: auto;
+          max-width: none;
+          margin: 0;
+          padding: 0;
         }
-        .sponsor__btn {
-          grid-row: 1;
-          grid-column: 2;
-          justify-self: end;
+        .sponsors {
+          width: auto;
+          margin: 0;
+          padding: 32px 0 0;
         }
-        .sponsor__text {
-          grid-row: 2;
-          grid-column: 1 / -1;
+        .sponsors__list {
+          grid-template-columns: 1fr;
         }
       }
 

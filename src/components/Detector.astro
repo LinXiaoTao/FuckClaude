@@ -101,9 +101,8 @@ const apiExamples = [
   </div>
 </header>
 
-<Sponsors lang={lang} />
-
-<main class="wrap">
+<div class="home-stage">
+  <div class="home-stage__main wrap">
   <section class="hero">
     <div class="credit">
       <span class="credit__spark" aria-hidden="true"></span>
@@ -196,7 +195,11 @@ const apiExamples = [
       </div>
     </div>
   </section>
+  </div>
+  <Sponsors lang={lang} />
+</div>
 
+<main class="wrap">
   <section id="scan-sec" aria-labelledby="scan-title">
     <div class="section-head">
       <h2 id="scan-title">{t('signals.title')}</h2>
