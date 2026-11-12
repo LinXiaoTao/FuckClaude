@@ -1,7 +1,7 @@
 export default {
   'meta.title': 'Fuck Claude | Claude ရဲ့ "မြန်မာ အသုံးပြုသူ" လား?',
   'meta.description':
-    'Claude Code က သင့်ကို မြန်မာ အသုံးပြုသူအဖြစ် မှတ်သားမလား ဆိုတာ အမြင်ရစေရန် browser ရဲ့ timezone၊ ဘာသာစကား၊ တရုတ် font များနဲ့ locale ကို စစ်ဆေးပါ။ ထို စကင်သည် browser အတွင်းမှာပဲ ရှိသည်။ IP purity စစ်ဆေးခြင်းက သင့် egress IP ကို /api/ip မှတဆင့် ပို့သည်။',
+    'Claude Code က သင့်ကို မြန်မာ အသုံးပြုသူအဖြစ် မှတ်သားမလား ဆိုတာ အမြင်ရစေရန် browser ရဲ့ timezone၊ ဘာသာစကား၊ အလံအကြောင်း font များနဲ့ locale ကို စစ်ဆေးပါ။ ထို စကင်သည် browser အတွင်းမှာပဲ ရှိသည်။ IP purity စစ်ဆေးခြင်းက သင့် egress IP ကို /api/ip မှတဆင့် ပို့သည်။',
 
   'nav.title': 'Fuck Claude',
   'nav.guides': 'ပိတ်ပင်မှု ရှောင်ရှား လမ်းညွှန်များ',
@@ -50,7 +50,7 @@ export default {
   'guides.path1.cta': 'အန္တရာယ် မော်ဒယ် ဖတ်ရန်',
   'guides.path2.title': '2 · ပတ်ဝန်းကျင် သန့်စင်ခြင်း',
   'guides.path2.desc':
-    'Timezone ကိုက်ညီအောင် လုပ်ပါ၊ တရုတ် font များကို ခွဲထားပါ၊ WebRTC leak ရပ်ပါ၊ residential IP ကို မှန်ကန်စွာ တပ်ဆင်ပါ။',
+    'Timezone ကိုက်ညီအောင် လုပ်ပါ၊ အလံအကြောင်း font များကို ခွဲထားပါ၊ WebRTC leak ရပ်ပါ၊ residential IP ကို မှန်ကန်စွာ တပ်ဆင်ပါ။',
   'guides.path2.cta': 'Setup သန့်စင်ရန်',
   'guides.path3.title': '3 · လုံခြုံစွာ စာရင်းသွင်းပြီး ငွေပေးချေရန်',
   'guides.path3.desc':
@@ -118,7 +118,7 @@ export default {
 
   'signal.timezone.name': 'စနစ် timezone',
   'signal.timezone.desc':
-    'Intl.DateTimeFormat သည် Claude Code ဖတ်သည့်အတိုင်း OS timezone တူညီစွာ ထုတ်ဖော်သည်။ Asia/Shanghai၊ Asia/Urumqi စသည့် တရုတ် zone များနှင့် နှိုင်းယှဉ်သည်။',
+    'Intl.DateTimeFormat သည် Claude Code ဖတ်သည့်အတိုင်း OS timezone တူညီစွာ ထုတ်ဖော်သည်။ Asia/Shanghai၊ Asia/Urumqi နှင့် အခြား zone များနှင့် နှိုင်းယှဉ်သည်။',
   'signal.language.name': 'Browser ဘာသာစကား',
   'signal.language.desc':
     'navigator.languages — စာရင်းထိပ်တွင် zh-CN / ရိုးရှင်းထုတ် တရုတ်ရှိလျှင် အမှတ်အကြီးဆုံး။',
@@ -160,18 +160,18 @@ export default {
 
   'how.title': 'စစ်ဆေးမှု လုပ်ပုံ',
   'how.p1':
-    'Claude Code ကို ANTHROPIC_BASE_URL ဖြင့် proxy endpoint သို့ ညွှန်သည့်အခါ၊ လူသိရှိထားသော reverse-engineering သတင်းများအရ OS timezone နှင့် proxy hostname ကို ဖတ်ပြီး Unicode steganography ဖြင့် system prompt အတွင်း ဖွက်ထားသည်ဟု ပြောသည်။ "Today’s date" မျဉ်းရှိ ရက်စွဲ ခွဲခြားသည့် အက္ခရာနှင့် အလားတူ apostrophe ၄ မျိုးသည် တရုတ် အသုံးပြုသူအဖြစ် ပုံပေါ်သည်မလား ကိုအင်္ကုဒ်လုပ်သည်။',
+    'Claude Code ကို ANTHROPIC_BASE_URL ဖြင့် proxy endpoint သို့ ညွှန်သည့်အခါ၊ လူသိရှိထားသော reverse-engineering သတင်းများအရ OS timezone နှင့် proxy hostname ကို ဖတ်ပြီး Unicode steganography ဖြင့် system prompt အတွင်း ဖွက်ထားသည်ဟု ပြောသည်။ "Today’s date" မျဉ်းရှိ ရက်စွဲ ခွဲခြားသည့် အက္ခရာနှင့် အလားတူ apostrophe ၄ မျိုးသည် မြန်မာ အသုံးပြုသူအဖြစ် ပုံပေါ်သည်မလား ကိုအင်္ကုဒ်လုပ်သည်။',
   'how.p2':
-    'ဝဘ်စာမျက်နှာသည် Claude Code ဖတ်နိုင်သည်ကို အကုန်မဖတ်နိုင်သော်လည်း အဓိက signal တူညီသည်။ ဤကိရိယာသည် တူညီသော OS timezone ကို ဖတ်ပြီး browser တွင် မြင်ရသော fingerprint အခြား ၉ ခု (UI ဘာသာ၊ တရုတ် font၊ vendor font၊ WebRTC IP leak၊ တရုတ် browser၊ ကိရိယာ brand၊ Intl locale၊ UTC+8 offset၊ emoji ပုံစံ) ကို တန်ဖိုးချ အမှတ်သို့ ပေါင်းထားသည်။ ≥၀.၂၅ ရှိသော signal များကို hit အဖြစ် ရေမတွက်သည်။ အဆင့် များ၊ ၀–၃၀၊ အလတ် ၃၁–၆၀၊ မြင့် ၆၁–၁၀၀။',
+    'ဝဘ်စာမျက်နှာသည် Claude Code ဖတ်နိုင်သည်ကို အကုန်မဖတ်နိုင်သော်လည်း အဓိက signal တူညီသည်။ ဤကိရိယာသည် တူညီသော OS timezone ကို ဖတ်ပြီး browser တွင် မြင်ရသော fingerprint အခြား ၉ ခု (UI ဘာသာ၊ အလံအကြောင်း font၊ vendor font၊ WebRTC IP leak၊ ဒေသတွင်း browser၊ ကိရိယာ brand၊ Intl locale၊ UTC+8 offset၊ emoji ပုံစံ) ကို တန်ဖိုးချ အမှတ်သို့ ပေါင်းထားသည်။ ≥၀.၂၅ ရှိသော signal များကို hit အဖြစ် ရေမတွက်သည်။ အဆင့် များ၊ ၀–၃၀၊ အလတ် ၃၁–၆၀၊ မြင့် ၆၁–၁၀၀။',
   'ui.weight': 'တန်ဖိုး',
 
-  'why.title': 'Claude က သင့်ကို "တရုတ် အသုံးပြုသူ" အဖြစ် မှတ်သားရခြင်း',
+  'why.title': 'Claude က သင့်ကို "မြန်မာ အသုံးပြုသူ" အဖြစ် မှတ်သားရခြင်း',
   'why.p1':
-    'Anthropic သည် တရုတ်ပြည်မကြီးတွင် Claude မရောင်းဘူးဖြစ်ပြီး Claude Code သည် "တရုတ်လို" ကြည့်ရသော traffic ကို အန္တရာယ်ပိုမို အဖြစ် သတ်မှတ်သည်ဟု သတင်းပို့ထားသည်။ ဆုံးဖြတ်ချက်သည် ခလုတ်တစ်ခု မဟုတ်ဘဲ အားနည်းသော signal များ စုပေါင်း၍ ဖြစ်နိုင်ခြေတစ်ခု ဖြစ်သည်။ စနစ် timezone သည် တိုက်ရိုက် ဖတ်ခက်ပြီး တောင်းဆိုမှုတိုင်းနှင့် သွားသောကြောင့် တစ်ခုတည်းသော အလေးအနက်ဆုံး signal ဖြစ်ပြီး ဘာသာ၊ font၊ ကိရိယာ brand၊ ကွန်ရက်တို့ ထပ်မံ အလေးပေးသည်။',
+    'Anthropic သည် မြန်မာတွင် Claude မပေးဆောင်ဘူးဖြစ်ပြီး Claude Code သည် "မြန်မာလို" ကြည့်ရသော traffic ကို အန္တရာယ်ပိုမို အဖြစ် သတ်မှတ်သည်ဟု သတင်းပို့ထားသည်။ ဆုံးဖြတ်ချက်သည် ခလုတ်တစ်ခု မဟုတ်ဘဲ အားနည်းသော signal များ စုပေါင်း၍ ဖြစ်နိုင်ခြေတစ်ခု ဖြစ်သည်။ စနစ် timezone သည် တိုက်ရိုက် ဖတ်ခက်ပြီး တောင်းဆိုမှုတိုင်းနှင့် သွားသောကြောင့် တစ်ခုတည်းသော အလေးအနက်ဆုံး signal ဖြစ်ပြီး ဘာသာ၊ font၊ ကိရိယာ brand၊ ကွန်ရက်တို့ ထပ်မံ အလေးပေးသည်။',
   'why.p2':
     'Browser ပတ်ဝန်းကျင်တစ်ခုလုံးက အများပြောသည့် အကြောင်းမှာ locale ချိန်ညှိမှုများ နေရာတိုင်းသို့ စိမ့်ဝင်လို့ ဖြစ်သည်။ OS timezone သည် Intl နှင့် Date ကို မောင်းနှင်သည်၊ ဘာသာရွေးချယ်မှုသည် navigator.languages နှင့် Accept-Language header ကို သတ်မှတ်သည်၊ OS font များကို canvas ဖြင့် pixel တစ်လုံးချင်းစီ probe လုပ်နိုင်သည်။ Claude Code ကို proxy ဖြင့် ဤအပေါ်တွင် လမ်းကြောင်းချထားလျှင် proxy hostname က signal တစ်ခု ထပ်ဖြစ်လာပြီး reverse-engineering သတင်းများအရ ဆုံးဖြတ်ချက်ကို system prompt ၏ "Today’s date" မျဉ်းတွင် steganographically အင်္ကုဒ်လုပ်ထားသည်ဟု တွေ့ရသည်။',
   'why.p3':
-    'signal တစ်ခုချင်းစီက အဖြတ်မဖြတ်နိုင်သောကြောင့် အန္တရာယ် စုပေါင်းတက်သည်။ US timezone အောက်တွင် တရုတ် font pack နှင့် WeChat WebView ရှိလျှင်လည်း သံသယ ဖြစ်သည်။ Steganography နှင့် အပြည့်အစုံ အန္တရာယ် မော်ဒယ်ကို',
+    'signal တစ်ခုချင်းစီက အဖြတ်မဖြတ်နိုင်သောကြောင့် အန္တရာယ် စုပေါင်းတက်သည်။ US timezone အောက်တွင် အလံအကြောင်း font pack နှင့် WeChat WebView ရှိလျှင်လည်း သံသယ ဖြစ်သည်။ Steganography နှင့် အပြည့်အစုံ အန္တရာယ် မော်ဒယ်ကို',
   'why.link1': 'steganography နှင့် အလွှာ ၄ ကြိမ် အန္တရာယ် မော်ဒယ် လမ်းညွှန်',
   'why.p3b': 'တွင် ဖြေရှင်းထားပြီး လက်တွေ့ပြင်ဆင်ချက်များသည်',
   'why.link2': 'ပတ်ဝန်းကျင် သန့်စင်ခြင်းနှင့် residential IP လမ်းညွှန်',
@@ -181,15 +181,15 @@ export default {
   'reduce.sub':
     'အစဉ်လိုက် အမြန် စာရင်းတို။ အဆင့်တိုင်း အထက်ပါ တန်ဖိုးချ signal တစ်ခုနှင့် တိုက်ရိုက် ကိုက်ညီသည်။ timezone နှင့် ဘာသာသည် အလေးအနက်များသောကြောင့် အပေါ်ကနေ စပါ။',
   'reduce.s1':
-    'OS timezone ကို တရုတ်မဟုတ်သော zone (ဥပမာ America/New_York သို့မဟုတ် Europe/London) သတ်မှတ်ပြီး getTimezoneOffset() သည် UTC+8 မဟုတ်တော့ကြောင်း အတည်ပြုပါ။ reverse-engineering သတင်းများအရ Claude Code သည် တိုက်ရိုက် ဖတ်သည်ဟု ဆိုသော signal သည် ဤတစ်ခုတည်းဖြစ်သောကြောင့် ဤအမှတ်တွင် အလေးအနက် အများဆုံး။',
+    'OS timezone ကို မြန်မာပြင်ပ zone (ဥပမာ America/New_York သို့မဟုတ် Europe/London) သတ်မှတ်ပြီး getTimezoneOffset() သည် UTC+8 မဟုတ်တော့ကြောင်း အတည်ပြုပါ။ reverse-engineering သတင်းများအရ Claude Code သည် တိုက်ရိုက် ဖတ်သည်ဟု ဆိုသော signal သည် ဤတစ်ခုတည်းဖြစ်သောကြောင့် ဤအမှတ်တွင် အလေးအနက် အများဆုံး။',
   'reduce.s2':
-    'browser နှင့် OS ဘာသာစာရင်းထိပ်မှ zh-CN / zh-Hans ကို ရွှေ့ပြီး navigator.languages နှင့် Accept-Language သည် အင်္ဂလိပ် သို့မဟုတ် တရုတ်မဟုတ်သော locale ဖြင့် စတင်စေပါ။',
+    'browser နှင့် OS ဘာသာစာရင်းထိပ်မှ zh-CN / zh-Hans ကို ရွှေ့ပြီး navigator.languages နှင့် Accept-Language သည် အင်္ဂလိပ် သို့မဟုတ် အလံ locale မဟုတ်သော locale ဖြင့် စတင်စေပါ။',
   'reduce.s3':
-    'တရုတ် နှင့် vendor font များ (Microsoft YaHei၊ PingFang SC၊ MiSans၊ HarmonyOS Sans) ကို ခွဲထားပါ။ သန့်ရှင်း browser profile သို့မဟုတ် anti-detect browser သုံးပြီး canvas font probe သည် တရုတ် လက္ခဏာ မတွေ့စေရန်။',
+    'အလံအကြောင်း နှင့် vendor font များ (Microsoft YaHei၊ PingFang SC၊ MiSans၊ HarmonyOS Sans) ကို ခွဲထားပါ။ သန့်ရှင်း browser profile သို့မဟုတ် anti-detect browser သုံးပြီး canvas font probe သည် မြန်မာ အသုံးပြုသူ လက္ခဏာ မတွေ့စေရန်။',
   'reduce.s4':
     'WebRTC IP leak ကို ပိတ်ပြီး datacenter အစား residential IP ဖြင့် လမ်းကြောင်းသတ်မှတ်ပါ၊ ကွန်ရက်အမှန်နှင့် ပထဝီဝင်သည် သန့်ရှင်းသော profile ကို မဖျက်စီးစေရန်။',
   'reduce.s5':
-    'relay ဖြင့် Claude Code သုံးသည့်အခါ ANTHROPIC_BASE_URL hostname ကို ကြားနေထားပါ။ အလံပြထားသော keyword သို့မဟုတ် AI lab အမည်ပါ domain များရှောင်ပါ။ host machine တရုတ်တွင်ပါက TZ environment variable ကို override လုပ်ပါ။',
+    'relay ဖြင့် Claude Code သုံးသည့်အခါ ANTHROPIC_BASE_URL hostname ကို ကြားနေထားပါ။ အလံပြထားသော keyword သို့မဟုတ် AI lab အမည်ပါ domain များရှောင်ပါ။ host machine မြန်မာတွင်ပါက TZ environment variable ကို override လုပ်ပါ။',
   'reduce.cta': 'အဆင့်လိုက် အပြည့်အစုံ လမ်းညွှန်များကို အောက်ပါတွင် ရှာပါ',
   'reduce.ctaLink': 'ပိတ်ပင်မှု ရှောင်ရှား လမ်းညွှန် သိပ္ပံ အခြေခံ',
 
@@ -199,10 +199,10 @@ export default {
     'လူသိရှိထားသော reverse-engineering သတင်းများအရ Claude Code သည် တရားဝင်မဟုတ်သော endpoint သို့ ချိတ်သည့်အခါ OS timezone နှင့် proxy hostname ကို ဖတ်ပြီး system prompt အတွင်း steganographically အကျုံးချသည်။ ဤစာမျက်နှာက Intl.DateTimeFormat ဖြင့် ဖတ်သည်သော timezone သည် တူညီသော OS timezone ဖြစ်သည်။',
   'faq.q2': 'ဤအမှတ်သည် Claude လုပ်သော စစ်ဆေးမှု နှင့် တူသလား?',
   'faq.a2':
-    'မဟုတ်ပါ။ စနစ် timezone သာ Claude သတင်းပို့ထားသော ယက်စပ်ပုံနှင့် တစ်ခုပြီးတစ်ခု ကိုက်သည်။ အခြား ၉ signal များသည် တရုတ်ပတ်ဝန်းကျင် သို့မဟုတ် ကွန်ရက် fingerprint များဖြစ်ပြီး ဆက်စပ်မှု ရှိသည်။ အမှတ်ကို ခန့်မှန်းချက် အဖြစ် ယူပါ၊ ဆုံးဖြတ်ချက် မဟုတ်ပါ။',
+    'မဟုတ်ပါ။ စနစ် timezone သာ Claude သတင်းပို့ထားသော ယက်စပ်ပုံနှင့် တစ်ခုပြီးတစ်ခု ကိုက်သည်။ အခြား ၉ signal များသည် မြန်မာ အသုံးပြုသူ ပတ်ဝန်းကျင် သို့မဟုတ် ကွန်ရက် fingerprint များဖြစ်ပြီး ဆက်စပ်မှု ရှိသည်။ အမှတ်ကို ခန့်မှန်းချက် အဖြစ် ယူပါ၊ ဆုံးဖြတ်ချက် မဟုတ်ပါ။',
   'faq.q3': 'အမှတ်ကို ဘယ်လို လျှော့မလဲ?',
   'faq.a3':
-    'OS timezone ကို Asia/Shanghai စသည့် တရုတ် zone မှ ရွှေ့ပါ၊ browser ဘာသာစာရင်းထိပ်မှ zh-CN ကို ဖယ်ပါ၊ WebRTC leak ပိတ်ပါ၊ အလံပြထားသော domain သို့မဟုတ် AI lab keyword ပါသော proxy မှတဆင့် Claude Code မလမ်းကြောင်းသတ်မှတ်ပါ။ အထက်ပါ "အန္တရာယ် အမှတ် လျှော့နည်း" စာရင်းသည် အစဉ်လိုက် ပြသထားသည်။',
+    'OS timezone ကို Asia/Shanghai စသည့် အလံ zone မှ ရွှေ့ပါ၊ browser ဘာသာစာရင်းထိပ်မှ zh-CN ကို ဖယ်ပါ၊ WebRTC leak ပိတ်ပါ၊ အလံပြထားသော domain သို့မဟုတ် AI lab keyword ပါသော proxy မှတဆင့် Claude Code မလမ်းကြောင်းသတ်မှတ်ပါ။ အထက်ပါ "အန္တရာယ် အမှတ် လျှော့နည်း" စာရင်းသည် အစဉ်လိုက် ပြသထားသည်။',
   'faq.q4': 'ဒေတာ upload လုပ်သလား?',
   'faq.a4':
     'မြန်မာ အသုံးပြုသူ စကင်သည် browser တွင်း လုပ်ဆောင်ပြီး ထို signal များကို upload မလုပ်ပါ။ IP purity စစ်ဆေးမှု (ပင်မစာမျက်နှာ card နှင့် /ip) သည် egress IP ကို /api/ip သို့ ပို့ပြီး proxycheck.io၊ AbuseIPDB၊ ipwho.is ကို မေးမြန်းသည်။ ထို အမှတ်ကို မြန်မာ အသုံးပြုသူ အမှတ်နှင့် မပေါင်းဘဲ ခွဲထားသည်။ site သည် Google Analytics နှင့် Google AdSense လည်း တင်သည်။ WebRTC leak ရှာဖွေရာတွင် public STUN server သို့ ခဏ ဆက်သွားနိုင်သည်။',
