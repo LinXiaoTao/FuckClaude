@@ -15,7 +15,9 @@
     "dev": "astro dev",
     "build": "node scripts/build-extension-zip.mjs && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "i18n:coverage": "tsx scripts/i18n-coverage.mjs",
+    "i18n:validate": "tsx scripts/i18n-validate.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -30,6 +32,7 @@
   "devDependencies": {
     "@types/qrcode": "^1.5.6",
     "qrcode": "^1.5.4",
-    "sharp": "^0.35.3"
+    "sharp": "^0.35.3",
+    "tsx": "^4.20.5"
   }
 }
