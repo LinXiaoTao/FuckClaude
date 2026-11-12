@@ -17,7 +17,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "i18n:coverage": "tsx scripts/i18n-coverage.mjs",
-    "i18n:validate": "tsx scripts/i18n-validate.mjs"
+    "i18n:validate": "tsx scripts/i18n-validate.mjs",
+    "signals:check": "tsx scripts/signals-check.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

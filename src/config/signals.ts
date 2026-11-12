@@ -1,35 +1,45 @@
 /**
- * Signal definitions + weighting for the "China user" risk score.
+ * Signal definitions + weighting for regional risk scores.
  *
  * This module is isomorphic: the `detect()` functions touch browser APIs
  * (document / navigator / Intl) but are ONLY invoked on the client from
  * `src/scripts/detect.ts`, so nothing here runs during SSR.
  */
 
-export type SignalId =
-  | 'timezone'
-  | 'timezoneOffset'
-  | 'language'
-  | 'intlLocale'
-  | 'fonts'
-  | 'vendorFonts'
-  | 'cnBrowser'
-  | 'deviceVendor'
-  | 'webrtcLeak'
-  | 'emoji';
+import {
+  REGIONS,
+  assertRegionProfiles,
+  regionForLang,
+  type RegionId,
+  type RegionProfile,
+  type SignalId,
+} from './regions';
+import {
+  CN_TIMEZONES,
+  CLAUDE_TIMEZONES,
+  GREATER_CN_TIMEZONES,
+  FONTS_SC,
+  FONTS_TC,
+  FONTS_CN_VENDOR,
+  CN_BROWSER_PATTERNS,
+  CN_DEVICE_PATTERNS,
+} from './signals-cn-assets';
+
+export type { SignalId, RegionId };
+export { regionForLang, REGIONS };
 
 export interface DetectOutcome {
   /** Human-readable detected value. */
   raw: string;
-  /** 0..1 "how China-like" similarity. */
+  /** 0..1 regional similarity. */
   score: number;
 }
 
 export interface SignalDef {
   id: SignalId;
-  /** Scoring weight; all weights sum to 100. */
+  /** Scoring weight; active signals for a region sum to 100. */
   weight: number;
-  /** True when Claude Code's real mechanism actually reads this signal. */
+  /** True when Claude Code's real mechanism actually reads this signal (cn timezone only). */
   claudeUsed?: boolean;
   /** Inline SVG icon markup. */
   icon: string;
@@ -37,119 +47,12 @@ export interface SignalDef {
   detect: () => DetectOutcome | Promise<DetectOutcome>;
 }
 
-export const CN_TIMEZONES = [
-  'Asia/Shanghai',
-  'Asia/Urumqi',
-  'Asia/Chongqing',
-  'Asia/Chungking',
-  'Asia/Harbin',
-  'Asia/Kashgar',
-];
-export const CLAUDE_TIMEZONES = ['Asia/Shanghai', 'Asia/Urumqi'];
 /**
  * Hong Kong / Macau are on Anthropic's restricted-region list, so they carry
  * partial risk. Taiwan is fully supported by Anthropic — Asia/Taipei must NOT
  * add any score (see issue #11).
  */
-export const GREATER_CN_TIMEZONES = ['Asia/Hong_Kong', 'Asia/Macau'];
-
-const FONTS_SC = [
-  'Microsoft YaHei',
-  'Microsoft YaHei UI',
-  'SimSun',
-  'NSimSun',
-  'SimHei',
-  'KaiTi',
-  'FangSong',
-  'DengXian',
-  'PingFang SC',
-  'Hiragino Sans GB',
-  'STHeiti',
-  'STSong',
-  'Songti SC',
-  'Source Han Sans CN',
-  'Source Han Sans SC',
-  'Noto Sans CJK SC',
-  'Noto Serif CJK SC',
-  'WenQuanYi Micro Hei',
-  'WenQuanYi Zen Hei',
-];
-const FONTS_TC = [
-  'Microsoft JhengHei',
-  'PMingLiU',
-  'MingLiU',
-  'DFKai-SB',
-  'PingFang TC',
-  'PingFang HK',
-  'Source Han Sans TW',
-  'Noto Sans CJK TC',
-];
-
-/**
- * Fonts shipped by Chinese device vendors or installed by Chinese software
- * (WPS bundles the Founder "FZ*" faces). Rarely present outside a
- * Chinese-vendor device / Chinese software environment, so any hit is strong.
- */
-const FONTS_CN_VENDOR = [
-  'MiSans', // Xiaomi HyperOS / MIUI
-  'MIUI', // legacy Xiaomi
-  'HarmonyOS Sans SC', // Huawei
-  'HarmonyOS Sans', // Huawei
-  'HONOR Sans', // Honor
-  'OPPO Sans', // OPPO / OnePlus (CN)
-  'vivo Sans', // vivo
-  'Alibaba PuHuiTi', // Alibaba
-  'Alibaba Sans', // Alibaba
-  'DingTalk JinBuTi', // DingTalk
-  'Douyin Sans', // ByteDance / Douyin
-  'HYQiHei', // HanYi, bundled by several CN apps
-  'FZShuSong-Z01S', // Founder faces installed with WPS Office
-  'FZKai-Z03S',
-  'FZHei-B01S',
-  'FZFangSong-Z02S',
-];
-
-/** Chinese browsers and in-app WebViews, matched against UA + UA-CH brands. */
-const CN_BROWSER_PATTERNS: Array<[RegExp, string]> = [
-  [/micromessenger|wxwork/i, 'WeChat'],
-  [/mqqbrowser|qqbrowser|\bqq\//i, 'QQ Browser'],
-  [/quark/i, 'Quark'],
-  [/ucbrowser|ucweb/i, 'UC Browser'],
-  [/baiduboxapp|bidubrowser|baidubrowser/i, 'Baidu'],
-  [/miuibrowser|xiaomi\/|mibrowser/i, 'Mi Browser'],
-  [/huaweibrowser/i, 'Huawei Browser'],
-  [/heytapbrowser|oppobrowser/i, 'HeyTap (OPPO)'],
-  [/vivobrowser/i, 'vivo Browser'],
-  [/sogoumobilebrowser|\bmetasr\b|\bse 2\.x\b/i, 'Sogou'],
-  [/maxthon/i, 'Maxthon'],
-  [/360se|360ee|qihoobrowser|\bqhbrowser\b/i, '360 Browser'],
-  [/2345explorer|2345browser/i, '2345'],
-  [/lbbrowser/i, 'Liebao'],
-  [/theworld/i, 'TheWorld'],
-  [/aweme|bytedancewebview|newsarticle|toutiaomicroapp/i, 'Douyin / Toutiao'],
-  [/alipayclient/i, 'Alipay'],
-  [/dingtalk/i, 'DingTalk'],
-  [/weibo/i, 'Weibo'],
-  [/xiaohongshu|xhsminiapp/i, 'Xiaohongshu'],
-  [/\bbilibili\b/i, 'Bilibili'],
-];
-
-/**
- * Chinese device brands / OSes, matched against UA-CH model + UA.
- * HarmonyOS is conclusive; brands that also sell globally score lower.
- */
-const CN_DEVICE_PATTERNS: Array<[RegExp, string, number]> = [
-  [/harmonyos|openharmony/i, 'HarmonyOS', 1],
-  [/huawei|\bhonor\b/i, 'Huawei / Honor', 0.8],
-  [/meizu/i, 'Meizu', 0.8],
-  [/nubia|\bzte\b/i, 'ZTE / nubia', 0.7],
-  [/xiaomi|redmi|\bpoco\b|\bm2\d{3}[a-z0-9]+\b/i, 'Xiaomi', 0.6],
-  [/oppo|\bpd[a-z]m\d{2}\b/i, 'OPPO', 0.6],
-  [/vivo|\bv2\d{3}[a-z]{1,2}\b/i, 'vivo', 0.6],
-  [/realme|\brmx\d{4}\b/i, 'realme', 0.6],
-  [/oneplus/i, 'OnePlus', 0.6],
-  [/\blenovo\b|\bzuk\b/i, 'Lenovo', 0.5],
-];
+export { CN_TIMEZONES, CLAUDE_TIMEZONES, GREATER_CN_TIMEZONES, FONTS_SC, FONTS_TC, FONTS_CN_VENDOR };
 
 function getTimezone(): string {
   try {
@@ -159,32 +62,34 @@ function getTimezone(): string {
   }
 }
 
-/** Pure timezone scoring, reused server-side against the Vercel geo timezone. */
-export function scoreTimezone(tz: string): number {
-  if (CLAUDE_TIMEZONES.includes(tz) || CN_TIMEZONES.includes(tz)) return 1;
-  if (GREATER_CN_TIMEZONES.includes(tz)) return 0.6;
+/** Pure timezone scoring for a region profile (Vercel geo + client Intl). */
+export function scoreTimezoneForRegion(tz: string, profile: RegionProfile): number {
+  if (profile.timezones.includes(tz)) return 1;
+  if (profile.partialTimezones.includes(tz)) return 0.6;
   return 0;
 }
 
-function detectTimezone(): DetectOutcome {
-  const tz = getTimezone();
-  return { raw: tz || 'unknown', score: scoreTimezone(tz) };
+/** China-only; keeps today’s Taiwan / HK / MO rules. */
+export function scoreTimezone(tz: string): number {
+  return scoreTimezoneForRegion(tz, REGIONS.cn);
 }
 
-function detectTimezoneOffset(): DetectOutcome {
-  const offset = new Date().getTimezoneOffset();
-  const utcHours = -offset / 60;
-  const sign = utcHours >= 0 ? '+' : '-';
-  const raw = `UTC${sign}${Math.abs(utcHours)}`;
-  return { raw, score: offset === -480 ? 0.7 : 0 };
-}
-
-function normLangs(): string[] {
-  const list =
-    navigator.languages && navigator.languages.length
-      ? navigator.languages
-      : [navigator.language];
-  return list.map((l) => (l || '').toLowerCase());
+function scoreGenericLanguages(langs: string[], table: RegionProfile['languages']): number {
+  const list = langs.map((l) => (l || '').toLowerCase()).filter(Boolean);
+  let best = 0;
+  for (let i = 0; i < list.length; i++) {
+    const lang = list[i]!;
+    for (const { tag, score } of table) {
+      const t = tag.toLowerCase();
+      const match = lang === t || lang.startsWith(`${t}-`);
+      if (match) {
+        const s = i === 0 ? score : score * 0.7;
+        if (s > best) best = s;
+        break;
+      }
+    }
+  }
+  return best;
 }
 
 /**
@@ -199,8 +104,6 @@ export function scoreLanguages(langs: string[]): number {
   const isHKMO = (l: string) => l.startsWith('zh-hk') || l.startsWith('zh-mo');
   const isTrad = (l: string) => isTW(l) || isHKMO(l) || l.includes('hant');
   const firstTrad = list.findIndex(isTrad);
-  // A bare "zh" only implies Simplified/mainland when it isn't the generic
-  // fallback trailing a Traditional-Chinese preference.
   const isHansCN = (l: string, i: number) =>
     l.startsWith('zh-cn') ||
     l.includes('hans') ||
@@ -219,28 +122,33 @@ export function scoreLanguages(langs: string[]): number {
   return 0;
 }
 
-function detectLanguage(): DetectOutcome {
-  const langs = normLangs();
-  return { raw: langs.join(', ') || 'unknown', score: scoreLanguages(langs) };
+export function scoreLanguagesForRegion(langs: string[], regionId: RegionId): number {
+  if (regionId === 'cn') return scoreLanguages(langs);
+  return scoreGenericLanguages(langs, REGIONS[regionId].languages);
 }
 
-function detectIntlLocale(): DetectOutcome {
-  let locale = '';
-  try {
-    locale = Intl.DateTimeFormat().resolvedOptions().locale || '';
-  } catch {
-    locale = '';
-  }
+function scoreCnIntlLocale(locale: string): number {
   const l = locale.toLowerCase();
-  let score = 0;
-  if (l.startsWith('zh-cn') || l.includes('hans') || l === 'zh') score = 1;
-  // zh-TW = Taiwan (supported region) → no score; zh-HK/zh-MO keep partial risk.
-  else if (l.startsWith('zh') && !l.startsWith('zh-tw')) score = 0.5;
-  return { raw: locale || 'unknown', score };
+  if (l.startsWith('zh-cn') || l.includes('hans') || l === 'zh') return 1;
+  if (l.startsWith('zh') && !l.startsWith('zh-tw')) return 0.5;
+  return 0;
 }
 
-function isFontAvailable(font: string, ctx: CanvasRenderingContext2D): boolean {
-  const testString = '中文字体检测ABCabc012';
+function scoreIntlLocaleForRegion(locale: string, regionId: RegionId): number {
+  if (regionId === 'cn') return scoreCnIntlLocale(locale);
+  return scoreGenericLanguages([locale], REGIONS[regionId].languages);
+}
+
+export function scoreTimezoneOffsetMinutes(
+  offsetMinutesWestOfUtc: number,
+  profile: RegionProfile,
+): number {
+  if (profile.offsetEastMinutes === null) return 0;
+  const expectedWest = -profile.offsetEastMinutes;
+  return offsetMinutesWestOfUtc === expectedWest ? 0.7 : 0;
+}
+
+function isFontAvailable(font: string, testString: string, ctx: CanvasRenderingContext2D): boolean {
   const size = '72px';
   const bases = ['monospace', 'sans-serif', 'serif'];
   return bases.some((base) => {
@@ -252,18 +160,31 @@ function isFontAvailable(font: string, ctx: CanvasRenderingContext2D): boolean {
   });
 }
 
-function detectFonts(): DetectOutcome {
+function detectRegionalFonts(profile: RegionProfile): DetectOutcome {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   if (!ctx) return { raw: 'canvas unavailable', score: 0 };
 
-  const sc = FONTS_SC.filter((f) => isFontAvailable(f, ctx));
-  const tc = FONTS_TC.filter((f) => isFontAvailable(f, ctx));
+  const hit = profile.fonts.filter((f) => isFontAvailable(f, profile.fontProbe, ctx));
+  let score = 0;
+  if (hit.length >= 1) score = Math.min(1, 0.75 + 0.08 * hit.length);
+  const raw = hit.length
+    ? hit.slice(0, 4).join(', ') + (hit.length > 4 ? '…' : '')
+    : 'none detected';
+  return { raw, score };
+}
+
+function detectCnFonts(): DetectOutcome {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return { raw: 'canvas unavailable', score: 0 };
+
+  const probe = REGIONS.cn.fontProbe;
+  const sc = FONTS_SC.filter((f) => isFontAvailable(f, probe, ctx));
+  const tc = FONTS_TC.filter((f) => isFontAvailable(f, probe, ctx));
 
   let score = 0;
   if (sc.length >= 1) score = Math.min(1, 0.75 + 0.08 * sc.length);
-  // TC-only fonts are typical for Taiwan (fully supported by Anthropic) and
-  // can't distinguish TW from HK/MO — keep them below the "hit" threshold.
   else if (tc.length >= 1) score = 0.2;
 
   const hit = [...sc, ...tc];
@@ -271,14 +192,19 @@ function detectFonts(): DetectOutcome {
   return { raw, score };
 }
 
-function detectVendorFonts(): DetectOutcome {
+function detectVendorFonts(profile: RegionProfile): DetectOutcome {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
   if (!ctx) return { raw: 'canvas unavailable', score: 0 };
 
-  const hit = FONTS_CN_VENDOR.filter((f) => isFontAvailable(f, ctx));
-  // Any vendor face is near-conclusive; two or more leaves no doubt.
-  const score = hit.length >= 2 ? 1 : hit.length === 1 ? 0.8 : 0;
+  const probe = profile.fontProbe || 'ABCabc012';
+  const hit = profile.vendorFonts.filter((f) => isFontAvailable(f, probe, ctx));
+  let score = 0;
+  if (profile.id === 'cn') {
+    score = hit.length >= 2 ? 1 : hit.length === 1 ? 0.8 : 0;
+  } else if (hit.length >= 1) {
+    score = Math.min(1, 0.75 + 0.08 * hit.length);
+  }
   const raw = hit.length ? hit.slice(0, 3).join(', ') + (hit.length > 3 ? '…' : '') : 'none detected';
   return { raw, score };
 }
@@ -293,39 +219,48 @@ function uaData(): UAData | undefined {
   return (navigator as Navigator & { userAgentData?: UAData }).userAgentData;
 }
 
-/** Pure Chinese-browser scoring, reused server-side against the User-Agent header. */
-export function scoreCnBrowser(probe: string): { name: string | null; score: number } {
-  for (const [re, name] of CN_BROWSER_PATTERNS) {
+export function scoreBrowserPatterns(
+  probe: string,
+  patterns: Array<[RegExp, string]>,
+): { name: string | null; score: number } {
+  for (const [re, name] of patterns) {
     if (re.test(probe)) return { name, score: 1 };
   }
   return { name: null, score: 0 };
 }
 
-function detectCnBrowser(): DetectOutcome {
-  const brands = (uaData()?.brands ?? []).map((b) => b.brand).join(' ');
-  const { name, score } = scoreCnBrowser(`${navigator.userAgent} ${brands}`);
-  return { raw: name ?? 'none detected', score };
+/** Pure Chinese-browser scoring, reused server-side against the User-Agent header. */
+export function scoreCnBrowser(probe: string): { name: string | null; score: number } {
+  return scoreBrowserPatterns(probe, CN_BROWSER_PATTERNS);
+}
+
+export function scoreBrowserForRegion(
+  probe: string,
+  regionId: RegionId,
+): { name: string | null; score: number } {
+  return scoreBrowserPatterns(probe, REGIONS[regionId].browsers);
 }
 
 /** Pure Chinese-device scoring, reused server-side against the User-Agent header. */
 export function scoreCnDevice(probe: string): { name: string | null; score: number } {
-  for (const [re, name, score] of CN_DEVICE_PATTERNS) {
+  return scoreDevicePatterns(probe, CN_DEVICE_PATTERNS);
+}
+
+export function scoreDevicePatterns(
+  probe: string,
+  patterns: Array<[RegExp, string, number]>,
+): { name: string | null; score: number } {
+  for (const [re, name, score] of patterns) {
     if (re.test(probe)) return { name, score };
   }
   return { name: null, score: 0 };
 }
 
-async function detectDeviceVendor(): Promise<DetectOutcome> {
-  // UA-CH high-entropy `model` restores what UA reduction hides on Android.
-  let extra = '';
-  try {
-    const high = await uaData()?.getHighEntropyValues?.(['model', 'platform', 'platformVersion']);
-    if (high) extra = ` ${String(high.model ?? '')} ${String(high.platform ?? '')}`;
-  } catch {
-    /* hints denied — fall back to the plain UA */
-  }
-  const { name, score } = scoreCnDevice(`${navigator.userAgent}${extra}`);
-  return { raw: name ?? 'none detected', score };
+export function scoreDeviceForRegion(
+  probe: string,
+  regionId: RegionId,
+): { name: string | null; score: number } {
+  return scoreDevicePatterns(probe, REGIONS[regionId].devices);
 }
 
 /** Pure emoji-vendor guess, reused server-side against the User-Agent header. */
@@ -348,13 +283,6 @@ export function scoreEmojiVendor(probe: string): { vendor: string; score: number
   };
 
   return { vendor, score: vendorScore[vendor] ?? 0.4 };
-}
-
-function detectEmoji(): DetectOutcome {
-  const ua = (navigator.userAgent || '').toLowerCase();
-  const platform = (navigator.platform || '').toLowerCase();
-  const { vendor, score } = scoreEmojiVendor(`${platform} ${ua}`);
-  return { raw: `${vendor} style`, score };
 }
 
 function detectWebrtcLeak(): Promise<DetectOutcome> {
@@ -428,18 +356,134 @@ const ICON = {
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5s1.4 2 3.5 2 3.5-2 3.5-2"/><path d="M9 9.5h.01M15 9.5h.01"/></svg>',
 };
 
-export const SIGNALS: SignalDef[] = [
-  { id: 'timezone', weight: 24, claudeUsed: true, icon: ICON.clock, detect: detectTimezone },
-  { id: 'language', weight: 18, icon: ICON.globe, detect: detectLanguage },
-  { id: 'fonts', weight: 14, icon: ICON.type, detect: detectFonts },
-  { id: 'vendorFonts', weight: 10, icon: ICON.typeBox, detect: detectVendorFonts },
-  { id: 'webrtcLeak', weight: 10, icon: ICON.shield, detect: detectWebrtcLeak },
-  { id: 'cnBrowser', weight: 8, icon: ICON.compass, detect: detectCnBrowser },
-  { id: 'deviceVendor', weight: 6, icon: ICON.phone, detect: detectDeviceVendor },
-  { id: 'intlLocale', weight: 4, icon: ICON.sliders, detect: detectIntlLocale },
-  { id: 'timezoneOffset', weight: 3, icon: ICON.clockOffset, detect: detectTimezoneOffset },
-  { id: 'emoji', weight: 3, icon: ICON.smile, detect: detectEmoji },
-];
+const SIGNAL_ICONS: Record<SignalId, string> = {
+  timezone: ICON.clock,
+  timezoneOffset: ICON.clockOffset,
+  language: ICON.globe,
+  intlLocale: ICON.sliders,
+  fonts: ICON.type,
+  vendorFonts: ICON.typeBox,
+  cnBrowser: ICON.compass,
+  deviceVendor: ICON.phone,
+  webrtcLeak: ICON.shield,
+  emoji: ICON.smile,
+};
+
+const SERVER_MEASURABLE: ReadonlySet<SignalId> = new Set([
+  'timezone',
+  'language',
+  'cnBrowser',
+  'deviceVendor',
+  'timezoneOffset',
+  'emoji',
+]);
+
+export function isServerMeasurable(id: SignalId): boolean {
+  return SERVER_MEASURABLE.has(id);
+}
+
+function normLangs(): string[] {
+  const list =
+    navigator.languages && navigator.languages.length
+      ? navigator.languages
+      : [navigator.language];
+  return list.map((l) => (l || '').toLowerCase());
+}
+
+function makeDetectors(regionId: RegionId, profile: RegionProfile): Record<SignalId, SignalDef['detect']> {
+  return {
+    timezone: () => {
+      const tz = getTimezone();
+      return { raw: tz || 'unknown', score: scoreTimezoneForRegion(tz, profile) };
+    },
+    timezoneOffset: () => {
+      const offset = new Date().getTimezoneOffset();
+      const utcHours = -offset / 60;
+      const sign = utcHours >= 0 ? '+' : '-';
+      const raw = `UTC${sign}${Math.abs(utcHours)}`;
+      return { raw, score: scoreTimezoneOffsetMinutes(offset, profile) };
+    },
+    language: () => {
+      const langs = normLangs();
+      return {
+        raw: langs.join(', ') || 'unknown',
+        score: scoreLanguagesForRegion(langs, regionId),
+      };
+    },
+    intlLocale: () => {
+      let locale = '';
+      try {
+        locale = Intl.DateTimeFormat().resolvedOptions().locale || '';
+      } catch {
+        locale = '';
+      }
+      return {
+        raw: locale || 'unknown',
+        score: scoreIntlLocaleForRegion(locale, regionId),
+      };
+    },
+    fonts: () => (regionId === 'cn' ? detectCnFonts() : detectRegionalFonts(profile)),
+    vendorFonts: () => detectVendorFonts(profile),
+    webrtcLeak: detectWebrtcLeak,
+    cnBrowser: () => {
+      const brands = (uaData()?.brands ?? []).map((b) => b.brand).join(' ');
+      const { name, score } = scoreBrowserPatterns(`${navigator.userAgent} ${brands}`, profile.browsers);
+      return { raw: name ?? 'none detected', score };
+    },
+    deviceVendor: async () => {
+      let extra = '';
+      try {
+        const high = await uaData()?.getHighEntropyValues?.(['model', 'platform', 'platformVersion']);
+        if (high) extra = ` ${String(high.model ?? '')} ${String(high.platform ?? '')}`;
+      } catch {
+        /* hints denied */
+      }
+      const { name, score } = scoreDevicePatterns(`${navigator.userAgent}${extra}`, profile.devices);
+      return { raw: name ?? 'none detected', score };
+    },
+    emoji: () => {
+      const ua = (navigator.userAgent || '').toLowerCase();
+      const platform = (navigator.platform || '').toLowerCase();
+      const { vendor, score } = scoreEmojiVendor(`${platform} ${ua}`);
+      return { raw: `${vendor} style`, score };
+    },
+  };
+}
+
+export function signalsFor(regionId: RegionId): SignalDef[] {
+  const profile = REGIONS[regionId];
+  const detectors = makeDetectors(regionId, profile);
+  const defs: SignalDef[] = [];
+  for (const id of Object.keys(profile.weights) as SignalId[]) {
+    const weight = profile.weights[id];
+    if (weight <= 0) continue;
+    defs.push({
+      id,
+      weight,
+      claudeUsed: regionId === 'cn' && id === 'timezone' ? true : undefined,
+      icon: SIGNAL_ICONS[id],
+      detect: detectors[id],
+    });
+  }
+  defs.sort((a, b) => b.weight - a.weight);
+  return defs;
+}
+
+/** China profile (en/zh pages); same as before this feature. */
+export const SIGNALS: SignalDef[] = signalsFor('cn');
+
+export function measuredWeightForRegion(regionId: RegionId): number {
+  const profile = REGIONS[regionId];
+  let total = 0;
+  for (const id of Object.keys(profile.weights) as SignalId[]) {
+    if (profile.weights[id] > 0 && isServerMeasurable(id)) total += profile.weights[id];
+  }
+  return total;
+}
+
+export function activeWeightForRegion(regionId: RegionId): number {
+  return Object.values(REGIONS[regionId].weights).reduce((a, b) => a + b, 0);
+}
 
 export type RiskBand = 'low' | 'medium' | 'high';
 
@@ -455,3 +499,5 @@ export function signalVerdict(score: number): RiskBand {
   if (score >= 0.25) return 'medium';
   return 'low';
 }
+
+assertRegionProfiles();

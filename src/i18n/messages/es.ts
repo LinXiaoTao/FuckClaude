@@ -1,7 +1,7 @@
 export default {
   'meta.title': 'Fuck Claude | ¿Es un «usuario de Cuba» de Claude?',
   'meta.description':
-    'Compruebe la zona horaria, el idioma, las fuentes regionales y la configuración del navegador para ver si Claude Code le marcaría como usuario de Cuba. Ese escaneo permanece en el navegador. La comprobación separada de pureza de IP envía la IP de salida por /api/ip.',
+    'Compruebe la zona horaria, el idioma (es-CU), la configuración regional Intl, las fugas de WebRTC y el estilo de emoji para ver si Claude Code le marcaría como usuario de Cuba. El escaneo permanece en el navegador. La comprobación separada de pureza de IP envía la IP de salida por /api/ip.',
 
   'nav.title': 'Fuck Claude',
   'nav.guides': 'Guías anti-bloqueo',
@@ -51,7 +51,7 @@ export default {
   'guides.path1.cta': 'Leer el modelo de riesgo',
   'guides.path2.title': '2 · Limpiar el entorno',
   'guides.path2.desc':
-    'Sincronice la zona horaria, aísle las fuentes regionales señaladas, detenga fugas de WebRTC y configure una IP residencial correctamente.',
+    'Alinee la zona horaria con un perfil fuera de America/Havana, retire es-CU del inicio de la lista de idiomas, detenga fugas de WebRTC y configure una IP residencial correctamente.',
   'guides.path2.cta': 'Limpiar la configuración',
   'guides.path3.title': '3 · Registrarse y pagar con seguridad',
   'guides.path3.desc':
@@ -119,26 +119,23 @@ export default {
 
   'signal.timezone.name': 'Zona horaria del sistema',
   'signal.timezone.desc':
-    'Intl.DateTimeFormat expone la misma zona horaria del SO que lee Claude Code; se compara con Asia/Shanghai, Asia/Urumqi y otras zonas.',
+    'Intl.DateTimeFormat expone la misma zona horaria del SO que, según informes públicos, lee Claude Code; se compara con America/Havana.',
   'signal.language.name': 'Idioma del navegador',
   'signal.language.desc':
-    'navigator.languages: zh-CN / chino simplificado al inicio de la lista obtiene la puntuación más alta.',
-  'signal.fonts.name': 'Fuentes regionales instaladas',
-  'signal.fonts.desc':
-    'Sondeo por ancho en canvas de fuentes simplificadas o tradicionales como Microsoft YaHei y PingFang SC.',
-  'signal.vendorFonts.name': 'Fuentes de fabricantes locales',
-  'signal.vendorFonts.desc':
-    'Sondeo en canvas de fuentes de fabricantes o software del entorno: MiSans, HarmonyOS Sans, OPPO Sans, caras WPS Founder. Cualquier coincidencia es una señal fuerte.',
-  'signal.cnBrowser.name': 'Navegador local / WebView',
-  'signal.cnBrowser.desc':
-    'User agent y marcas UA-CH comparados con WeChat, QQ, Quark, UC, Baidu y otros navegadores locales o WebViews en aplicaciones.',
-  'signal.deviceVendor.name': 'Dispositivo de marca local',
-  'signal.deviceVendor.desc':
-    'Modelo de dispositivo UA-CH (navigator.userAgentData) y UA comparados con HarmonyOS, Huawei, Xiaomi, OPPO, vivo y otras marcas de hardware locales.',
+    'navigator.languages: es-CU al inicio de la lista obtiene la puntuación más alta; es genérico al inicio suma menos.',
+  'signal.fonts.name': 'Fuentes del sistema',
+  'signal.fonts.desc': 'No entra en el escaneo de Cuba en esta página.',
+  'signal.vendorFonts.name': 'Fuentes de fabricantes',
+  'signal.vendorFonts.desc': 'No entra en el escaneo de Cuba en esta página.',
+  'signal.cnBrowser.name': 'Navegador / WebView',
+  'signal.cnBrowser.desc': 'No entra en el escaneo de Cuba en esta página.',
+  'signal.deviceVendor.name': 'Marca del dispositivo',
+  'signal.deviceVendor.desc': 'No entra en el escaneo de Cuba en esta página.',
   'signal.intlLocale.name': 'Configuración regional Intl',
-  'signal.intlLocale.desc': 'La configuración regional que el navegador resuelve para formato de fecha y números.',
+  'signal.intlLocale.desc':
+    'La configuración regional que el navegador resuelve para formato de fecha y números; se contrasta con perfiles asociados a Cuba.',
   'signal.timezoneOffset.name': 'Desplazamiento de zona horaria',
-  'signal.timezoneOffset.desc': 'Si getTimezoneOffset() es igual a UTC+8.',
+  'signal.timezoneOffset.desc': 'No entra en el escaneo de Cuba en esta página.',
   'signal.webrtcLeak.name': 'Fuga de IP por WebRTC',
   'signal.webrtcLeak.desc':
     'Sondeo con RTCPeerConnection de fugas de candidatos IP local o pública real mediante STUN.',
@@ -152,7 +149,8 @@ export default {
   'result.noHits': 'No coincidieron señales fuertes de Cuba. Riesgo bajo.',
 
   'signals.title': 'Qué se escanea',
-  'signals.sub': 'Diez huellas de configuración regional y red, ponderadas a una puntuación de riesgo de 0–100.',
+  'signals.sub':
+    'Cinco huellas de configuración regional y red visibles en el navegador, ponderadas a una puntuación de riesgo de 0–100.',
   'tools.title': 'Herramientas de código abierto relacionadas',
   'tools.cageName': 'Claude Cage',
   'tools.cageBody':
@@ -162,18 +160,18 @@ export default {
 
   'how.title': 'Cómo funciona la comprobación',
   'how.p1':
-    'Cuando Claude Code apunta a un endpoint de proxy mediante ANTHROPIC_BASE_URL, informes públicos de ingeniería inversa indican que lee la zona horaria del sistema operativo y el hostname del proxy, y oculta el veredicto en el system prompt con esteganografía Unicode: el separador de fecha y cuatro apóstrofos casi idénticos en la línea «Today’s date» codifican si parece un usuario de Cuba.',
+    'Cuando Claude Code apunta a un endpoint de proxy mediante ANTHROPIC_BASE_URL, informes públicos de ingeniería inversa indican que lee la zona horaria del sistema operativo y el hostname del proxy, y oculta en el system prompt, con esteganografía Unicode, un veredicto sobre si el tráfico parece de usuario de China: el separador de fecha y cuatro apóstrofos casi idénticos en la línea «Today’s date» codifican ese juicio. Las comprobaciones de esta página para Cuba son una heurística propia de este sitio, no un mecanismo publicado por Anthropic.',
   'how.p2':
-    'Una página web no puede leer todo lo que Claude Code puede, pero la señal clave es idéntica: esta herramienta lee la misma zona horaria del SO y suma nueve huellas más visibles en el navegador (idioma de la UI, fuentes regionales, fuentes de fabricantes locales, fugas de IP por WebRTC, navegadores locales, marca del dispositivo, configuración Intl, desplazamiento UTC+8 y estilo de emoji) en una puntuación ponderada. Las señales con ≥0,25 cuentan como aciertos; bandas: Bajo 0–30, Medio 31–60, Alto 61–100.',
+    'Una página web no puede leer todo lo que Claude Code puede, pero la señal clave coincide: esta herramienta lee la misma zona horaria del SO y suma cuatro huellas más visibles en el navegador — idioma (es-CU), configuración regional Intl, fugas de IP por WebRTC y estilo de emoji — en una puntuación ponderada orientada a Cuba. Las señales con ≥0,25 cuentan como aciertos; bandas: Bajo 0–30, Medio 31–60, Alto 61–100.',
   'ui.weight': 'Peso',
 
   'why.title': 'Por qué Claude le marca como «usuario de Cuba»',
   'why.p1':
-    'Anthropic no ofrece Claude en Cuba, y se ha reportado que Claude Code trata el tráfico que «parece de usuario de Cuba» como de mayor riesgo. El juicio no es un único interruptor: apila varias señales débiles en una probabilidad. La zona horaria del sistema es la señal individual más pesada porque viaja con cada solicitud y es difícil falsificarla por accidente, pero idioma, fuentes, marca del dispositivo y red suman peso además.',
+    'Anthropic no ofrece Claude en Cuba, y se ha reportado que Claude Code trata el tráfico que «parece de usuario de Cuba» como de mayor riesgo. El juicio no es un único interruptor: apila varias señales débiles en una probabilidad. La zona horaria del sistema es la señal individual más pesada en este escaneo porque viaja con cada solicitud y es difícil falsificarla por accidente, pero el idioma, la configuración regional Intl, WebRTC y el estilo de emoji suman peso además.',
   'why.p2':
-    'La razón por la que todo el entorno del navegador filtra tanto es que la configuración regional se filtra en todo: la zona horaria del SO impulsa Intl y Date, la preferencia de idioma fija navigator.languages y la cabecera Accept-Language, y las fuentes del SO pueden sondearse píxel a píxel en un canvas. Si además se enruta Claude Code por un proxy, el hostname del proxy es otra señal: informes de ingeniería inversa encontraron el veredicto codificado de forma esteganográfica en la línea «Today’s date» del system prompt.',
+    'La razón por la que el entorno del navegador filtra tanto es que la configuración regional se filtra en todo: la zona horaria del SO impulsa Intl y Date, la preferencia de idioma fija navigator.languages y la cabecera Accept-Language, y una sonda WebRTC puede exponer la IP real detrás de un proxy. Si además se enruta Claude Code por un proxy, el hostname del proxy es otra señal: informes de ingeniería inversa encontraron el veredicto codificado de forma esteganográfica en la línea «Today’s date» del system prompt.',
   'why.p3':
-    'Ninguna de estas señales es decisiva por sí sola, que es exactamente por qué el riesgo es acumulativo. Una zona horaria de EE. UU. con un paquete de fuentes regionales y un WebView de WeChat sigue leyéndose como sospechoso. La esteganografía y el modelo de riesgo completo se detallan en la',
+    'Ninguna de estas señales es decisiva por sí sola, que es exactamente por qué el riesgo es acumulativo. Una zona horaria de EE. UU. con es-CU al inicio de la lista de idiomas sigue leyéndose como sospechoso para el perfil cubano. La esteganografía y el modelo de riesgo completo se detallan en la',
   'why.link1': 'guía de esteganografía y modelo de riesgo de 4 capas',
   'why.p3b': ', y las correcciones prácticas están en la',
   'why.link2': 'guía de limpieza del entorno e IP residencial',
@@ -183,11 +181,11 @@ export default {
   'reduce.sub':
     'Una lista ordenada breve. Cada paso corresponde directamente a una de las señales ponderadas anteriores; empiece por arriba, porque zona horaria e idioma llevan más peso.',
   'reduce.s1':
-    'Configure la zona horaria del SO en una zona fuera de Cuba (por ejemplo America/New_York o Europe/London) y confirme que getTimezoneOffset() ya no sea UTC+8. En los informes de ingeniería inversa esta es la señal que se dice que Claude Code lee directamente, por eso tiene el mayor peso en esta puntuación.',
+    'Configure la zona horaria del SO fuera de Cuba y de America/Havana (por ejemplo America/New_York o Europe/London) y confirme en el escaneo que Intl ya no resuelva America/Havana. En los informes de ingeniería inversa esta es la señal que se dice que Claude Code lee directamente, por eso tiene el mayor peso en esta puntuación.',
   'reduce.s2':
-    'Quite zh-CN / zh-Hans del inicio de la lista de idiomas del navegador y del SO para que navigator.languages y Accept-Language encabecen con inglés u otra configuración regional que no active las señales marcadas.',
+    'Quite es-CU del inicio de la lista de idiomas del navegador y del SO para que navigator.languages y Accept-Language encabecen con inglés u otro locale que no marque Cuba con la máxima puntuación.',
   'reduce.s3':
-    'Aísle fuentes regionales y de fabricante (Microsoft YaHei, PingFang SC, MiSans, HarmonyOS Sans): use un perfil limpio del navegador o un navegador anti-detección para que el sondeo de fuentes en canvas no encuentre fuentes claramente señaladas.',
+    'Alinee la configuración regional Intl del navegador (formato de fecha, números y divisas) con el país o perfil que quiere presentar, de modo que no refuerce un entorno cubano si busca otro.',
   'reduce.s4':
     'Bloquee fugas de IP por WebRTC y enrute por una IP residencial en lugar de una de datacenter, para que la red y la geografía reales no anulen un perfil por lo demás limpio.',
   'reduce.s5':
@@ -201,10 +199,10 @@ export default {
     'Según informes públicos de ingeniería inversa, cuando Claude Code habla con un endpoint no oficial lee la zona horaria del SO y el hostname del proxy, y codifica el resultado de forma esteganográfica en su system prompt. La zona horaria que esta página lee mediante Intl.DateTimeFormat es exactamente la misma del SO.',
   'faq.q2': '¿Esta puntuación es la comprobación exacta que ejecuta Claude?',
   'faq.a2':
-    'No. Solo la zona horaria del sistema se corresponde uno a uno con el mecanismo reportado de Claude. Las otras nueve señales son huellas habituales del entorno regional o de red que correlacionan con un «usuario de Cuba»; trate la puntuación como una estimación, no como un veredicto.',
+    'No. Solo la zona horaria del sistema se corresponde uno a uno con el mecanismo reportado de Claude. Las otras cuatro señales de esta página (idioma es-CU, Intl, WebRTC y emoji) son huellas habituales del entorno regional o de red que correlacionan con un «usuario de Cuba»; trate la puntuación como una estimación, no como un veredicto.',
   'faq.q3': '¿Cómo reduzco mi puntuación?',
   'faq.a3':
-    'Cambie la zona horaria del SO fuera de Cuba y de las zonas señaladas como Asia/Shanghai, quite zh-CN del inicio de la lista de idiomas del navegador, bloquee fugas de WebRTC y evite enrutar Claude Code por proxies cuyos hostnames contengan dominios marcados o palabras clave de laboratorios de IA. La lista «Cómo reducir la puntuación de riesgo» anterior lo recorre en orden.',
+    'Cambie la zona horaria del SO fuera de America/Havana, quite es-CU del inicio de la lista de idiomas del navegador, alinee la configuración regional Intl, bloquee fugas de WebRTC y evite enrutar Claude Code por proxies cuyos hostnames contengan dominios marcados o palabras clave de laboratorios de IA. La lista «Cómo reducir la puntuación de riesgo» anterior lo recorre en orden.',
   'faq.q4': '¿Se suben datos?',
   'faq.a4':
     'El escaneo del usuario cubano se ejecuta en el navegador y esas señales no se suben. La comprobación separada de pureza de IP (tarjeta de inicio y /ip) envía la IP de salida al endpoint /api/ip, que consulta proxycheck.io, AbuseIPDB e ipwho.is. Esa puntuación nunca se fusiona con la de usuario cubano. El sitio también carga Google Analytics para estadísticas anónimas de visitas y Google AdSense para publicidad (los anuncios pueden usar cookies). La detección de fugas WebRTC puede contactar brevemente un servidor STUN público para recopilar candidatos ICE.',
@@ -219,7 +217,7 @@ export default {
     'Porque la zona horaria del SO se lee en el cliente y viaja en la solicitud de una forma que los informes de ingeniería inversa vincularon directamente al veredicto codificado. Una VPN cambia la IP pero suele dejar intacta la zona horaria del SO, que es la razón más habitual por la que una configuración de VPN «limpia» sigue puntuando alto aquí.',
   'faq.q8': 'El resultado de la API difiere del escaneo en el navegador; ¿por qué?',
   'faq.a8':
-    'El endpoint curl en /api/check se ejecuta en el servidor, así que solo ve lo que expone la solicitud: zona horaria geo de Vercel, país, Accept-Language y User-Agent. No puede sondear fuentes, configuración Intl ni fugas WebRTC, por lo que puntúa aproximadamente 62/100 del peso total y lo normaliza a 0–100. El escaneo en el navegador lee el SO real y es el panorama más completo.',
+    'El endpoint curl en /api/check se ejecuta en el servidor, así que solo ve lo que expone la solicitud: zona horaria geo de Vercel, país, Accept-Language y User-Agent. No puede sondear la configuración Intl, fugas WebRTC ni el estilo de emoji, por lo que solo cubre zona horaria e idioma (unas tres cuartas partes del peso en Cuba) y normaliza a 0–100. El escaneo en el navegador lee el SO real y es el panorama más completo.',
   'faq.q9': 'Mi cuenta ya está bloqueada; ¿qué hago ahora?',
   'faq.a9':
     'Primero identifique el tipo de bloqueo (bloqueo de IP, reembolso forzado o cuenta totalmente deshabilitada), porque cada uno tiene un camino distinto. La guía de diagnóstico de bloqueo y SOP de apelación en inglés explica cómo distinguirlos e incluye plantillas de correo de apelación; si la recuperación no es realista, la guía de conmutación a modelos alternativos nacionales y de código abierto cubre el cambio con mínima interrupción. El formulario oficial de apelación se alcanza iniciando sesión en claude.ai con la cuenta bloqueada.',

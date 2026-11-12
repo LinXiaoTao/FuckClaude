@@ -2,7 +2,7 @@
 import { localePath, type Lang } from '../i18n/locales';
 import { localize } from '../i18n/localize';
 import { useTranslations } from '../i18n/ui';
-import { SIGNALS } from '../config/signals';
+import { regionForLang, signalsFor } from '../config/signals';
 import { getGuide, type GuideArticle } from '../config/guides';
 import LangToggle from './LangToggle.astro';
 import ScoreRing from './ScoreRing.astro';
@@ -21,6 +21,7 @@ interface Props {
   path: string;
 }
 const { lang } = Astro.props;
+const pageSignals = signalsFor(regionForLang(lang));
 const t = useTranslations(lang);
 const home = localePath(lang, '/');
 const guidesHub = localePath(lang, '/guides/');
@@ -206,7 +207,7 @@ const apiExamples = [
     </div>
     <ol class="scan-list" id="scan">
       {
-        SIGNALS.map((signal) => (
+        pageSignals.map((signal) => (
           <li class="scan-row is-pending" data-signal={signal.id}>
             <span class="scan-row__icon" set:html={signal.icon} />
             <span class="scan-row__main">

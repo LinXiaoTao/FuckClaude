@@ -206,6 +206,8 @@ Claude Code 标记为中国用户。点击后会有逐项检测的扫描动效,�
 
 ## 检测信号与权重
 
+英文 `/` 与中文 `/zh/` 使用 **cn** 档案(下表,十项合计 100,与改造前一致)。`/ru/`、`/fa/`、`/es/`、`/ar/`、`/my/` 各用 `src/config/regions.ts` 中的区域档案:仅 weight>0 的信号出现在扫描列表与 JSON-LD 中,时区 / 语言 / 字体 / 浏览器等列表随国家变化。`signalsFor(regionId)` 与 `npm run signals:check` 负责校验。
+
 | 信号 | 权重 | 检测方式 |
 | --- | --- | --- |
 | 系统时区 | 24 | `Intl.DateTimeFormat().resolvedOptions().timeZone` 对比 `Asia/Shanghai`、`Asia/Urumqi` 等(**Claude 实际使用**) |
@@ -242,8 +244,8 @@ Claude Code 标记为中国用户。点击后会有逐项检测的扫描动效,�
 - **curl / HTTP 接口** —— 网站是静态的,但 `/api/check` 是一个极小的 Vercel Function,
   为终端与脚本返回服务端估算。它基于请求可见的信息评分 —— Vercel 归属地时区
   (`x-vercel-ip-timezone`)、国家、`Accept-Language` 头与 User-Agent(emoji 厂商 +
-  国产浏览器 + 国产品牌设备)—— 在可检测的 62/100 权重上(中文字体、厂商字体、
-  Intl locale 与 WebRTC 泄露仅浏览器可测)归一化到 0–100,复用与浏览器扫描完全一致的评分器。
+  国产浏览器 + 国产品牌设备)—— 在**该区域**服务端可测的权重之和上(字体、Intl locale、
+  WebRTC 等仅浏览器可测)归一化到 0–100,复用与浏览器扫描完全一致的 `score*ForRegion` 评分器。
   响应语言会自动跟随你的 `Accept-Language` 请求头。
 
 ```bash
@@ -276,7 +278,8 @@ curl "https://fuck-claude.vercel.app/api/check?format=json"
 
 ```
 src/
-├── config/signals.ts    # 信号定义、权重、检测函数、图标
+├── config/regions.ts    # 区域档案 (时区/语言/字体/权重)
+├── config/signals.ts    # signalsFor、纯评分函数、检测器
 ├── config/guides.ts     # 指南元数据:slug、分类、摘要、日期、相关指南、官方来源
 ├── config/official-rules.ts # 指南首页展示的 Anthropic 官方规则,每条附来源链接
 ├── config/sponsors.ts   # 赞助商列表(logo、链接、中英文案)

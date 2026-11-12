@@ -1,5 +1,6 @@
 ---
 import { LOCALES, LOCALE_CODES, alternatePaths, defaultLang, type Lang } from '../i18n/locales';
+import { regionForLang, signalsFor } from '../config/signals';
 import { useTranslations } from '../i18n/ui';
 import { ADSENSE_PUB_ID } from '../config/site';
 import LocaleSuggestBanner from '../components/LocaleSuggestBanner.astro';
@@ -89,18 +90,7 @@ const jsonLd = {
           inLanguage: htmlLang,
           image: ogImage,
           offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-          featureList: [
-            t('signal.timezone.name'),
-            t('signal.language.name'),
-            t('signal.fonts.name'),
-            t('signal.vendorFonts.name'),
-            t('signal.webrtcLeak.name'),
-            t('signal.cnBrowser.name'),
-            t('signal.deviceVendor.name'),
-            t('signal.intlLocale.name'),
-            t('signal.timezoneOffset.name'),
-            t('signal.emoji.name'),
-          ],
+          featureList: signalsFor(regionForLang(lang)).map((s) => t(`signal.${s.id}.name`)),
         },
     ...(faq.length ? [{ '@type': 'FAQPage', mainEntity: faq }] : []),
     ...(jsonLdExtra

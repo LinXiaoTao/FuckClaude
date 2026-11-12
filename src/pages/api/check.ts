@@ -9,10 +9,10 @@
  *   - `accept-language`       — browser/UA language preferences
  *   - `user-agent`            — OS/vendor guess for the emoji signal
  *
- * Fonts (Chinese + vendor faces), Intl locale and WebRTC IP leak are
- * browser-only, so the score is computed over the measurable weight (62/100)
- * and normalised to 0–100. It reuses the exact same pure scorers as the client
- * so results stay consistent.
+ * Fonts, Intl locale, and WebRTC IP leak are browser-only. The score is
+ * computed over the active region's server-measurable weight sum and normalised
+ * to 0–100. It reuses the same pure scorers as the client (`signalsFor` +
+ * `regionForLang`).
  *
  * Response format:
  *   - default (curl, browser, …)                      → pretty plain-text report
@@ -26,16 +26,22 @@
  */
 import type { APIRoute } from 'astro';
 import {
-  SIGNALS,
   riskBand,
-  scoreTimezone,
-  scoreLanguages,
+  scoreBrowserForRegion,
+  scoreDeviceForRegion,
   scoreEmojiVendor,
-  scoreCnBrowser,
-  scoreCnDevice,
+  scoreLanguagesForRegion,
+  scoreTimezoneForRegion,
+  scoreTimezoneOffsetMinutes,
+  regionForLang,
+  signalsFor,
+  isServerMeasurable,
+  activeWeightForRegion,
   type RiskBand,
   type SignalId,
+  type RegionId,
 } from '../../config/signals';
+import { REGIONS } from '../../config/regions';
 import {
   CHECK_CLI_BROWSER_ONLY,
   CHECK_CLI_COVERAGE,
@@ -150,33 +156,61 @@ function wantsColor(url: URL, req: Request): boolean {
   return !/mozilla|chrome\/|safari\/|firefox\/|edg\//.test(ua);
 }
 
+function regionMeasuredValues(
+  regionId: RegionId,
+  tz: string,
+  acceptLang: string[],
+  ua: string,
+): Partial<Record<SignalId, { value: string; score: number }>> {
+  const profile = REGIONS[regionId];
+  const offsetEast = tzOffsetEastMinutes(tz);
+  const offsetWest = offsetEast === null ? null : -offsetEast;
+  const emoji = scoreEmojiVendor(ua);
+  const browser = scoreBrowserForRegion(ua, regionId);
+  const device = scoreDeviceForRegion(ua, regionId);
+
+  const out: Partial<Record<SignalId, { value: string; score: number }>> = {
+    timezone: { value: tz || 'unknown', score: scoreTimezoneForRegion(tz, profile) },
+    language: {
+      value: acceptLang.join(', ') || 'unknown',
+      score: scoreLanguagesForRegion(acceptLang, regionId),
+    },
+    cnBrowser: { value: browser.name ?? 'none detected', score: browser.score },
+    deviceVendor: { value: device.name ?? 'none detected', score: device.score },
+    emoji: { value: `${emoji.vendor} style`, score: emoji.score },
+  };
+  if (profile.weights.timezoneOffset > 0 && offsetWest !== null) {
+    out.timezoneOffset = {
+      value: fmtOffset(offsetEast),
+      score: scoreTimezoneOffsetMinutes(offsetWest, profile),
+    };
+  }
+  return out;
+}
+
 function analyze(req: Request, lang: Lang): Analysis {
   const t = useTranslations(lang);
+  const regionId = regionForLang(lang);
+  const activeSignals = signalsFor(regionId);
   const tz = req.headers.get('x-vercel-ip-timezone') || '';
   const country = req.headers.get('x-vercel-ip-country') || '';
   const acceptLang = parseAcceptLanguage(req.headers.get('accept-language') || '');
   const ua = req.headers.get('user-agent') || '';
 
-  const offsetEast = tzOffsetEastMinutes(tz);
-  const emoji = scoreEmojiVendor(ua);
-  const cnBrowser = scoreCnBrowser(ua);
-  const cnDevice = scoreCnDevice(ua);
-
-  const measured: Partial<Record<SignalId, { value: string; score: number }>> = {
-    timezone: { value: tz || 'unknown', score: scoreTimezone(tz) },
-    language: { value: acceptLang.join(', ') || 'unknown', score: scoreLanguages(acceptLang) },
-    cnBrowser: { value: cnBrowser.name ?? 'none detected', score: cnBrowser.score },
-    deviceVendor: { value: cnDevice.name ?? 'none detected', score: cnDevice.score },
-    timezoneOffset: { value: fmtOffset(offsetEast), score: offsetEast === 480 ? 0.7 : 0 },
-    emoji: { value: `${emoji.vendor} style`, score: emoji.score },
-  };
+  const measuredAll = regionMeasuredValues(regionId, tz, acceptLang, ua);
+  const measured: Partial<Record<SignalId, { value: string; score: number }>> = {};
+  for (const id of Object.keys(measuredAll) as SignalId[]) {
+    const weight = REGIONS[regionId].weights[id];
+    if (weight > 0 && isServerMeasurable(id)) {
+      measured[id] = measuredAll[id];
+    }
+  }
 
   let rawContribution = 0;
   let measuredWeight = 0;
-  let totalWeight = 0;
+  const totalWeight = activeWeightForRegion(regionId);
 
-  const signals: SignalResult[] = SIGNALS.map((s) => {
-    totalWeight += s.weight;
+  const signals: SignalResult[] = activeSignals.map((s) => {
     const m = measured[s.id];
     if (m) {
       const contribution = Math.round(m.score * s.weight);

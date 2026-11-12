@@ -196,7 +196,7 @@ for (const [stem, key] of switchPairs) {
   switchFiles[catalogKey] = { on, off };
 }
 
-const signalsPath = join(root, '../src/config/signals.ts');
+const signalsPath = join(root, '../src/config/signals-cn-assets.ts');
 let hiddenFonts;
 try {
   hiddenFonts = parseFontArrays(readFileSync(signalsPath, 'utf8'));

@@ -4,7 +4,14 @@
  * been checked it shows a verdict plus the list of matched signals.
  * Everything runs locally in the browser.
  */
-import { SIGNALS, riskBand, signalVerdict, type SignalDef, type RiskBand } from '../config/signals';
+import {
+  regionForLang,
+  riskBand,
+  signalVerdict,
+  signalsFor,
+  type SignalDef,
+  type RiskBand,
+} from '../config/signals';
 import { CN_MODELS } from '../config/cn-models';
 import { loadLocaleData } from '../i18n/locale-data-client';
 import { langFromDocument, useTranslations } from '../i18n/ui-client';
@@ -27,8 +34,10 @@ const BAND_HIGH_LINKS = [
 const SCAN_STEP_MS = 460;
 const SETTLE_MS = 150;
 
-await loadLocaleData(langFromDocument());
-const t = useTranslations(langFromDocument());
+const pageLang = langFromDocument();
+await loadLocaleData(pageLang);
+const t = useTranslations(pageLang);
+const SIGNALS = signalsFor(regionForLang(pageLang));
 
 function q<T extends Element = HTMLElement>(sel: string, root: ParentNode = document): T | null {
   return root.querySelector<T>(sel);
@@ -202,7 +211,7 @@ function resetCard() {
 async function buildCard(total: number, band: RiskBand, hits: CardHit[]) {
   try {
     const blob = await renderResultCard({
-      lang: currentLang(),
+      lang: pageLang,
       title: t('hero.title'),
       score: total,
       band,
