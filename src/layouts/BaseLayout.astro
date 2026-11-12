@@ -408,14 +408,9 @@ const jsonLd = {
         }
       }
 
-      /* ---------- homepage stage + sponsors ---------- */
-      .home-stage {
-        width: 100%;
-      }
+      /* ---------- sponsors ---------- */
       .sponsors {
-        width: min(100%, var(--maxw));
-        margin: 0 auto;
-        padding: 4px 20px 8px;
+        margin: 8px 0 18px;
       }
       .sponsors__inner {
         padding: 0;
@@ -512,33 +507,9 @@ const jsonLd = {
         width: 11px;
         height: 11px;
       }
-      @media (min-width: 700px) and (max-width: 1279px) {
+      @media (min-width: 700px) {
         .sponsors__list {
           grid-template-columns: 1fr 1fr;
-        }
-      }
-      @media (min-width: 1280px) {
-        .home-stage {
-          display: grid;
-          grid-template-columns: minmax(0, var(--maxw)) minmax(260px, 300px);
-          column-gap: 20px;
-          align-items: start;
-          width: min(100% - 40px, calc(var(--maxw) + 320px));
-          margin: 0 auto;
-        }
-        .home-stage__main.wrap {
-          width: auto;
-          max-width: none;
-          margin: 0;
-          padding: 0;
-        }
-        .sponsors {
-          width: auto;
-          margin: 0;
-          padding: 32px 0 0;
-        }
-        .sponsors__list {
-          grid-template-columns: 1fr;
         }
       }
 
