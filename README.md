@@ -2,7 +2,7 @@
 
 English | [中文](#中文)
 
-A lightweight, SEO-friendly, bilingual (EN / 中文) single-page tool that scans your
+A lightweight, SEO-friendly tool (English at `/`, plus `zh`, `ru`, `fa`, `es`, `ar`, `my` under path prefixes) that scans your
 **browser environment** and tells you whether Claude Code would flag you as a China
 user. One click runs an animated scan of each signal, the gauge climbs as risk adds
 up, and you get a verdict plus the list of matched signals. Everything runs **100%
