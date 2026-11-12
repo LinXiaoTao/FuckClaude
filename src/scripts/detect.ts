@@ -6,7 +6,8 @@
  */
 import { SIGNALS, riskBand, signalVerdict, type SignalDef, type RiskBand } from '../config/signals';
 import { CN_MODELS } from '../config/cn-models';
-import { useTranslations, type Lang } from '../i18n/ui';
+import { loadLocaleData } from '../i18n/locale-data-client';
+import { langFromDocument, useTranslations } from '../i18n/ui-client';
 import { renderResultCard, type CardHit } from './share-card';
 import { startDeferredIpPurity, setIpPurityIdle } from './ip-purity-ui';
 
@@ -26,10 +27,8 @@ const BAND_HIGH_LINKS = [
 const SCAN_STEP_MS = 460;
 const SETTLE_MS = 150;
 
-function currentLang(): Lang {
-  return document.documentElement.lang.toLowerCase().startsWith('zh') ? 'zh' : 'en';
-}
-const t = useTranslations(currentLang());
+await loadLocaleData(langFromDocument());
+const t = useTranslations(langFromDocument());
 
 function q<T extends Element = HTMLElement>(sel: string, root: ParentNode = document): T | null {
   return root.querySelector<T>(sel);

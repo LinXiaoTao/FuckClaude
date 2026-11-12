@@ -1,6 +1,6 @@
 ---
 import TrustPageShell from '../components/TrustPageShell.astro';
-import { TRUST_CONTENT } from '../content/trust';
+import { resolveTrustPageBody } from '../content/trust/resolve';
 import { useTranslations } from '../i18n/ui';
 
 const lang = 'en';
@@ -10,9 +10,7 @@ const t = useTranslations(lang);
 <TrustPageShell
   lang={lang}
   path="/privacy/"
-  enPath="/privacy/"
-  zhPath="/zh/privacy/"
   title={t('trust.privacy.title')}
   description={t('trust.privacy.description')}
-  body={TRUST_CONTENT.privacy.en}
+  body={resolveTrustPageBody('privacy', lang)}
 />

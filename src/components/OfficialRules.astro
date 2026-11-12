@@ -1,6 +1,8 @@
 ---
 import { OFFICIAL_RULES, OFFICIAL_RULES_CHECKED_AT } from '../config/official-rules';
-import { useTranslations, type Lang } from '../i18n/ui';
+import { localize } from '../i18n/localize';
+import type { Lang } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -19,15 +21,15 @@ const t = useTranslations(lang);
     {
       OFFICIAL_RULES.map((rule) => (
         <li class="rule">
-          <h3>{rule.title[lang]}</h3>
-          <p>{rule.body[lang]}</p>
+          <h3>{localize(rule.title, lang)}</h3>
+          <p>{localize(rule.body, lang)}</p>
           <p class="rule__src">
             {t('rules.source')}:{' '}
             {rule.sources.map((source, index) => (
               <>
                 {index > 0 && ' · '}
                 <a href={source.url} target="_blank" rel="noopener noreferrer">
-                  {source.name[lang]} ↗
+                  {localize(source.name, lang)} ↗
                 </a>
               </>
             ))}

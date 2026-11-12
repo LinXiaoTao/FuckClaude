@@ -5,7 +5,12 @@
  * to call `startDeferredIpPurity`. Full /ip pages still fetch on mount.
  * Does not touch the China-user score.
  */
-import { useTranslations, type Lang } from '../i18n/ui';
+import { isLang as isSiteLang, type Lang } from '../i18n/locales';
+import { localizePair } from '../i18n/localize-pairs';
+import { loadLocaleData } from '../i18n/locale-data-client';
+import { langFromDocument, useTranslations } from '../i18n/ui-client';
+
+await loadLocaleData(langFromDocument());
 
 interface Deduction {
   code: string;
@@ -50,9 +55,6 @@ export type IpFetchResult =
 const FLAG_KEYS = ['proxy', 'vpn', 'tor', 'datacenter', 'abusive'] as const;
 const SOURCE_KEYS = ['proxycheck', 'abuseipdb', 'ipwho'] as const;
 
-function isLang(value: string | null): value is Lang {
-  return value === 'en' || value === 'zh';
-}
 
 function el<K extends keyof HTMLElementTagNameMap>(
   tag: K,
@@ -70,18 +72,19 @@ function clear(node: Element): void {
 }
 
 function noticeText(data: IpPayload, lang: Lang): string {
-  if (!data.notice) return '';
-  return lang === 'zh' ? data.notice.textZh || data.notice.textEn || '' : data.notice.textEn || data.notice.textZh || '';
+  if (!data.notice?.textEn || !data.notice.textZh) return data.notice?.textEn || data.notice?.textZh || '';
+  return localizePair({ en: data.notice.textEn, zh: data.notice.textZh }, lang);
 }
 
 function hintText(data: IpPayload, lang: Lang): string {
   const hint = data.claudeHint;
-  if (!hint) return '';
-  return lang === 'zh' ? hint.textZh || hint.textEn || '' : hint.textEn || hint.textZh || '';
+  if (!hint?.textEn || !hint.textZh) return hint?.textEn || hint?.textZh || '';
+  return localizePair({ en: hint.textEn, zh: hint.textZh }, lang);
 }
 
 function langOf(root: HTMLElement): Lang {
-  return isLang(root.dataset.lang ?? null) ? (root.dataset.lang as Lang) : 'en';
+  const raw = root.dataset.lang ?? langFromDocument();
+  return isSiteLang(raw) ? raw : 'en';
 }
 
 function bodyOf(root: HTMLElement): Element | null {
@@ -91,7 +94,8 @@ function bodyOf(root: HTMLElement): Element | null {
 /** Relative `/api/ip` fetch. Never throws; callers decide how to render. */
 export async function fetchIpPurity(): Promise<IpFetchResult> {
   try {
-    const res = await fetch('/api/ip', {
+    const lang = langFromDocument();
+    const res = await fetch(`/api/ip?lang=${encodeURIComponent(lang)}`, {
       headers: { Accept: 'application/json' },
       cache: 'no-store',
     });

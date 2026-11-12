@@ -1,3 +1,5 @@
+import type { Localized } from '../i18n/types';
+
 export interface SiteAuthor {
   id: 'linxiaotao';
   name: string;
@@ -5,7 +7,7 @@ export interface SiteAuthor {
   github: string;
   githubUrl: string;
   xUrl: string;
-  bio: { en: string; zh: string };
+  bio: Localized;
 }
 
 export const SITE_AUTHOR: SiteAuthor = {

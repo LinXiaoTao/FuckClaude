@@ -1,0 +1,14 @@
+---
+import GuidesHubPage from '../../../components/GuidesHubPage.astro';
+import { PREFIXED_LOCALES, isLang, type Lang } from '../../../i18n/locales';
+
+export function getStaticPaths() {
+  return PREFIXED_LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const raw = Astro.params.lang ?? '';
+if (!isLang(raw)) throw new Error(`Invalid locale: ${raw}`);
+const lang = raw as Lang;
+---
+
+<GuidesHubPage lang={lang} />

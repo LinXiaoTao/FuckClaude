@@ -1,15 +1,25 @@
 /**
- * Bilingual (English / Simplified-Chinese) copy for the whole site.
- * Isomorphic + framework-free so the client detect script can import it too.
+ * Authoritative English / Simplified-Chinese UI tables.
+ * Runtime resolution for other locales lives in `use-translations.ts`.
  */
 
-export const languages = {
-  en: 'English',
-  zh: '中文',
-} as const;
+import { LOCALES, PREFIXED_LOCALES, defaultLang, type Lang } from './locales';
 
-export type Lang = keyof typeof languages;
-export const defaultLang: Lang = 'en';
+export {
+  LOCALES,
+  LOCALE_CODES,
+  PREFIXED_LOCALES,
+  defaultLang,
+  isLang,
+  localePath,
+  stripLocalePrefix,
+  alternatePaths,
+  type Lang,
+  type LocaleMeta,
+} from './locales';
+export type { Localized, ContentSource } from './types';
+export { localize, localizeDetailed, translationNoticeApplies } from './localize';
+export { useTranslations } from './use-translations';
 
 export const ui = {
   en: {
@@ -249,6 +259,7 @@ export const ui = {
     'trust.about.description':
       'Who runs Fuck Claude, why it exists, editorial standards, and its relationship to Anthropic.',
     'trust.contact.title': 'Contact',
+    'trust.navTitle': 'Trust & Policies',
     'trust.contact.description':
       'Contact LinXiaoTao by email or GitHub Issues for bug reports, guide corrections, privacy requests, and sponsorship inquiries.',
 
@@ -400,6 +411,12 @@ export const ui = {
     'banner.prompt': 'Choose another language to browse content adapted for your browser language preference.',
     'banner.continue': 'Continue',
     'banner.dismiss': 'Close',
+
+    'i18n.notice':
+      'This page is shown in a machine translation or English fallback. The English version is authoritative.',
+    'i18n.noticeLink': 'View English version',
+    'lang.toggleLabel': 'Site language',
+    'share.cardFooter': 'Measure yours at fuck-claude.vercel.app',
   },
 
   zh: {
@@ -632,6 +649,7 @@ export const ui = {
     'trust.about.title': '关于本站',
     'trust.about.description': 'Fuck Claude 的运营者、项目目的、编辑准则及其与 Anthropic 的关系。',
     'trust.contact.title': '联系我们',
+    'trust.navTitle': '政策与信任导航',
     'trust.contact.description': '通过电子邮件或 GitHub Issues 联系 LinXiaoTao：问题反馈、指南勘误、隐私请求与赞助合作。',
 
     'social.x': 'X(推特)',
@@ -778,31 +796,27 @@ export const ui = {
     'banner.prompt': '选择另一语言以浏览适用于你浏览器语言偏好的内容。',
     'banner.continue': '继续',
     'banner.dismiss': '关闭',
+
+    'i18n.notice': '本页内容为机器翻译或英文后备展示，以英文版为准。',
+    'i18n.noticeLink': '查看英文版',
+    'lang.toggleLabel': '站点语言',
+    'share.cardFooter': '在 fuck-claude.vercel.app 测测你的',
   },
 } as const;
 
 export type UiKey = keyof (typeof ui)['en'];
 
-/** Returns a translator that falls back to English, then to the raw key. */
-export function useTranslations(lang: Lang) {
-  const table = ui[lang] ?? ui[defaultLang];
-  return function t(key: string): string {
-    return (
-      (table as Record<string, string>)[key] ??
-      (ui[defaultLang] as Record<string, string>)[key] ??
-      key
-    );
-  };
-}
-
-/** `/` for English (default), `/zh/` for Chinese. */
-export function localePath(lang: Lang): string {
-  return lang === defaultLang ? '/' : `/${lang}/`;
-}
-
 /** Detect the current language from an Astro request URL. */
 export function getLangFromUrl(url: URL): Lang {
-  const [, seg] = url.pathname.split('/');
-  if (seg && seg in languages) return seg as Lang;
+  const path = url.pathname.replace(/\/index\.html$/, '') || '/';
+  const sorted = [...PREFIXED_LOCALES].sort(
+    (a, b) => LOCALES[b].pathPrefix.length - LOCALES[a].pathPrefix.length,
+  );
+  for (const code of sorted) {
+    const prefix = LOCALES[code].pathPrefix;
+    if (path === prefix || path === `${prefix}/` || path.startsWith(`${prefix}/`)) {
+      return code;
+    }
+  }
   return defaultLang;
 }

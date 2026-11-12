@@ -1,5 +1,6 @@
 ---
-import { useTranslations, type Lang } from '../i18n/ui';
+import { LOCALES, LOCALE_CODES, alternatePaths, defaultLang, type Lang } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui';
 import { ADSENSE_PUB_ID } from '../config/site';
 import LocaleSuggestBanner from '../components/LocaleSuggestBanner.astro';
 
@@ -10,14 +11,14 @@ interface Props {
   title?: string;
   /** Optional meta description override. */
   description?: string;
-  /** English alternate path for hreflang (defaults to `/`). */
-  enPath?: string;
-  /** Chinese alternate path for hreflang (defaults to `/zh/`). */
-  zhPath?: string;
   /** When true, skip homepage FAQ JSON-LD (guide pages). */
   omitFaq?: boolean;
   /** Extra JSON-LD nodes merged into @graph (e.g. Article on guide pages). */
   jsonLdExtra?: Record<string, unknown> | Record<string, unknown>[];
+  /** Thin English duplicate: keep canonical self, omit hreflang for this locale. */
+  omitHreflangFor?: Lang;
+  /** Set when guide body is English fallback for this locale. */
+  robotsNoindex?: boolean;
 }
 
 const {
@@ -25,21 +26,32 @@ const {
   path,
   title: titleProp,
   description: descriptionProp,
-  enPath = '/',
-  zhPath = '/zh/',
   omitFaq = false,
   jsonLdExtra,
+  omitHreflangFor,
+  robotsNoindex = false,
 } = Astro.props;
 const t = useTranslations(lang);
 
 const site = Astro.site ?? new URL('https://fuck-claude.vercel.app');
 const canonical = new URL(path, site).href;
-const enUrl = new URL(enPath, site).href;
-const zhUrl = new URL(zhPath, site).href;
 const ogImage = new URL('/og.png', site).href;
 
-const htmlLang = lang === 'zh' ? 'zh-CN' : 'en';
-const ogLocale = lang === 'zh' ? 'zh_CN' : 'en_US';
+const localeMeta = LOCALES[lang];
+const htmlLang = localeMeta.htmlLang;
+const ogLocale = localeMeta.ogLocale;
+const textDir = localeMeta.dir;
+
+const altPaths = alternatePaths(path);
+const hreflangLinks = LOCALE_CODES.filter((code) => code !== omitHreflangFor).map((code) => ({
+  hreflang: LOCALES[code].hreflang,
+  href: new URL(altPaths[code], site).href,
+}));
+const xDefaultHref = new URL(altPaths[defaultLang], site).href;
+
+const robotsContent = robotsNoindex
+  ? 'noindex, follow'
+  : 'index, follow, max-image-preview:large';
 
 const title = titleProp ?? t('meta.title');
 const description = descriptionProp ?? t('meta.description');
@@ -101,12 +113,12 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang={htmlLang}>
+<html lang={htmlLang} dir={textDir} data-lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#FAF9F5" />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="robots" content={robotsContent} />
     <meta name="generator" content={Astro.generator} />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -118,9 +130,12 @@ const jsonLd = {
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
 
-    <link rel="alternate" hreflang="en" href={enUrl} />
-    <link rel="alternate" hreflang="zh-CN" href={zhUrl} />
-    <link rel="alternate" hreflang="x-default" href={enUrl} />
+    {
+      hreflangLinks.map((link) => (
+        <link rel="alternate" hreflang={link.hreflang} href={link.href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={xDefaultHref} />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={t('nav.title')} />
@@ -161,7 +176,7 @@ const jsonLd = {
     </script>
   </head>
   <body>
-    <LocaleSuggestBanner currentLang={lang} enPath={enPath} zhPath={zhPath} />
+    <LocaleSuggestBanner currentLang={lang} alternateUrls={altPaths} />
     <slot />
 
     <script>
@@ -193,6 +208,10 @@ const jsonLd = {
         --font:
           -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
           'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+        --font-fa: 'Geeza Pro', 'Tahoma', 'Arial', sans-serif;
+        --font-ar: 'Geeza Pro', 'Tahoma', 'Arial', sans-serif;
+        --font-my:
+          'Myanmar Text', 'Noto Sans Myanmar', 'Padauk', var(--font);
         --serif: 'Georgia', 'Times New Roman', 'Songti SC', 'STSong', 'SimSun', serif;
         --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
       }
@@ -213,6 +232,18 @@ const jsonLd = {
         line-height: 1.6;
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
+      }
+      html[lang^='fa'] body,
+      html[lang^='fa'] {
+        font-family: var(--font-fa), var(--font);
+      }
+      html[lang^='ar'] body,
+      html[lang^='ar'] {
+        font-family: var(--font-ar), var(--font);
+      }
+      html[lang^='my'] body,
+      html[lang^='my'] {
+        font-family: var(--font-my);
       }
 
       a {
@@ -269,24 +300,58 @@ const jsonLd = {
         gap: 10px;
       }
 
-      .lang-toggle {
+      .lang-switcher {
+        position: relative;
+        font-size: 0.82rem;
+      }
+      .lang-switcher summary {
+        list-style: none;
+        cursor: pointer;
         display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
         border: 1px solid var(--border-strong);
         border-radius: 999px;
-        overflow: hidden;
-        font-size: 0.82rem;
         background: var(--surface);
+        color: var(--muted);
+        font-weight: 600;
+        user-select: none;
       }
-      .lang-toggle a {
-        padding: 5px 12px;
+      .lang-switcher summary::-webkit-details-marker {
+        display: none;
+      }
+      .lang-switcher[open] summary {
+        border-color: var(--accent);
+        color: var(--text);
+      }
+      .lang-switcher__menu {
+        position: absolute;
+        inset-inline-end: 0;
+        top: calc(100% + 6px);
+        margin: 0;
+        padding: 6px;
+        list-style: none;
+        min-width: 11rem;
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
+        box-shadow: var(--shadow-md);
+        z-index: 40;
+      }
+      .lang-switcher__menu a {
+        display: block;
+        padding: 6px 10px;
+        border-radius: 8px;
         color: var(--muted);
         white-space: nowrap;
       }
-      .lang-toggle a:hover {
+      .lang-switcher__menu a:hover {
         text-decoration: none;
+        background: var(--accent-soft);
         color: var(--text);
       }
-      .lang-toggle a[aria-current='page'] {
+      .lang-switcher__menu a[aria-current='page'] {
         background: var(--accent);
         color: #fff;
         font-weight: 650;
@@ -354,7 +419,7 @@ const jsonLd = {
           row-gap: 6px;
         }
         .nav__link,
-        .lang-toggle,
+        .lang-switcher,
         .icon-link,
         .nav__actions .socials {
           flex-shrink: 0;
@@ -384,7 +449,7 @@ const jsonLd = {
         }
         /* Keep each control intact so a narrow row wraps instead of clipping. */
         .nav__link,
-        .lang-toggle,
+        .lang-switcher,
         .icon-link,
         .nav__actions .socials {
           flex-shrink: 0;
@@ -395,11 +460,11 @@ const jsonLd = {
           font-size: 0.78rem;
           white-space: nowrap;
         }
-        .lang-toggle {
+        .lang-switcher {
           font-size: 0.78rem;
         }
-        .lang-toggle a {
-          padding: 4px 6px;
+        .lang-switcher summary {
+          padding: 4px 8px;
         }
         .icon-link {
           min-width: 28px;
@@ -479,7 +544,7 @@ const jsonLd = {
       .sponsor__text strong {
         color: var(--text);
         font-weight: 700;
-        margin-right: 3px;
+        margin-inline-end: 3px;
       }
       .sponsor:hover .sponsor__text strong {
         color: var(--accent-strong);
@@ -1069,7 +1134,7 @@ const jsonLd = {
       .scan-row::before {
         content: '';
         position: absolute;
-        left: 0;
+        inset-inline-start: 0;
         top: 0;
         bottom: 0;
         width: 3px;
@@ -1160,7 +1225,7 @@ const jsonLd = {
         font-size: 0.95rem;
         color: var(--text);
         min-width: 30px;
-        text-align: right;
+        text-align: end;
       }
       .spinner {
         display: none;

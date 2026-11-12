@@ -4,24 +4,24 @@
  * `public/sponsors/` and append an entry here.
  */
 
-import type { Lang } from '../i18n/ui';
+import type { Localized } from '../i18n/types';
 
 export interface Sponsor {
   id: string;
   name: string;
   /** Outbound (referral) link; the whole banner row links here. */
-  url: Record<Lang, string>;
+  url: Localized;
   /** Path under `public/`, e.g. `/sponsors/foo.png`. */
   logo: string;
   /** Intrinsic logo size, used to reserve space and avoid layout shift. */
   logoWidth: number;
   logoHeight: number;
   /** Bold lead-in shown before the tagline. */
-  headline: Record<Lang, string>;
+  headline: Localized;
   /** One-line pitch per language. */
-  tagline: Record<Lang, string>;
+  tagline: Localized;
   /** Per-sponsor CTA button label. */
-  cta: Record<Lang, string>;
+  cta: Localized;
 }
 
 export const SPONSORS: Sponsor[] = [

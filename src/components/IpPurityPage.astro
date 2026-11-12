@@ -4,7 +4,8 @@ import LangToggle from './LangToggle.astro';
 import SocialLinks from './SocialLinks.astro';
 import Footer from './Footer.astro';
 import IpPurityCard from './IpPurityCard.astro';
-import { useTranslations, type Lang } from '../i18n/ui';
+import { localePath, type Lang } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -12,12 +13,11 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const prefix = lang === 'zh' ? '/zh' : '';
-const home = `${prefix}/`;
-const guidesHub = `${prefix}/guides/`;
-const newsHub = `${prefix}/news/`;
-const extensionPage = `${prefix}/extension/`;
-const path = `${prefix}/ip/`;
+const home = localePath(lang, '/');
+const guidesHub = localePath(lang, '/guides/');
+const newsHub = localePath(lang, '/news/');
+const extensionPage = localePath(lang, '/extension/');
+const path = localePath(lang, '/ip/');
 
 const site = Astro.site ?? new URL('https://fuck-claude.vercel.app');
 const currentUrl = new URL(path, site).href;
@@ -36,8 +36,6 @@ const breadcrumbJsonLd = {
   path={path}
   title={`${t('ip.meta.title')} | Fuck Claude`}
   description={t('ip.meta.description')}
-  enPath="/ip/"
-  zhPath="/zh/ip/"
   omitFaq
   jsonLdExtra={breadcrumbJsonLd}
 >

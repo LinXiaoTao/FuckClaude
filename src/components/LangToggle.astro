@@ -1,43 +1,41 @@
 ---
-import { languages, type Lang } from '../i18n/ui';
+import { LOCALE_CODES, LOCALES, localePath, stripLocalePrefix, type Lang } from '../i18n/locales';
+import { LOCALE_LABELS } from '../i18n/locale-labels';
+import { useTranslations } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
 }
 
 const { lang } = Astro.props;
-const pathname = Astro.url.pathname.replace(/\/index\.html$/, '/') || '/';
+const t = useTranslations(lang);
+const pathname = stripLocalePrefix(Astro.url.pathname);
+const suffix = pathname === '/' ? '/' : pathname.endsWith('/') ? pathname : `${pathname}/`;
 
-/** Map current path to the other locale while preserving guide/article paths. */
 function altPath(target: Lang): string {
-  if (target === lang) return pathname;
-
-  if (target === 'zh') {
-    if (pathname === '/' || pathname === '') return '/zh/';
-    return pathname.startsWith('/zh') ? pathname : `/zh${pathname}`;
-  }
-
-  // target === 'en'
-  if (pathname === '/zh' || pathname === '/zh/') return '/';
-  if (pathname.startsWith('/zh/')) {
-    const rest = pathname.slice(3);
-    return rest.startsWith('/') ? rest : `/${rest}`;
-  }
-  return pathname;
+  return localePath(target, suffix);
 }
 ---
 
-<div class="lang-toggle" role="group" aria-label="Language / 语言">
-  {
-    (Object.entries(languages) as [Lang, string][]).map(([code, label]) => (
-      <a
-        href={altPath(code)}
-        hreflang={code === 'zh' ? 'zh-CN' : 'en'}
-        data-lang={code}
-        aria-current={code === lang ? 'page' : undefined}
-      >
-        {label}
-      </a>
-    ))
-  }
-</div>
+<details class="lang-switcher">
+  <summary aria-label={t('lang.toggleLabel')}>
+    {LOCALE_LABELS[lang]}
+  </summary>
+  <ul class="lang-switcher__menu" role="list">
+    {
+      LOCALE_CODES.map((code) => (
+        <li>
+          <a
+            href={altPath(code)}
+            hreflang={LOCALES[code].hreflang}
+            lang={LOCALES[code].htmlLang}
+            data-lang={code}
+            aria-current={code === lang ? 'page' : undefined}
+          >
+            {LOCALE_LABELS[code]}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</details>

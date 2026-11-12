@@ -1,7 +1,9 @@
 ---
 import { getLatestCommunityPosts, POST_TAGS, type CommunityPostTag } from '../config/community-posts';
 import { getGuide } from '../config/guides';
-import { useTranslations, type Lang } from '../i18n/ui';
+import { LOCALES, localePath, type Lang } from '../i18n/locales';
+import { localize } from '../i18n/localize';
+import { useTranslations } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -12,11 +14,11 @@ interface Props {
 const { lang, limit, showMoreLink = false } = Astro.props;
 const t = useTranslations(lang);
 const items = getLatestCommunityPosts(limit);
-const newsHub = lang === 'zh' ? '/zh/news/' : '/news/';
-const guidePrefix = lang === 'zh' ? '/zh/guides/' : '/guides/';
+const newsHub = localePath(lang, '/news/');
+const guidePrefix = localePath(lang, '/guides/');
 
 function formatDate(iso: string, locale: Lang): string {
-  return new Date(iso).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', {
+  return new Date(iso).toLocaleDateString(LOCALES[locale].htmlLang, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -24,7 +26,7 @@ function formatDate(iso: string, locale: Lang): string {
 }
 
 function tagLabel(tag: CommunityPostTag, locale: Lang): string {
-  return POST_TAGS[tag][locale];
+  return localize(POST_TAGS[tag], locale);
 }
 ---
 
@@ -78,12 +80,12 @@ function tagLabel(tag: CommunityPostTag, locale: Lang): string {
             </time>
           </div>
 
-          <h3 class="community-card__title">{post.title[lang]}</h3>
-          <p class="community-card__text">{post.text[lang]}</p>
+          <h3 class="community-card__title">{localize(post.title, lang)}</h3>
+          <p class="community-card__text">{localize(post.text, lang)}</p>
 
           <div class="community-card__takeaway">
             <span class="community-card__takeaway-label">{t('community.takeaway')}</span>
-            <span>{post.takeaway[lang]}</span>
+            <span>{localize(post.takeaway, lang)}</span>
           </div>
 
           <div class="community-card__tags">
@@ -99,7 +101,7 @@ function tagLabel(tag: CommunityPostTag, locale: Lang): string {
               <p class="community-card__guide">
                 {t('community.relatedGuide')}:{' '}
                 <a href={`${guidePrefix}${post.relatedGuideSlug}/`}>
-                  {getGuide(post.relatedGuideSlug)?.title[lang]} →
+                  {getGuide(post.relatedGuideSlug) ? localize(getGuide(post.relatedGuideSlug)!.title, lang) : ''} →
                 </a>
               </p>
             )

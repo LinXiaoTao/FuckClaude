@@ -1,5 +1,7 @@
 ---
-import { useTranslations, type Lang } from '../i18n/ui';
+import { localePath, type Lang } from '../i18n/locales';
+import { localize } from '../i18n/localize';
+import { useTranslations } from '../i18n/ui';
 import { SIGNALS } from '../config/signals';
 import { getGuide, type GuideArticle } from '../config/guides';
 import LangToggle from './LangToggle.astro';
@@ -20,11 +22,11 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const home = lang === 'zh' ? '/zh/' : '/';
-const guidesHub = lang === 'zh' ? '/zh/guides/' : '/guides/';
-const newsHub = lang === 'zh' ? '/zh/news/' : '/news/';
-const extensionPage = lang === 'zh' ? '/zh/extension/' : '/extension/';
-const guideUrl = (slug: string) => (lang === 'zh' ? `/zh/guides/${slug}/` : `/guides/${slug}/`);
+const home = localePath(lang, '/');
+const guidesHub = localePath(lang, '/guides/');
+const newsHub = localePath(lang, '/news/');
+const extensionPage = localePath(lang, '/extension/');
+const guideUrl = (slug: string) => localePath(lang, `/guides/${slug}/`);
 const FEATURED_GUIDE_SLUGS = [
   'antiban-essentials',
   'environment-cleanup-and-ip-setup',
@@ -316,7 +318,7 @@ const apiExamples = [
         <h2 id="guides-title">{t('guides.title')}</h2>
         <p>{t('guides.sub')}</p>
       </div>
-      <a class="nav__link" href={lang === 'zh' ? '/zh/guides/' : '/guides/'}>
+      <a class="nav__link" href={guidesHub}>
         <span>{t('guides.readMore')} →</span>
       </a>
     </div>
@@ -324,7 +326,7 @@ const apiExamples = [
       {
         featuredGuides.map((guide) => (
           <a class="guide-box" href={guideUrl(guide.slug)}>
-            <h3>{guide.title[lang]}</h3>
+            <h3>{localize(guide.title, lang)}</h3>
             <p>{guide.summary[lang]}</p>
             <span class="guide-box__more">{t('guides.readMore')} →</span>
           </a>
@@ -361,7 +363,7 @@ const apiExamples = [
         <h2>{t('privacy.title')}</h2>
         <p>{t('privacy.body')}</p>
         <p class="privacy__link">
-          <a href={lang === 'zh' ? '/zh/privacy/' : '/privacy/'}>{t('privacy.fullPolicy')}</a>
+          <a href={localePath(lang, '/privacy/')}>{t('privacy.fullPolicy')}</a>
         </p>
       </div>
     </div>

@@ -4,7 +4,8 @@
  * apps (Douyin / Xiaohongshu / TikTok). Everything is drawn on a canvas from
  * same-origin assets, so the result never leaves the browser.
  */
-import type { Lang } from '../i18n/ui';
+import type { Lang } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui-client';
 import type { RiskBand } from '../config/signals';
 
 export interface CardHit {
@@ -214,11 +215,8 @@ export async function renderResultCard(d: CardData): Promise<Blob | null> {
   ctx.fillStyle = C.muted2;
   ctx.font = `500 26px ${SANS}`;
   ctx.textAlign = 'center';
-  ctx.fillText(
-    d.lang === 'zh' ? '在 fuck-claude.vercel.app 测测你的' : 'Measure yours at fuck-claude.vercel.app',
-    SIZE / 2,
-    SIZE - 68,
-  );
+  const tShare = useTranslations(d.lang);
+  ctx.fillText(tShare('share.cardFooter'), SIZE / 2, SIZE - 68);
 
   return await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/png'));
 }

@@ -1,0 +1,23 @@
+---
+import TrustPageShell from '../../components/TrustPageShell.astro';
+import { resolveTrustPageBody } from '../../content/trust/resolve';
+import { PREFIXED_LOCALES, isLang, localePath, type Lang } from '../../i18n/locales';
+import { useTranslations } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return PREFIXED_LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const raw = Astro.params.lang ?? '';
+if (!isLang(raw)) throw new Error(`Invalid locale: ${raw}`);
+const lang = raw as Lang;
+const t = useTranslations(lang);
+---
+
+<TrustPageShell
+  lang={lang}
+  path={localePath(lang, '/contact/')}
+  title={t('trust.contact.title')}
+  description={t('trust.contact.description')}
+  body={resolveTrustPageBody('contact', lang)}
+/>

@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Detector from '../../components/Detector.astro';
+import { PREFIXED_LOCALES, isLang, localePath, type Lang } from '../../i18n/locales';
+
+export function getStaticPaths() {
+  return PREFIXED_LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const raw = Astro.params.lang ?? '';
+if (!isLang(raw)) {
+  throw new Error(`Invalid locale: ${raw}`);
+}
+const lang = raw as Lang;
+const path = localePath(lang, '/');
+---
+
+<BaseLayout lang={lang} path={path}>
+  <Detector lang={lang} path={path} />
+</BaseLayout>

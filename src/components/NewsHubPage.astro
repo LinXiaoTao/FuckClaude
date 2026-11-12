@@ -1,18 +1,26 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import LangToggle from '../../../components/LangToggle.astro';
-import SocialLinks from '../../../components/SocialLinks.astro';
-import Footer from '../../../components/Footer.astro';
-import ClaudeNews from '../../../components/ClaudeNews.astro';
-import CommunityPosts from '../../../components/CommunityPosts.astro';
-import { useTranslations } from '../../../i18n/ui';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LangToggle from './LangToggle.astro';
+import SocialLinks from './SocialLinks.astro';
+import Footer from './Footer.astro';
+import ClaudeNews from './ClaudeNews.astro';
+import CommunityPosts from './CommunityPosts.astro';
+import I18nNotice from './I18nNotice.astro';
+import { localePath, type Lang } from '../i18n/locales';
+import { translationNoticeApplies } from '../i18n/ui';
+import { useTranslations } from '../i18n/ui';
 
-const lang = 'zh';
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
 const t = useTranslations(lang);
-const home = '/zh/';
-const guidesHub = '/zh/guides/';
-const newsHub = '/zh/news/';
-const extensionPage = '/zh/extension/';
+const home = localePath(lang, '/');
+const guidesHub = localePath(lang, '/guides/');
+const newsHub = localePath(lang, '/news/');
+const extensionPage = localePath(lang, '/extension/');
+const showNotice = translationNoticeApplies(lang, 'fallback');
 
 const site = Astro.site ?? new URL('https://fuck-claude.vercel.app');
 const currentUrl = new URL(newsHub, site).href;
@@ -21,29 +29,17 @@ const homeUrl = new URL(home, site).href;
 const breadcrumbJsonLd = {
   '@type': 'BreadcrumbList',
   itemListElement: [
-    {
-      '@type': 'ListItem',
-      position: 1,
-      name: t('nav.home'),
-      item: homeUrl,
-    },
-    {
-      '@type': 'ListItem',
-      position: 2,
-      name: t('news.title'),
-      item: currentUrl,
-    },
+    { '@type': 'ListItem', position: 1, name: t('nav.home'), item: homeUrl },
+    { '@type': 'ListItem', position: 2, name: t('news.title'), item: currentUrl },
   ],
 };
 ---
 
 <BaseLayout
   lang={lang}
-  path="/zh/news/"
+  path={newsHub}
   title={`${t('news.title')} | Fuck Claude`}
   description={t('news.sub')}
-  enPath="/news/"
-  zhPath="/zh/news/"
   omitFaq
   jsonLdExtra={breadcrumbJsonLd}
 >
@@ -75,6 +71,7 @@ const breadcrumbJsonLd = {
 
   <main class="wrap">
     <section class="news-hero">
+      {showNotice && <I18nNotice lang={lang} />}
       <nav class="breadcrumb" aria-label="Breadcrumb">
         <ol>
           <li><a href={home}>{t('nav.home')}</a></li>

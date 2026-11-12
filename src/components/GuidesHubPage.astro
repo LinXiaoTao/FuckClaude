@@ -6,7 +6,8 @@ import Footer from './Footer.astro';
 import ClaudeNews from './ClaudeNews.astro';
 import OfficialRules from './OfficialRules.astro';
 import GuideCatalog from './GuideCatalog.astro';
-import { useTranslations, type Lang } from '../i18n/ui';
+import { localePath, type Lang } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -14,11 +15,10 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const prefix = lang === 'zh' ? '/zh' : '';
-const home = `${prefix}/`;
-const newsHub = `${prefix}/news/`;
-const guidesHub = `${prefix}/guides/`;
-const extensionPage = `${prefix}/extension/`;
+const home = localePath(lang, '/');
+const newsHub = localePath(lang, '/news/');
+const guidesHub = localePath(lang, '/guides/');
+const extensionPage = localePath(lang, '/extension/');
 
 const readingPaths = [
   { slug: 'antiban-essentials', key: 'path0' },
@@ -57,8 +57,6 @@ const breadcrumbJsonLd = {
   path={guidesHub}
   title={`${t('guides.title')} | Fuck Claude`}
   description={t('guides.sub')}
-  enPath="/guides/"
-  zhPath="/zh/guides/"
   omitFaq
   jsonLdExtra={breadcrumbJsonLd}
 >

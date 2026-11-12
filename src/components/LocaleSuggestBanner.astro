@@ -1,13 +1,19 @@
 ---
-import { languages, type Lang } from '../i18n/ui';
+import { LOCALE_CODES, LOCALES, type Lang } from '../i18n/locales';
+import { LOCALE_LABELS } from '../i18n/locale-labels';
+import { useTranslations } from '../i18n/ui';
 
 interface Props {
   currentLang: Lang;
-  enPath?: string;
-  zhPath?: string;
+  alternateUrls: Record<Lang, string>;
 }
 
-const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
+const { currentLang, alternateUrls } = Astro.props;
+const t = useTranslations(currentLang);
+const localeJson = JSON.stringify(
+  Object.fromEntries(LOCALE_CODES.map((code) => [code, alternateUrls[code]])),
+);
+const labelsJson = JSON.stringify(LOCALE_LABELS);
 ---
 
 <aside
@@ -16,17 +22,13 @@ const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
   role="region"
   aria-label="Language recommendation banner"
   data-current-lang={currentLang}
-  data-en-url={enPath}
-  data-zh-url={zhPath}
+  data-locale-urls={localeJson}
+  data-locale-labels={labelsJson}
   style="display: none;"
 >
   <div class="locale-banner-inner">
     <div class="locale-banner-text">
-      <span id="locale-banner-message">
-        {currentLang === 'zh'
-          ? '选择另一语言以浏览适用于你浏览器语言偏好的内容。'
-          : 'Choose another language to browse content adapted for your browser language preference.'}
-      </span>
+      <span id="locale-banner-message">{t('banner.prompt')}</span>
     </div>
 
     <div class="locale-banner-controls">
@@ -34,20 +36,23 @@ const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
         <svg class="locale-banner-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
-        <select id="locale-banner-select" class="locale-banner-select" aria-label="Select preferred language">
-          <option value="en" selected={currentLang !== 'en'}>English</option>
-          <option value="zh" selected={currentLang !== 'zh'}>中文</option>
+        <select id="locale-banner-select" class="locale-banner-select" aria-label={t('lang.toggleLabel')}>
+          {
+            LOCALE_CODES.map((code) => (
+              <option value={code}>{LOCALE_LABELS[code]}</option>
+            ))
+          }
         </select>
         <svg class="locale-banner-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
       </div>
 
-      <a id="locale-banner-continue" href={currentLang === 'zh' ? enPath : zhPath} class="locale-banner-button">
-        {currentLang === 'zh' ? '继续' : 'Continue'}
+      <a id="locale-banner-continue" href={alternateUrls[currentLang]} class="locale-banner-button">
+        {t('banner.continue')}
       </a>
 
-      <button id="locale-banner-close" class="locale-banner-close" aria-label="Close suggestion banner" type="button">
+      <button id="locale-banner-close" class="locale-banner-close" aria-label={t('banner.dismiss')} type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -69,14 +74,25 @@ const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
       }
 
       const currentLang = banner.getAttribute('data-current-lang') || 'en';
-      const enUrl = banner.getAttribute('data-en-url') || '/';
-      const zhUrl = banner.getAttribute('data-zh-url') || '/zh/';
+      const urls = JSON.parse(banner.getAttribute('data-locale-urls') || '{}');
 
-      const primary = (navigator.languages && navigator.languages[0]) || navigator.language || '';
-      const userWantsZh = /^zh/i.test(primary);
-      const detectedLang = userWantsZh ? 'zh' : 'en';
+      function normalizeTag(tag) {
+        return (tag || '').trim().toLowerCase().replace(/_/g, '-');
+      }
 
-      // Only display the banner when detected browser language differs from current page language
+      function pickFromNavigator() {
+        const list = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
+        for (const raw of list) {
+          const tag = normalizeTag(raw);
+          if (tag in urls) return tag;
+          if (tag === 'zh' || tag.startsWith('zh-')) return 'zh';
+          const base = tag.split('-')[0];
+          if (base in urls) return base;
+        }
+        return 'en';
+      }
+
+      const detectedLang = pickFromNavigator();
       if (detectedLang === currentLang) {
         return;
       }
@@ -84,15 +100,14 @@ const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
       const select = document.getElementById('locale-banner-select');
       const continueBtn = document.getElementById('locale-banner-continue');
       const closeBtn = document.getElementById('locale-banner-close');
-      const msg = document.getElementById('locale-banner-message');
 
-      if (select) {
+      if (select && urls[detectedLang]) {
         select.value = detectedLang;
       }
 
       function updateContinueTarget() {
         if (!select || !continueBtn) return;
-        const target = select.value === 'zh' ? zhUrl : enUrl;
+        const target = urls[select.value] || urls.en || '/';
         continueBtn.setAttribute('href', target);
       }
 
@@ -141,6 +156,7 @@ const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
     flex: 1 1 320px;
     color: #1d1d1f;
     font-weight: 400;
+    text-align: start;
   }
 
   .locale-banner-controls {
@@ -164,7 +180,7 @@ const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
 
   .locale-banner-check {
     position: absolute;
-    left: 8px;
+    inset-inline-start: 8px;
     width: 13px;
     height: 13px;
     color: #1d1d1f;
@@ -173,7 +189,7 @@ const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
 
   .locale-banner-chevron {
     position: absolute;
-    right: 8px;
+    inset-inline-end: 8px;
     width: 12px;
     height: 12px;
     color: #86868b;
@@ -189,7 +205,7 @@ const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
     color: #1d1d1f;
     outline: none;
     cursor: pointer;
-    padding-right: 4px;
+    padding-inline-end: 4px;
   }
 
   .locale-banner-button {
@@ -215,7 +231,7 @@ const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
     background: transparent;
     border: none;
     padding: 4px;
-    margin-left: 4px;
+    margin-inline-start: 4px;
     color: #1d1d1f;
     cursor: pointer;
     display: inline-flex;
@@ -252,7 +268,7 @@ const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
     .locale-banner-text {
       flex: 0 1 auto;
       width: 100%;
-      padding-right: 44px;
+      padding-inline-end: 44px;
     }
 
     .locale-banner-controls {
@@ -283,7 +299,7 @@ const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
     .locale-banner-close {
       position: absolute;
       top: 2px;
-      right: max(4px, env(safe-area-inset-right));
+      inset-inline-end: max(4px, env(safe-area-inset-right));
       width: 44px;
       height: 44px;
       min-width: 44px;
@@ -292,7 +308,7 @@ const { currentLang, enPath = '/', zhPath = '/zh/' } = Astro.props;
       align-items: center;
       justify-content: center;
       padding: 12px;
-      margin-left: 0;
+      margin-inline-start: 0;
       border-radius: 50%;
     }
   }

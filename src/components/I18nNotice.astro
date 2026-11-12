@@ -1,0 +1,41 @@
+---
+import { LOCALES, defaultLang, localePath, type Lang } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const enUrl = localePath(defaultLang, Astro.url.pathname);
+---
+
+{
+  lang !== 'en' && lang !== 'zh' && (
+    <aside class="i18n-notice" role="note">
+      <p>
+        {t('i18n.notice')}{' '}
+        <a href={enUrl}>{t('i18n.noticeLink')}</a>
+      </p>
+    </aside>
+  )
+}
+
+<style>
+  .i18n-notice {
+    margin: 0 0 16px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-soft);
+    font-size: 0.86rem;
+    color: var(--muted);
+  }
+  .i18n-notice p {
+    margin: 0;
+  }
+  [dir='rtl'] .i18n-notice {
+    text-align: start;
+  }
+</style>

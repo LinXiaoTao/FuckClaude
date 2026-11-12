@@ -1,7 +1,9 @@
 ---
 import { GUIDE_CATEGORIES, GUIDE_CATEGORY_ORDER, LISTED_GUIDES } from '../config/guides';
-import { GUIDE_CONTENT } from '../content/guidesData';
-import { useTranslations, type Lang } from '../i18n/ui';
+import { resolveGuideBody } from '../i18n/guide-content';
+import { localePath, type Lang } from '../i18n/locales';
+import { localize } from '../i18n/localize';
+import { useTranslations } from '../i18n/ui';
 import { estimateReadMinutes } from '../utils/guide-html';
 
 interface Props {
@@ -10,7 +12,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const guidePrefix = lang === 'zh' ? '/zh/guides/' : '/guides/';
+const guidePrefix = localePath(lang, '/guides/');
 
 const groups = GUIDE_CATEGORY_ORDER.map((category) => ({
   category,
@@ -18,7 +20,7 @@ const groups = GUIDE_CATEGORY_ORDER.map((category) => ({
 })).filter((group) => group.guides.length > 0);
 
 function readTime(slug: string): string {
-  const minutes = estimateReadMinutes(GUIDE_CONTENT[slug][lang], lang);
+  const minutes = estimateReadMinutes(resolveGuideBody(slug, lang).html, lang);
   return t('guides.readTime').replace('{n}', String(minutes));
 }
 ---
@@ -29,7 +31,7 @@ function readTime(slug: string): string {
     {
       groups.map((group) => (
         <a href={`#cat-${group.category}`}>
-          {GUIDE_CATEGORIES[group.category][lang]}
+          {localize(GUIDE_CATEGORIES[group.category], lang)}
           <span class="catalog__count">{group.guides.length}</span>
         </a>
       ))
@@ -39,7 +41,7 @@ function readTime(slug: string): string {
   {
     groups.map((group) => (
       <section class="catalog__group" aria-labelledby={`cat-${group.category}`}>
-        <h3 id={`cat-${group.category}`}>{GUIDE_CATEGORIES[group.category][lang]}</h3>
+        <h3 id={`cat-${group.category}`}>{localize(GUIDE_CATEGORIES[group.category], lang)}</h3>
         <div class="catalog__grid">
           {group.guides.map((guide) => (
             <article class="guide-card">
@@ -48,9 +50,9 @@ function readTime(slug: string): string {
                 <span class="guide-card__time">{guide.updatedAt}</span>
               </div>
               <h4>
-                <a href={`${guidePrefix}${guide.slug}/`}>{guide.title[lang]}</a>
+                <a href={`${guidePrefix}${guide.slug}/`}>{localize(guide.title, lang)}</a>
               </h4>
-              <p>{guide.summary[lang]}</p>
+              <p>{localize(guide.summary, lang)}</p>
               <a class="guide-card__link" href={`${guidePrefix}${guide.slug}/`}>
                 {t('guides.readMore')} →
               </a>

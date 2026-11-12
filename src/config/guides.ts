@@ -15,10 +15,9 @@ export type GuideCategory =
   | 'alternatives'
   | 'detection';
 
-export interface LocalizedText {
-  en: string;
-  zh: string;
-}
+import type { Localized as LocalizedText } from '../i18n/types';
+
+export type { LocalizedText };
 
 export interface GuideSource {
   name: LocalizedText;

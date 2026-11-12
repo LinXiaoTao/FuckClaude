@@ -1,0 +1,20 @@
+---
+import GuideArticlePage from '../../../components/GuideArticlePage.astro';
+import { GUIDES } from '../../../config/guides';
+import { PREFIXED_LOCALES, isLang, type Lang } from '../../../i18n/locales';
+
+export function getStaticPaths() {
+  return PREFIXED_LOCALES.flatMap((lang) =>
+    GUIDES.map((guide) => ({
+      params: { lang, slug: guide.slug },
+    })),
+  );
+}
+
+const rawLang = Astro.params.lang ?? '';
+const slug = Astro.params.slug ?? '';
+if (!isLang(rawLang)) throw new Error(`Invalid locale: ${rawLang}`);
+const lang = rawLang as Lang;
+---
+
+<GuideArticlePage lang={lang} slug={slug} />

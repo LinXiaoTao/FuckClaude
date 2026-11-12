@@ -1,5 +1,7 @@
 ---
-import { useTranslations, type Lang } from '../i18n/ui';
+import { localize } from '../i18n/localize';
+import type { Lang } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui';
 import { SPONSORS } from '../config/sponsors';
 
 interface Props {
@@ -21,7 +23,7 @@ const t = useTranslations(lang);
           <li>
             <a
               class="sponsor"
-              href={sponsor.url[lang]}
+              href={localize(sponsor.url, lang)}
               target="_blank"
               rel="sponsored nofollow noopener noreferrer"
               data-ga-event="sponsor_click"
@@ -35,11 +37,11 @@ const t = useTranslations(lang);
                 alt={sponsor.name}
               />
               <p class="sponsor__text">
-                <strong>{sponsor.headline[lang]}</strong>
-                {sponsor.tagline[lang]}
+                <strong>{localize(sponsor.headline, lang)}</strong>
+                {localize(sponsor.tagline, lang)}
               </p>
               <span class="sponsor__btn">
-                {sponsor.cta[lang]}
+                {localize(sponsor.cta, lang)}
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M5 12h14"></path>
                   <path d="m13 6 6 6-6 6"></path>

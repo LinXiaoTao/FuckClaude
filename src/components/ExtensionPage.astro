@@ -5,7 +5,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import LangToggle from './LangToggle.astro';
 import SocialLinks from './SocialLinks.astro';
 import Footer from './Footer.astro';
-import { useTranslations, type Lang } from '../i18n/ui';
+import { localePath, type Lang } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -13,11 +14,10 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const prefix = lang === 'zh' ? '/zh' : '';
-const home = `${prefix}/`;
-const guidesHub = `${prefix}/guides/`;
-const newsHub = `${prefix}/news/`;
-const extensionPage = `${prefix}/extension/`;
+const home = localePath(lang, '/');
+const guidesHub = localePath(lang, '/guides/');
+const newsHub = localePath(lang, '/news/');
+const extensionPage = localePath(lang, '/extension/');
 
 const extPkg = JSON.parse(readFileSync(join(process.cwd(), 'extension/package.json'), 'utf8')) as {
   version?: string;
@@ -82,8 +82,6 @@ function formatBytes(bytes: number): string {
   path={extensionPage}
   title={`${t('ext.title')} | Fuck Claude`}
   description={t('ext.description')}
-  enPath="/extension/"
-  zhPath="/zh/extension/"
   omitFaq
   jsonLdExtra={breadcrumbJsonLd}
 >

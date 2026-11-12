@@ -1,5 +1,6 @@
 ---
-import { useTranslations, type Lang } from '../i18n/ui';
+import { localePath, type Lang } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -9,10 +10,9 @@ interface Props {
 
 const { lang, variant = 'card' } = Astro.props;
 const t = useTranslations(lang);
-const prefix = lang === 'zh' ? '/zh' : '';
-const detailsHref = `${prefix}/ip/`;
-const extensionHref = `${prefix}/extension/`;
-const guideHref = `${prefix}/guides/environment-cleanup-and-ip-setup/`;
+const detailsHref = localePath(lang, '/ip/');
+const extensionHref = localePath(lang, '/extension/');
+const guideHref = localePath(lang, '/guides/environment-cleanup-and-ip-setup/');
 ---
 
 <section

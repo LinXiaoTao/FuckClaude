@@ -6,8 +6,11 @@ import AuthorByline from './AuthorByline.astro';
 import Footer from './Footer.astro';
 import { GUIDE_CATEGORIES, getGuide, getRelatedGuides, toIsoDate } from '../config/guides';
 import { SITE_AUTHOR } from '../config/site';
-import { GUIDE_CONTENT } from '../content/guidesData';
-import { useTranslations, type Lang } from '../i18n/ui';
+import I18nNotice from './I18nNotice.astro';
+import { resolveGuideBody } from '../i18n/guide-content';
+import { LOCALES, localePath, type Lang } from '../i18n/locales';
+import { localize, translationNoticeApplies } from '../i18n/localize';
+import { useTranslations } from '../i18n/ui';
 import { estimateReadMinutes, prepareArticleHtml } from '../utils/guide-html';
 
 interface Props {
@@ -17,23 +20,23 @@ interface Props {
 
 const { lang, slug } = Astro.props;
 const guide = getGuide(slug);
-const content = GUIDE_CONTENT[slug];
 
-if (!guide || !content) {
+if (!guide) {
   throw new Error(`Guide not found for slug: ${slug}`);
 }
 
 const t = useTranslations(lang);
-const prefix = lang === 'zh' ? '/zh' : '';
-const home = `${prefix}/`;
-const guidesHub = `${prefix}/guides/`;
-const newsHub = `${prefix}/news/`;
-const extensionPage = `${prefix}/extension/`;
-const articlePath = `${guidesHub}${slug}/`;
+const home = localePath(lang, '/');
+const guidesHub = localePath(lang, '/guides/');
+const newsHub = localePath(lang, '/news/');
+const extensionPage = localePath(lang, '/extension/');
+const articlePath = localePath(lang, `/guides/${slug}/`);
 
-const title = guide.title[lang];
-const summary = guide.summary[lang];
-const rawHtml = content[lang];
+const title = localize(guide.title, lang);
+const summary = localize(guide.summary, lang);
+const { html: rawHtml, source: bodySource } = resolveGuideBody(slug, lang);
+const showNotice = translationNoticeApplies(lang, bodySource);
+const thinEnDuplicate = bodySource === 'fallback' && lang !== 'en' && lang !== 'zh';
 const { html, toc } = prepareArticleHtml(rawHtml, t('guides.tableLabel'));
 const readTime = t('guides.readTime').replace('{n}', String(estimateReadMinutes(rawHtml, lang)));
 const relatedGuides = getRelatedGuides(guide);
@@ -61,9 +64,15 @@ const jsonLdExtra = [
     },
     datePublished: toIsoDate(guide.publishedAt),
     dateModified: toIsoDate(guide.updatedAt),
-    inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
+    inLanguage: LOCALES[lang].htmlLang,
     ...(guide.sources
-      ? { citation: guide.sources.map((source) => ({ '@type': 'CreativeWork', name: source.name[lang], url: source.url })) }
+      ? {
+          citation: guide.sources.map((source) => ({
+            '@type': 'CreativeWork',
+            name: localize(source.name, lang),
+            url: source.url,
+          })),
+        }
       : {}),
   },
   {
@@ -82,10 +91,10 @@ const jsonLdExtra = [
   path={articlePath}
   title={`${title} | Fuck Claude`}
   description={summary}
-  enPath={`/guides/${slug}/`}
-  zhPath={`/zh/guides/${slug}/`}
   omitFaq
   jsonLdExtra={jsonLdExtra}
+  omitHreflangFor={thinEnDuplicate ? lang : undefined}
+  robotsNoindex={thinEnDuplicate}
 >
   <header class="nav">
     <div class="wrap nav__inner">
@@ -125,9 +134,11 @@ const jsonLdExtra = [
         </ol>
       </nav>
 
+      {showNotice && <I18nNotice lang={lang} />}
+
       <header class="article__header">
         <div class="article__meta">
-          <span class="article__tag">{GUIDE_CATEGORIES[guide.category][lang]}</span>
+          <span class="article__tag">{localize(GUIDE_CATEGORIES[guide.category], lang)}</span>
           <span class="article__time">{readTime}</span>
         </div>
         <AuthorByline lang={lang} updatedAt={guide.updatedAt} />
@@ -168,7 +179,7 @@ const jsonLdExtra = [
               {guide.sources.map((source) => (
                 <li>
                   <a href={source.url} target="_blank" rel="noopener noreferrer">
-                    {source.name[lang]} ↗
+                    {localize(source.name, lang)} ↗
                   </a>
                 </li>
               ))}
@@ -183,9 +194,9 @@ const jsonLdExtra = [
           {
             relatedGuides.map((g) => (
               <a class="related-card" href={`${guidesHub}${g.slug}/`}>
-                <span class="related-card__tag">{GUIDE_CATEGORIES[g.category][lang]}</span>
-                <span class="related-card__title">{g.title[lang]}</span>
-                <span class="related-card__sum">{g.summary[lang]}</span>
+                <span class="related-card__tag">{localize(GUIDE_CATEGORIES[g.category], lang)}</span>
+                <span class="related-card__title">{localize(g.title, lang)}</span>
+                <span class="related-card__sum">{localize(g.summary, lang)}</span>
               </a>
             ))
           }
