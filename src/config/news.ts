@@ -26,6 +26,306 @@ export const NEWS_CATEGORIES: Record<NewsCategory, { en: string; zh: string }> =
 
 export const CLAUDE_NEWS: NewsItem[] = [
   {
+    id: 'fable-52-overload-incident-nov-2026',
+    category: 'product',
+    publishedAt: '2026-11-10',
+    title: {
+      en: 'Claude API reports ~4 minutes of overload errors on Fable 5.2 and Mythos 5.2',
+      zh: 'Claude API：Fable 5.2 与 Mythos 5.2 出现约 4 分钟过载错误',
+    },
+    summary: {
+      en: 'On November 10, 2026, Anthropic\'s status page logged an incident of elevated errors on Claude Fable 5.2 and Claude Mythos 5.2. The update describes overloaded errors lasting about four minutes on the Claude API; Anthropic marked the incident resolved after mitigation. Separate incidents on November 8 concerned degraded performance on Claude Fable 5.1 across claude.ai, the API, Claude Code, and Cowork.',
+      zh: '2026 年 11 月 10 日，Anthropic 状态页记录 Claude Fable 5.2 与 Claude Mythos 5.2 的错误率升高。官方更新称 Claude API 上出现约四分钟的过载（overloaded）错误，缓解后事件已标记为已解决。11 月 8 日另一起事件涉及 Claude Fable 5.1 在 claude.ai、API、Claude Code 与 Cowork 上的性能下降。',
+    },
+    takeaway: {
+      en: 'Build retries and model fallbacks for Fable-tier production traffic; launch-week overloads can be brief but hit all platforms at once.',
+      zh: 'Fable 级生产流量请配置重试与模型 fallback；发布周短暂过载可能同时影响各接入面。',
+    },
+    relatedGuideSlug: 'troubleshooting-guide',
+    sourceUrl: 'https://status.claude.com/incidents/pgz8r13pk4sm',
+    sourceName: 'Claude Status',
+  },
+  {
+    id: 'claude-code-2-1-321-fable-52-default',
+    category: 'product',
+    publishedAt: '2026-11-09',
+    title: {
+      en: 'Claude Code 2.1.321 sets Claude Fable 5.2 as the default Fable model',
+      zh: 'Claude Code 2.1.321 将 Claude Fable 5.2 设为默认 Fable 模型',
+    },
+    summary: {
+      en: 'Claude Code 2.1.321 adds Claude Fable 5.2 (`claude-fable-5-2`) as the default Fable model, with 1M context and pricing at $8 / $40 per MTok plus $0.20 / MTok cache reads. The release also hardens sandbox and permission checks: deny rules and protected-file prompts apply to files written by `cp` or `mv`, some read-only Bash commands no longer skip prompts, and MCP OAuth no longer sends refresh tokens to unintended hosts after redirects. Remote-control sessions can load a settings file via `--settings`.',
+      zh: 'Claude Code 2.1.321 将 Claude Fable 5.2（`claude-fable-5-2`）设为默认 Fable 模型，支持 1M 上下文，定价 $8 / $40 per MTok，缓存读取 $0.20 / MTok。该版本还加强沙箱与权限：`cp` / `mv` 写入的文件受 deny 规则与受保护文件提示约束；部分只读 Bash 不再跳过确认；MCP OAuth 重定向后不再把 refresh token 发往错误主机。`claude remote-control` 可用 `--settings` 为所启会话加载设置文件。',
+    },
+    takeaway: {
+      en: 'After upgrading past 2.1.321, expect Fable-tier defaults and re-test auto mode and Bash allowlists around copy/move workflows.',
+      zh: '升级到 2.1.321 后默认模型会切到 Fable 5.2，请重新验证 auto mode 以及涉及复制/移动的 Bash 放行规则。',
+    },
+    relatedGuideSlug: 'claude-code-and-api-safety',
+    sourceUrl: 'https://github.com/anthropics/claude-code/releases/tag/v2.1.321',
+    sourceName: 'Anthropic',
+  },
+  {
+    id: 'claude-fable-mythos-5-2-launch',
+    category: 'product',
+    publishedAt: '2026-11-09',
+    title: {
+      en: 'Claude Fable 5.2 and Mythos 5.2 launch at $8/$40 with optional fast mode',
+      zh: 'Claude Fable 5.2 与 Mythos 5.2 发布，定价 $8/$40，可选 fast mode',
+    },
+    summary: {
+      en: 'Anthropic released Claude Fable 5.2 (`claude-fable-5-2`) and Claude Mythos 5.2 (`claude-mythos-5-2`) on November 9, 2026. Both models share the same weights: Fable is generally available while Mythos is limited to verified Cyber and Life Sciences Verification Program members. Input and output pricing drops to $8 / $40 per MTok from $10 / $50 on Fable 5.1, with Fable 5.2 cache reads at $0.20 / MTok. Fast mode (`speed: "fast"`) offers up to 2.5× output speed at $16 / $80 per MTok. On the API, both enforce prefix checks on every account for preserved thinking, require `computer_toolset_20260801`, reject `computer_20251124` except on Amazon Bedrock, and bind thinking blocks to the producing account.',
+      zh: 'Anthropic 于 2026 年 11 月 9 日发布 Claude Fable 5.2（`claude-fable-5-2`）与 Claude Mythos 5.2（`claude-mythos-5-2`），二者为同一权重：Fable 面向公众，Mythos 限已通过 Cyber 与 Life Sciences Verification Program 审核的组织。输入/输出定价由 Fable 5.1 的 $10 / $50 per MTok 降至 $8 / $40，Fable 5.2 缓存读取为 $0.20 / MTok。fast mode（`speed: "fast"`）可将输出提速最高约 2.5 倍，定价 $16 / $80 per MTok。API 上二者对所有账号强制执行前缀校验（preserved thinking），需使用 `computer_toolset_20260801`，除 Amazon Bedrock 外拒绝 `computer_20251124`，thinking block 与生成账号绑定。',
+    },
+    takeaway: {
+      en: 'Audit prefix edits and computer-use tool IDs before pointing agent pipelines at Fable 5.2; Mythos 5.2 still needs program verification, not a model alias swap.',
+      zh: 'Agent 流水线切到 Fable 5.2 前请检查前缀篡改与 computer use 工具 ID；Mythos 5.2 仍需验证计划准入，不能仅靠改 model 别名。',
+    },
+    relatedGuideSlug: 'api-advanced-optimization',
+    sourceUrl: 'https://www.anthropic.com/claude-fable-and-mythos-5-2',
+    sourceName: 'Anthropic',
+  },
+  {
+    id: 'claude-code-2-1-319-auto-mode-gateway',
+    category: 'security',
+    publishedAt: '2026-11-06',
+    title: {
+      en: 'Claude Code 2.1.319 tightens auto mode behind LLM gateways and adds `denyInsteadOfPrompting`',
+      zh: 'Claude Code 2.1.319：网关后加强 auto mode，新增 `denyInsteadOfPrompting`',
+    },
+    summary: {
+      en: 'Claude Code 2.1.319 changes auto mode when telemetry or feature flags are off, including behind custom LLM gateways: tool calls the server cannot evaluate are now denied or prompted manually, with no fallback to the built-in classifier unless `CLAUDE_CODE_AUTO_MODE_SERVER=0`. Behind a gateway, `CLAUDE_CODE_AUTO_MODE_SERVER=1` enables server-side checks even when `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS` is set. The release adds `permissions.denyInsteadOfPrompting` to deny calls that would block on a permission prompt and continue the turn, adds background handling for MCP task tools, and warns when a session falls back to `ant auth login` billing after a claude.ai login expires.',
+      zh: 'Claude Code 2.1.319 在关闭 telemetry 或 feature flags、尤其是位于自定义 LLM 网关之后时，调整 auto mode：服务端无法评估的工具调用会被拒绝或改用手动确认，不再回退到内置分类器，除非设置 `CLAUDE_CODE_AUTO_MODE_SERVER=0`。在网关后，`CLAUDE_CODE_AUTO_MODE_SERVER=1` 即使在 `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS` 开启时也会启用服务端检查。该版本新增 `permissions.denyInsteadOfPrompting`（本可弹窗确认的调用直接拒绝并继续对话），支持将 MCP task 工具放入后台执行，并在 claude.ai 登录过期回退到 `ant auth login` 计费时给出警告。',
+    },
+    takeaway: {
+      en: 'Gateway deployments must expose auto-mode checks or expect more denials after 2.1.319; document whether Console org billing replaces claude.ai login on shared runners.',
+      zh: '网关部署需打通 auto mode 服务端评估，否则 2.1.319 起拒答会增多；共享 runner 上应明确 Console 组织计费是否取代 claude.ai 登录。',
+    },
+    relatedGuideSlug: 'claude-code-and-api-safety',
+    sourceUrl: 'https://github.com/anthropics/claude-code/releases/tag/v2.1.319',
+    sourceName: 'Anthropic',
+  },
+  {
+    id: 'console-ip-allowlist-nov-2026',
+    category: 'security',
+    publishedAt: '2026-11-05',
+    title: {
+      en: 'Claude Console beta adds organization IP allowlists for API keys',
+      zh: 'Claude Console beta 支持组织级 API IP 允许列表',
+    },
+    summary: {
+      en: 'Anthropic added an organization IP allowlist in the Claude Console, in beta. Requests to covered services from addresses outside the list are refused, limiting where a leaked API key can be used. Organizations can add IPv4 and IPv6 addresses or CIDR ranges, up to 1,000 entries per organization.',
+      zh: 'Anthropic 在 Claude Console 以 beta 形式推出组织 IP 允许列表。名单外地址对受覆盖服务的请求将被拒绝，从而限制泄露 API 密钥的可滥用范围。组织可添加 IPv4、IPv6 或 CIDR，每个组织最多 1,000 条。',
+    },
+    takeaway: {
+      en: 'Pair IP allowlists with workspace-scoped keys so a stolen laptop key cannot call the API from arbitrary egress.',
+      zh: '将 IP 允许列表与工作区范围密钥配合使用，避免笔记本泄露的密钥在任意出口调用 API。',
+    },
+    relatedGuideSlug: 'api-advanced-optimization',
+    sourceUrl: 'https://platform.claude.com/docs/en/release-notes/overview',
+    sourceName: 'Anthropic Docs',
+  },
+  {
+    id: 'messages-api-message-threads-beta',
+    category: 'api',
+    publishedAt: '2026-11-02',
+    title: {
+      en: 'Message threads beta stores conversation server-side for smaller follow-up requests',
+      zh: 'Messages API message threads beta：服务端存会话以缩小后续请求',
+    },
+    summary: {
+      en: 'With the `message-threads-2026-08-12` beta header, long Messages API conversations can use message threads: the API keeps the conversation on the server so each later request sends only new messages, improving time to first token. A thread expires five minutes after its last request and is deleted within about one hour of last use. Message threads are available on the Claude API, Claude Platform on AWS, Claude Models on Google Cloud (Anthropic managed), and Claude in Microsoft Foundry.',
+      zh: '在 `message-threads-2026-08-12` beta 头下，长 Messages API 对话可使用 message threads：API 在服务端保留会话，后续请求仅发送新消息，缩短首 token 延迟。线程在最后一次请求后 5 分钟过期，并在末次使用后约 1 小时内删除。适用于 Claude API、Claude Platform on AWS、Claude Models on Google Cloud（Anthropic 托管）与 Claude in Microsoft Foundry。',
+    },
+    takeaway: {
+      en: 'Prefer official threads over hand-rolled context pruning, but plan for five-minute idle expiry in long-pause agent loops.',
+      zh: '长 Agent 优先用官方 thread，勿手写裁剪上下文；注意停顿超过 5 分钟会触发线程过期。',
+    },
+    relatedGuideSlug: 'api-advanced-optimization',
+    sourceUrl: 'https://platform.claude.com/docs/en/release-notes/overview',
+    sourceName: 'Anthropic Docs',
+  },
+  {
+    id: 'claude-code-2-1-314-writes-outside-wd',
+    category: 'security',
+    publishedAt: '2026-10-30',
+    title: {
+      en: 'Claude Code 2.1.314 can block writes outside working directories in every permission mode',
+      zh: 'Claude Code 2.1.314：`blockWritesOutsideWorkingDirectories` 各模式均生效',
+    },
+    summary: {
+      en: 'Claude Code 2.1.314 adds `permissions.blockWritesOutsideWorkingDirectories`: Write, Edit, and NotebookEdit refuse paths outside the session working directories in every permission mode, including auto mode and bypass. The release also warns when managed remote settings cannot refresh, fixes sandbox coverage for resumed worktrees, and improves gateway failover when Bedrock guardrails or Vertex token endpoints stall.',
+      zh: 'Claude Code 2.1.314 新增 `permissions.blockWritesOutsideWorkingDirectories`：Write、Edit、NotebookEdit 在包括 auto mode 与 bypass 在内的所有权限模式下，拒绝写入工作目录之外的路径。该版本还在托管远程设置无法刷新时告警，修复 resume 后 worktree 未进沙箱的问题，并改进 Bedrock 护栏或 Vertex token 端点卡住时的网关故障转移。',
+    },
+    takeaway: {
+      en: 'Enable `blockWritesOutsideWorkingDirectories` on shared CI runners before relying on path-based allowlists alone.',
+      zh: '共享 CI runner 在仅靠路径 allowlist 之前，建议开启 `blockWritesOutsideWorkingDirectories`。',
+    },
+    relatedGuideSlug: 'automation-safety-practices',
+    sourceUrl: 'https://github.com/anthropics/claude-code/releases/tag/v2.1.314',
+    sourceName: 'Anthropic',
+  },
+  {
+    id: 'opus-4-8-fast-mode-deprecation-nov-2026',
+    category: 'api',
+    publishedAt: '2026-10-30',
+    title: {
+      en: 'Fast mode on Claude Opus 4.8 deprecated; removed November 30, 2026',
+      zh: 'Claude Opus 4.8 fast mode 弃用，2026-11-30 移除',
+    },
+    summary: {
+      en: 'Anthropic deprecated fast mode for Claude Opus 4.8 (`claude-opus-4-8`), with removal scheduled for November 30, 2026. After removal, requests that set `speed: "fast"` on that model ID return an error. Anthropic recommends migrating fast workloads to Claude Opus 5.5, where fast mode is generally available without the prior research-preview beta header.',
+      zh: 'Anthropic 弃用 Claude Opus 4.8（`claude-opus-4-8`）的 fast mode，计划 2026 年 11 月 30 日移除。移除后对该 model ID 设置 `speed: "fast"` 的请求将报错。官方建议将 fast 工作负载迁移至 Claude Opus 5.5，其 fast mode 已普遍可用且无需原先的 research preview beta 头。',
+    },
+    takeaway: {
+      en: 'Search configs for `claude-opus-4-8` plus `speed: "fast"` before the November 30 cutoff.',
+      zh: '请在 11 月 30 日前检索配置中是否仍有 `claude-opus-4-8` 搭配 `speed: "fast"`。',
+    },
+    relatedGuideSlug: 'api-advanced-optimization',
+    sourceUrl: 'https://platform.claude.com/docs/en/release-notes/overview',
+    sourceName: 'Anthropic Docs',
+  },
+  {
+    id: 'usage-cost-analytics-api-oct-2026',
+    category: 'api',
+    publishedAt: '2026-10-29',
+    title: {
+      en: 'Usage and Cost Analytics API beta replaces legacy usage report endpoints',
+      zh: 'Usage and Cost Analytics API beta 上线，旧用量报表端点标记为 legacy',
+    },
+    summary: {
+      en: 'Anthropic launched the Usage and Cost Analytics API in beta with the `analytics-usage-cost-2026-08-24` header. Its `/v1/organizations/analytics/usage` and `/v1/organizations/analytics/cost` endpoints report token usage and cost for Claude Console and Claude Enterprise organizations, with filters by model, workspace, API key, and requesting user or service account. The older Usage and Cost API and the Claude Enterprise `usage_report` / `cost_report` endpoints are now legacy but remain supported.',
+      zh: 'Anthropic 以 `analytics-usage-cost-2026-08-24` beta 头发布 Usage and Cost Analytics API。`/v1/organizations/analytics/usage` 与 `/v1/organizations/analytics/cost` 可为 Claude Console 与 Claude Enterprise 组织报告 token 用量与费用，支持按模型、工作区、API 密钥及请求用户或服务账号筛选。原 Usage and Cost API 与 Claude Enterprise 的 `usage_report` / `cost_report` 端点现列为 legacy，但仍受支持。',
+    },
+    takeaway: {
+      en: 'Migrate dashboards to the analytics endpoints before legacy paths lose future features.',
+      zh: '请在旧端点停止新增能力前，将看板迁移至 analytics 端点。',
+    },
+    relatedGuideSlug: 'multi-account-management',
+    sourceUrl: 'https://platform.claude.com/docs/en/release-notes/overview',
+    sourceName: 'Anthropic Docs',
+  },
+  {
+    id: 'sdk-ant-2026-10-21-breaking',
+    category: 'api',
+    publishedAt: '2026-10-21',
+    title: {
+      en: 'SDK 2.0 and `ant` CLI 2.0 default to API version `2026-10-21` with breaking changes',
+      zh: 'SDK 2.0 与 ant CLI 2.0 默认 API 版本 `2026-10-21`，含破坏性变更',
+    },
+    summary: {
+      en: 'Anthropic released API version `2026-10-21` and new major SDK and CLI releases that send it by default: Python SDK 2.0.0, TypeScript SDK 1.0.0, C# SDK 13.0.0, Go SDK 2.0.0, Java SDK 3.0.0, PHP SDK 1.0.0, Ruby SDK 2.0.0, and `ant` CLI 2.0.0. These versions also include SDK- and CLI-specific breaking changes independent of the API version, and they are licensed under Apache 2.0 instead of MIT. Migration guides are published under Switch to 2026-10-21.',
+      zh: 'Anthropic 发布 API 版本 `2026-10-21`，以及默认发送该版本的新版 SDK 与 CLI：Python SDK 2.0.0、TypeScript SDK 1.0.0、C# SDK 13.0.0、Go SDK 2.0.0、Java SDK 3.0.0、PHP SDK 1.0.0、Ruby SDK 2.0.0 与 `ant` CLI 2.0.0。这些版本还包含与 API 版本无关的破坏性变更，许可证由 MIT 改为 Apache 2.0。迁移说明见 Switch to 2026-10-21。',
+    },
+    takeaway: {
+      en: 'Pin SDK major versions in CI until you have run the 2026-10-21 migration guide against production request shapes.',
+      zh: '在按 2026-10-21 迁移指南验证生产请求形态前，请在 CI 中锁定 SDK 主版本。',
+    },
+    relatedGuideSlug: 'api-advanced-optimization',
+    sourceUrl: 'https://platform.claude.com/docs/en/release-notes/overview',
+    sourceName: 'Anthropic Docs',
+  },
+  {
+    id: 'api-user-profiles-enforcement-oct-2026',
+    category: 'security',
+    publishedAt: '2026-10-21',
+    title: {
+      en: 'User profiles and `enforcement_status` let platforms scope API bans to end customers',
+      zh: 'User profiles 与 `enforcement_status` 可将 API 封禁限定到终端客户',
+    },
+    summary: {
+      en: 'Anthropic launched user profiles so API platforms and resellers can tag which end customer each request serves. Profile responses now include `enforcement_status` and `enforcement_actions`, and list endpoints accept an `enforcement_status[]` filter. Beta organization webhooks (`webhooks-2026-10-07`) can notify admins when Anthropic restricts or lifts a ban on a profile. Console admins can also disable organization-wide web fetch or set domain allow/block lists on the Capabilities page.',
+      zh: 'Anthropic 上线 user profiles，供 API 平台与经销商标记每条请求对应的终端客户。Profile 响应新增 `enforcement_status` 与 `enforcement_actions`，列表接口支持 `enforcement_status[]` 筛选。Beta 组织 webhook（`webhooks-2026-10-07`）可在某 profile 被限制或解封时通知管理员。Console 管理员还可在 Capabilities 页面关闭组织级 web fetch 或设置域名允许/阻止列表。',
+    },
+    takeaway: {
+      en: 'Multi-tenant gateways should send a stable profile ID per customer before one customer\'s violation disables the whole organization.',
+      zh: '多租户网关应为每位客户发送稳定的 profile ID，避免单客户违规牵连整个组织。',
+    },
+    relatedGuideSlug: 'multi-account-management',
+    sourceUrl: 'https://platform.claude.com/docs/en/release-notes/overview',
+    sourceName: 'Anthropic Docs',
+  },
+  {
+    id: 'distillation-defenses-oct-2026',
+    category: 'security',
+    publishedAt: '2026-10-12',
+    title: {
+      en: 'Anthropic reports 90–99% less distillation harvesting after new classifiers',
+      zh: 'Anthropic：新分类器后蒸馏抓取数据量约减少 90%–99%',
+    },
+    summary: {
+      en: 'On October 12, 2026, Anthropic described expanded anti-distillation defenses, combining preserved thinking limits, model-to-model thinking portability rules, and a two-stage classifier trained on distiller transcripts. Anthropic says reasoning tokens extracted on its platform fell to between one-tenth and one-hundredth of prior levels and that harvested data dropped roughly 90% to 99%, with a claimed false-positive rate under 0.1%. The post also says tens of thousands of distillation-linked accounts were banned, often within about two hours of campaign start.',
+      zh: '2026 年 10 月 12 日，Anthropic 介绍扩大的反蒸馏防护，结合 preserved thinking 限制、模型间 thinking 可移植性规则，以及基于蒸馏者会话训练的双阶段分类器。官方称平台上被提取的 reasoning token 降至此前的约十分之一至百分之一，被抓取的数据总量约减少 90%–99%，并声称误报率低于 0.1%。文章还表示数以万计与蒸馏相关的账号被封，许多在 campaign 开始后约两小时内处置。',
+    },
+    takeaway: {
+      en: 'High-volume capability-probing from one org now looks like distillation, not a pricing bug; expect fast profile- or org-level enforcement.',
+      zh: '单组织高频能力探测更像蒸馏而非计费异常；请预期 profile 或组织级快速处置。',
+    },
+    relatedGuideSlug: 'claude-steganography-and-risk-model',
+    sourceUrl: 'https://www.anthropic.com/news/distillation-defenses',
+    sourceName: 'Anthropic',
+  },
+  {
+    id: 'supported-regions-policy-effective-nov-2026',
+    category: 'policy',
+    publishedAt: '2026-11-12',
+    title: {
+      en: 'Supported Regions Policy effective Nov 12; Vietnam, Nigeria, and others now listed',
+      zh: '支持地区政策 11 月 12 日生效；越南、尼日利亚等已列入名单',
+    },
+    summary: {
+      en: 'Anthropic\'s Supported Regions Policy page shows an effective date of November 12, 2026. The list now includes many countries that were not highlighted on this site before, including Vietnam, Nigeria, Ethiopia, Sudan, Libya, Iraq, Palestine, and Turkmenistan. The policy still excludes any country not named, and it forbids use while physically located in unsupported regions, use by entities incorporated or headquartered in unsupported regions, and use by majority-owned entities tied to unsupported regions. Mainland China, Hong Kong, and Macau remain absent from the list; Taiwan, Singapore, Japan, and India remain present.',
+      zh: 'Anthropic「支持地区」政策页显示生效日期为 2026 年 11 月 12 日。名单现包含本站此前未单独强调的多国，例如越南、尼日利亚、埃塞俄比亚、苏丹、利比亚、伊拉克、巴勒斯坦与土库曼斯坦。未列出的国家/地区仍不支持；政策仍禁止在不受支持地区物理所在地使用、由在不受支持地区注册或总部实体及其人员使用，以及由不受支持地区多数控股实体使用。中国大陆、香港、澳门仍不在名单内；台湾、新加坡、日本、印度仍在名单内。',
+    },
+    takeaway: {
+      en: 'Eligibility follows incorporation, residency, and ownership—not only whether a country appears on the expanded list.',
+      zh: '合规取决于注册地、物理所在地与股权结构，不能仅因某国新列入名单就认定可用。',
+    },
+    relatedGuideSlug: 'regional-access-strategy',
+    sourceUrl: 'https://www.anthropic.com/supported-countries',
+    sourceName: 'Anthropic',
+  },
+  {
+    id: 'usage-policy-2026-effective-nov-12',
+    category: 'policy',
+    publishedAt: '2026-10-08',
+    title: {
+      en: '2026 Usage Policy refresh takes effect November 12',
+      zh: '2026 版使用政策将于 11 月 12 日生效',
+    },
+    summary: {
+      en: 'Anthropic published an updated Usage Policy on October 8, 2026, effective November 12, 2026. Changes consolidate rules on deceptive campaigns and fake-account influence operations, refocus election restrictions on voter deception and turnout disruption, clarify weapons software and autonomous hardware operator requirements, tighten surveillance and law-enforcement prohibitions, restate high-risk human-in-the-loop duties, and ban sustained abusive behavior toward models. The post also clarifies how the Supported Regions Policy is enforced across physical location, incorporation, and majority ownership.',
+      zh: 'Anthropic 于 2026 年 10 月 8 日发布新版使用政策，2026 年 11 月 12 日生效。变更包括：合并欺骗性宣传活动与假账号影响操作规则；选举条款聚焦欺骗选民与破坏投票；澄清武器相关软件与自主硬件操作者要求；收紧监控与执法用途禁止；重申高风险场景人工复核义务；禁止对模型持续辱骂。文章亦说明支持地区政策如何按物理位置、注册地与多数股权执行。',
+    },
+    takeaway: {
+      en: 'Review automated publishing, civic, and hardware-control workflows before November 12; several clarified rules already matched Anthropic enforcement practice.',
+      zh: '请在 11 月 12 日前审查自动发稿、公民科技与硬件控制流程；多项澄清与既有执法口径一致。',
+    },
+    relatedGuideSlug: 'account-appeal-and-recovery-sop',
+    sourceUrl: 'https://www.anthropic.com/news/2026-usage-policy-update',
+    sourceName: 'Anthropic',
+  },
+  {
+    id: 'managed-agents-dynamic-workflows-oct-2026',
+    category: 'api',
+    publishedAt: '2026-10-09',
+    title: {
+      en: 'Claude Managed Agents beta adds dynamic multi-agent workflow runs',
+      zh: 'Claude Managed Agents beta 支持动态多 Agent workflow 运行',
+    },
+    summary: {
+      en: 'With the `managed-agents-2026-04-01` beta header, Managed Agents can run dynamic workflows: for large jobs such as reviewing hundreds of documents, an agent can author a workflow program that the server executes as a background workflow run with phased agents. Enable it with `multiagent: {"type": "multiagent_20261001", "workflows": {"type": "enabled"}}` and follow `workflow_run.*` events on the session stream.',
+      zh: '在 `managed-agents-2026-04-01` beta 头下，Managed Agents 可运行动态 workflow：面对例如审阅数百份文档的大任务，Agent 可编写 workflow 程序，由服务端作为后台 workflow run 分阶段执行多 Agent。通过 `multiagent: {"type": "multiagent_20261001", "workflows": {"type": "enabled"}}` 启用，并在会话事件流中跟踪 `workflow_run.*`。',
+    },
+    takeaway: {
+      en: 'Treat workflow runs like untrusted code paths: scope permissions and hosts before enabling `workflows.type: "enabled"`.',
+      zh: '将 workflow run 视为不可信代码路径，启用 `workflows.type: "enabled"` 前先收紧权限与网络主机范围。',
+    },
+    relatedGuideSlug: 'automation-safety-practices',
+    sourceUrl: 'https://platform.claude.com/docs/en/release-notes/overview',
+    sourceName: 'Anthropic Docs',
+  },
+  {
     id: 'claude-code-2-1-294-permission-fixes',
     category: 'product',
     publishedAt: '2026-10-08',

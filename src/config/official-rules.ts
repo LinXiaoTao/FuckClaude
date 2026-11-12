@@ -6,7 +6,7 @@
 
 import { OFFICIAL_SOURCES, type GuideSource, type LocalizedText } from './guides';
 
-export const OFFICIAL_RULES_CHECKED_AT = '2026-10-08';
+export const OFFICIAL_RULES_CHECKED_AT = '2026-11-12';
 
 export interface OfficialRule {
   id: string;
