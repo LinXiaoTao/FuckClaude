@@ -2,6 +2,18 @@ import { SITE_AUTHOR } from '../../config/site';
 
 export type TrustPageId = 'privacy' | 'about' | 'contact' | 'terms';
 
+/** Appended to the privacy page. Kept as its own record so existing locale translations of the main body stay valid. */
+export const PRIVACY_COUNTERS_SECTION: { en: string; zh: string } = {
+  en: `
+<h2>9. Counters: smash button and scan count</h2>
+<p>The mascot button on the homepage and the scan counter send a count to <code>/api/stats</code>. The server adds it to a per-country total in a small Redis database hosted by Upstash. The country comes from the <code>x-vercel-ip-country</code> header, which Vercel sets from your IP address. We do not store your IP address, an identifier, a timestamp, or any scan result in that database. A short in-memory rate limit on each server instance uses your IP address and discards it within seconds. Your own hit count is kept in your browser's local storage and disappears when you clear site data.</p>
+`.trim(),
+  zh: `
+<h2>9. 计数器：点击与扫描次数</h2>
+<p>首页吉祥物按钮和扫描计数会向 <code>/api/stats</code> 发送一个计数。服务器把它累加到按国家分组的总数里，数据存放在 Upstash 托管的小型 Redis 数据库中。国家来自 Vercel 根据你的 IP 地址设置的 <code>x-vercel-ip-country</code> 请求头。该数据库不保存你的 IP 地址、任何标识符、时间戳或扫描结果。每个服务器实例上有一个短时内存限流，会用到你的 IP 地址，并在几秒内丢弃。你自己的点击数只保存在浏览器本地存储中，清除网站数据后即消失。</p>
+`.trim(),
+};
+
 export const TRUST_CONTENT: Record<TrustPageId, { en: string; zh: string }> = {
   privacy: {
     en: `

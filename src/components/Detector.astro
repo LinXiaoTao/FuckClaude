@@ -7,6 +7,7 @@ import { getGuide, type GuideArticle } from '../config/guides';
 import LangToggle from './LangToggle.astro';
 import ScoreRing from './ScoreRing.astro';
 import Mascot from './Mascot.astro';
+import RageStats from './RageStats.astro';
 import Sponsors from './Sponsors.astro';
 import ResultSponsor from './ResultSponsor.astro';
 import IpPurityCard from './IpPurityCard.astro';
@@ -115,9 +116,11 @@ const apiExamples = [
 
     <div class="panel">
       <div class="panel__main">
-        <Mascot />
+        <Mascot lang={lang} />
         <ScoreRing lang={lang} />
       </div>
+
+      <RageStats lang={lang} />
 
       <aside class="tool-card" aria-labelledby="tool-card-title">
         <p class="tool-card__label" id="tool-card-title">{t('tools.title')}</p>

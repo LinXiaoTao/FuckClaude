@@ -1,0 +1,157 @@
+---
+/**
+ * Counter strip under the score ring: global hits, global scans and the
+ * visitor's own hits, plus a collapsible country ranking. Filled in by
+ * scripts/rage.ts from /api/stats. While the global store is unavailable the
+ * script sets data-enabled="false" and only the personal count stays visible.
+ */
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="stats" id="stats" data-enabled="false" aria-label={t('rage.statsLabel')}>
+  <dl class="stats__row">
+    <div class="stat stat--global">
+      <dt class="stat__label">{t('rage.stat.smash')}</dt>
+      <dd class="stat__num" id="stat-smash">–</dd>
+    </div>
+    <div class="stat stat--global">
+      <dt class="stat__label">{t('rage.stat.scan')}</dt>
+      <dd class="stat__num" id="stat-scan">–</dd>
+    </div>
+    <div class="stat">
+      <dt class="stat__label">{t('rage.stat.you')}</dt>
+      <dd class="stat__num" id="stat-you">0</dd>
+    </div>
+  </dl>
+
+  <details class="stats__more stat--global" id="stats-more">
+    <summary>{t('rage.countries')}</summary>
+    <div class="stats__lists">
+      <div>
+        <h3>{t('rage.countries.smash')}</h3>
+        <ol id="top-smash"></ol>
+      </div>
+      <div>
+        <h3>{t('rage.countries.scan')}</h3>
+        <ol id="top-scan"></ol>
+      </div>
+    </div>
+  </details>
+
+  <p class="stats__note" id="stats-note">{t('rage.note')}</p>
+</section>
+
+<script>
+  import '../scripts/rage';
+</script>
+
+<style>
+  .stats {
+    margin: 22px auto 0;
+    max-width: 640px;
+    padding: 14px 16px 12px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    text-align: center;
+  }
+  .stats[data-enabled='false'] .stat--global {
+    display: none;
+  }
+  .stats__row {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
+    gap: 10px 14px;
+  }
+  .stat {
+    margin: 0;
+    min-width: 0;
+  }
+  .stat__label {
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    overflow-wrap: anywhere;
+  }
+  .stat__num {
+    margin: 2px 0 0;
+    font-family: var(--mono);
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .stat__num.is-bump {
+    animation: stat-bump 0.18s ease-out;
+  }
+  @keyframes stat-bump {
+    50% {
+      transform: scale(1.12);
+      color: var(--accent-strong);
+    }
+  }
+  .stats__more {
+    margin-top: 10px;
+    text-align: start;
+  }
+  .stats__more summary {
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 650;
+    color: var(--accent-strong);
+    text-align: center;
+  }
+  .stats__lists {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+    gap: 12px 20px;
+    margin-top: 10px;
+  }
+  .stats__lists h3 {
+    margin: 0 0 4px;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+  .stats__lists ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+  }
+  .stats__lists :global(li) {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 2px 0;
+    overflow-wrap: anywhere;
+  }
+  .stats__lists :global(li span:last-child) {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+  }
+  .stats__lists :global(li.is-empty) {
+    color: var(--muted-2);
+  }
+  .stats__note {
+    margin: 10px 0 0;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    color: var(--muted-2);
+    overflow-wrap: anywhere;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stat__num.is-bump {
+      animation: none;
+    }
+  }
+</style>

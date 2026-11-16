@@ -8,7 +8,18 @@
  *   medium – suspicious stare
  *   high   – pointing a (toy) gun at you
  * Every state loops a CSS animation so the character is never static.
+ *
+ * The figure is also a button: scripts/rage.ts reacts to clicks with flying
+ * props, a speech bubble and the "BANNED" stamp (all drawn inside .mascot__fx).
  */
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
 const STATES = [
   { id: 'doze', src: '/mascot/ceo-doze.webp' },
   { id: 'search', src: '/mascot/ceo-search.webp' },
@@ -18,11 +29,16 @@ const STATES = [
 ];
 ---
 
-<div class="mascot" id="mascot" data-state="doze" aria-hidden="true">
-  <div class="mascot__stage">
-    {STATES.map((s) => <img class="mascot__fig" data-mstate={s.id} src={s.src} alt="" decoding="async" />)}
-    <span class="mascot__zzz"><i>Z</i><i>Z</i><i>Z</i></span>
-  </div>
+<div class="mascot" id="mascot" data-state="doze">
+  <p class="mascot__bubble" id="mascot-bubble" data-visible="true">{t('rage.hint')}</p>
+  <button class="mascot__hit" id="mascot-hit" type="button" aria-label={t('rage.aria')}>
+    <span class="mascot__stage" id="mascot-stage">
+      {STATES.map((s) => <img class="mascot__fig" data-mstate={s.id} src={s.src} alt="" decoding="async" draggable="false" />)}
+      <span class="mascot__zzz"><i>Z</i><i>Z</i><i>Z</i></span>
+      <span class="mascot__stamp" id="mascot-stamp" aria-hidden="true">{t('rage.stamp')}</span>
+      <span class="mascot__fx" id="mascot-fx" aria-hidden="true"></span>
+    </span>
+  </button>
   <span class="mascot__shadow"></span>
 </div>
 
@@ -34,6 +50,48 @@ const STATES = [
     width: 232px;
     flex: none;
   }
+  .mascot__bubble {
+    margin: 0 0 6px;
+    min-height: 2.7em;
+    max-width: 100%;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--text);
+    overflow-wrap: anywhere;
+    transition: opacity 0.25s;
+  }
+  .mascot__bubble[data-visible='false'] {
+    opacity: 0;
+  }
+  .mascot__hit {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    border-radius: var(--radius-sm);
+  }
+  .mascot__hit:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
   .mascot__stage {
     position: relative;
     height: 238px;
@@ -41,6 +99,39 @@ const STATES = [
     display: flex;
     align-items: flex-end;
     justify-content: center;
+  }
+  .mascot__stage.is-hit {
+    animation: mascot-hit 0.22s ease-out;
+  }
+  .mascot__fx {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .mascot__stamp {
+    position: absolute;
+    inset-inline: 0;
+    top: 46%;
+    margin-inline: auto;
+    width: max-content;
+    max-width: 100%;
+    padding: 2px 12px;
+    border: 3px solid var(--high);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--high);
+    font-family: var(--mono);
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: rotate(-14deg) scale(1.6);
+    pointer-events: none;
+  }
+  .mascot__stamp.is-on {
+    animation: mascot-stamp 1.1s cubic-bezier(0.2, 0.9, 0.3, 1) both;
   }
   .mascot__fig {
     display: none;
@@ -129,6 +220,35 @@ const STATES = [
   }
 
   /* ---- keyframes ---- */
+  @keyframes mascot-hit {
+    0% {
+      transform: scale(1);
+    }
+    35% {
+      transform: scale(0.94, 1.05) rotate(-2deg);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes mascot-stamp {
+    0% {
+      opacity: 0;
+      transform: rotate(-14deg) scale(1.6);
+    }
+    18% {
+      opacity: 0.95;
+      transform: rotate(-14deg) scale(1);
+    }
+    75% {
+      opacity: 0.95;
+      transform: rotate(-14deg) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: rotate(-14deg) scale(1);
+    }
+  }
   @keyframes mascot-pop {
     0% {
       transform: scale(0.72);
@@ -231,6 +351,16 @@ const STATES = [
     }
     80% {
       transform: scale(1.04) translate(-1px, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mascot__stage.is-hit,
+    .mascot__stamp.is-on {
+      animation: none;
+    }
+    .mascot__stamp.is-on {
+      opacity: 0.95;
     }
   }
 

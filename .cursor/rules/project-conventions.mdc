@@ -45,6 +45,13 @@ alwaysApply: true
 ## Sponsors
 - **Sponsors Config**: Maintained in `src/config/sponsors.ts` and rendered via `src/components/Sponsors.astro`. Logos live under `public/sponsors/`. Entries include `{ en, zh }` headlines, taglines, CTAs, and referral URLs. Sponsor copy describes the product neutrally and must not promise to bypass Claude risk control or avoid bans.
 
+## Counters (smash button and scan count)
+- **Where**: `src/components/RageStats.astro` (counter strip) and the clickable `Mascot.astro` sit in the home hero panel. Client logic is `src/scripts/rage.ts`; `detect.ts` only dispatches `fc:scan-complete` after a scan finishes. The target is the cartoon risk-control mascot; copy must not name or insult a real person.
+- **Storage**: `src/server/stats-store.ts` talks to Upstash Redis over REST with `fetch` (no SDK). Env vars: `KV_REST_API_URL` and `KV_REST_API_TOKEN` (or `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`). Exactly two hashes, `fc:smash` and `fc:scan`, field = ISO country code, value = count; totals are the sum of fields. Do not add IPs, ids, timestamps or per-user keys. Rate limiting stays in memory per instance.
+- **Provisioning**: the Vercel Marketplace resource is `fuck-claude-stats` (Upstash for Redis, Pay As You Go, no free tier), connected to project `fuck-claude` in all environments. Keep command usage low: reads are CDN-cached (`s-maxage=30`), writes are batched by the client. For local runs, `vercel env pull .env.local` and export the variables into the shell (Astro dev does not fill `process.env` from `.env.local`). Local tests write to the production store, so delete the test keys (`fc:smash`, `fc:scan`) afterwards.
+- **API**: `/api/stats` (`GET` snapshot, `POST { kind, n }`). Without credentials it answers `enabled: false` and the UI shows only the visitor's own count (localStorage `fc:smashes`).
+- **Copy**: UI keys are `rage.*` in `src/i18n/ui.ts` (en and zh) with overlays in `src/i18n/messages/<lang>.ts`. The privacy disclosure is `PRIVACY_COUNTERS_SECTION` in `src/content/trust/index.ts`, appended by `resolveTrustPageBody`; its translations live in `src/i18n/translations/<lang>/part-3.ts`. Do not edit the main privacy body text lightly: the dictionary key is the whole English string.
+
 ## Detection Signals
 - Fingerprint detection signals live in `src/config/signals.ts` with sum of weights = 100.
 - Detection must run client-side only without uploading user data. Follow `skills/detection-signals/SKILL.md`.

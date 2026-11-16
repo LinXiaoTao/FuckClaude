@@ -445,6 +445,7 @@ async function run() {
   }
 
   finalize(Math.min(100, total), hits);
+  document.dispatchEvent(new CustomEvent('fc:scan-complete'));
   // IP may already have painted; await so a slow /api/ip cannot leak into the next scan.
   try {
     await ipPurityJob;
