@@ -9,10 +9,13 @@
  *   high   – pointing a (toy) gun at you
  * Every state loops a CSS animation so the character is never static.
  *
- * The figure is also a button: scripts/rage.ts reacts to clicks with flying
- * props, a speech bubble and the "BANNED" stamp (all drawn inside .mascot__fx).
+ * The figure is also a button (hammer cursor, "click to hit" pill). On each
+ * hit scripts/rage.ts swings a hammer, knocks the body back (.mascot__body),
+ * shows dizzy stars, leaves plasters and, after a streak, tints the figure red
+ * (data-hurt 1-3). The "hits" counter card sits under the figure.
  */
 import { useTranslations, type Lang } from '../i18n/ui';
+import RageStats from './RageStats.astro';
 
 interface Props {
   lang: Lang;
@@ -29,18 +32,29 @@ const STATES = [
 ];
 ---
 
-<div class="mascot" id="mascot" data-state="doze">
-  <p class="mascot__bubble" id="mascot-bubble" data-visible="true">{t('rage.hint')}</p>
+<div class="mascot" id="mascot" data-state="doze" data-hurt="0" data-engaged="false">
+  <p class="mascot__bubble" id="mascot-bubble">{t('rage.hint')}</p>
   <button class="mascot__hit" id="mascot-hit" type="button" aria-label={t('rage.aria')}>
     <span class="mascot__stage" id="mascot-stage">
-      {STATES.map((s) => <img class="mascot__fig" data-mstate={s.id} src={s.src} alt="" decoding="async" draggable="false" />)}
+      <span class="mascot__body" id="mascot-body">
+        {STATES.map((s) => <img class="mascot__fig" data-mstate={s.id} src={s.src} alt="" decoding="async" draggable="false" />)}
+      </span>
       <span class="mascot__zzz"><i>Z</i><i>Z</i><i>Z</i></span>
+      <span class="mascot__dizzy" aria-hidden="true"><i style="--i:0">💫</i><i style="--i:1">⭐</i><i style="--i:2">💫</i></span>
+      <span class="mascot__sweat" aria-hidden="true">💦</span>
+      <span class="mascot__marks" id="mascot-marks" aria-hidden="true"></span>
       <span class="mascot__stamp" id="mascot-stamp" aria-hidden="true">{t('rage.stamp')}</span>
       <span class="mascot__fx" id="mascot-fx" aria-hidden="true"></span>
     </span>
+    <span class="mascot__shadow"></span>
+    <span class="mascot__cta"><span class="mascot__cta-icon" aria-hidden="true">🔨</span>{t('rage.cta')}</span>
   </button>
-  <span class="mascot__shadow"></span>
+  <RageStats lang={lang} kind="smash" />
 </div>
+
+<script>
+  import '../scripts/rage';
+</script>
 
 <style>
   .mascot {
@@ -69,9 +83,6 @@ const STATES = [
     overflow-wrap: anywhere;
     transition: opacity 0.25s;
   }
-  .mascot__bubble[data-visible='false'] {
-    opacity: 0;
-  }
   .mascot__hit {
     display: block;
     width: 100%;
@@ -81,12 +92,15 @@ const STATES = [
     background: none;
     font: inherit;
     color: inherit;
-    cursor: pointer;
+    cursor: url('/mascot/hammer.svg') 14 14, pointer;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     -webkit-user-select: none;
     border-radius: var(--radius-sm);
+  }
+  .mascot__hit:active {
+    cursor: url('/mascot/hammer-down.svg') 12 22, pointer;
   }
   .mascot__hit:focus-visible {
     outline: 2px solid var(--accent);
@@ -100,8 +114,29 @@ const STATES = [
     align-items: flex-end;
     justify-content: center;
   }
-  .mascot__stage.is-hit {
-    animation: mascot-hit 0.22s ease-out;
+  .mascot__body {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    transform-origin: 50% 90%;
+    transition:
+      transform 0.15s ease-out,
+      filter 0.5s;
+  }
+  .mascot__hit:hover .mascot__body {
+    transform: translateY(-3px) scale(1.02);
+  }
+  .mascot__body.is-hit {
+    animation: mascot-knock 0.46s cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+  /* streak damage: the figure gets redder and sweats, then sees stars */
+  .mascot[data-hurt='2'] .mascot__body {
+    filter: saturate(1.3) sepia(0.12);
+  }
+  .mascot[data-hurt='3'] .mascot__body {
+    filter: saturate(1.8) sepia(0.3) hue-rotate(-14deg);
   }
   .mascot__fx {
     position: absolute;
@@ -143,12 +178,92 @@ const STATES = [
     will-change: transform;
   }
   .mascot__shadow {
+    display: block;
     width: 128px;
     height: 15px;
     border-radius: 50%;
     background: rgba(31, 30, 29, 0.13);
     filter: blur(3px);
-    margin-top: -5px;
+    margin: -5px auto 0;
+  }
+  .mascot__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    max-width: 100%;
+    margin-top: 10px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 2px 0 var(--accent-strong);
+    color: #fff;
+    font-size: 0.84rem;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: center;
+    overflow-wrap: anywhere;
+    transition:
+      transform 0.12s,
+      background 0.12s;
+  }
+  .mascot[data-engaged='false'] .mascot__cta {
+    animation: mascot-cta 1.6s ease-in-out infinite;
+  }
+  .mascot__cta-icon {
+    display: inline-block;
+    transform-origin: 80% 80%;
+    animation: mascot-cta-tap 1.6s ease-in-out infinite;
+  }
+  .mascot__hit:hover .mascot__cta {
+    background: var(--accent-strong);
+    transform: translateY(-1px);
+  }
+  .mascot__hit:active .mascot__cta {
+    transform: translateY(2px);
+    box-shadow: none;
+  }
+  .mascot__marks {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .mascot__dizzy {
+    display: none;
+    position: absolute;
+    top: 4px;
+    inset-inline: 0;
+    margin-inline: auto;
+    width: 100px;
+    height: 24px;
+    pointer-events: none;
+  }
+  .mascot.is-dizzy .mascot__dizzy,
+  .mascot[data-hurt='3'] .mascot__dizzy {
+    display: block;
+  }
+  .mascot__dizzy i {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    font-style: normal;
+    font-size: 1.15rem;
+    line-height: 1;
+    animation: mascot-orbit 1.1s linear infinite;
+    animation-delay: calc(var(--i) * -0.366s);
+  }
+  .mascot__sweat {
+    display: none;
+    position: absolute;
+    top: 30px;
+    inset-inline-end: 34px;
+    font-size: 1.3rem;
+    pointer-events: none;
+    animation: mascot-sweat 0.9s ease-in infinite;
+  }
+  .mascot[data-hurt='2'] .mascot__sweat,
+  .mascot[data-hurt='3'] .mascot__sweat {
+    display: block;
   }
 
   /* ---- state visibility + loops (pop first, then the idle loop) ---- */
@@ -220,15 +335,91 @@ const STATES = [
   }
 
   /* ---- keyframes ---- */
-  @keyframes mascot-hit {
+  /* knock-back: red flash, squash toward the blow, then recoil */
+  @keyframes mascot-knock {
     0% {
-      transform: scale(1);
+      transform: none;
+      filter: brightness(1.7) saturate(2.2) hue-rotate(-18deg);
     }
-    35% {
-      transform: scale(0.94, 1.05) rotate(-2deg);
+    14% {
+      transform: translateX(calc(var(--dir, 1) * 20px)) rotate(calc(var(--dir, 1) * 12deg)) scale(1.14, 0.76);
+      filter: brightness(1.4) saturate(2.6) hue-rotate(-24deg);
+    }
+    38% {
+      transform: translateX(calc(var(--dir, 1) * -7px)) rotate(calc(var(--dir, 1) * -6deg)) scale(0.96, 1.07);
+      filter: brightness(1.15) saturate(1.7);
+    }
+    60% {
+      transform: translateX(calc(var(--dir, 1) * 3px)) rotate(calc(var(--dir, 1) * 2.5deg));
     }
     100% {
-      transform: scale(1);
+      transform: none;
+    }
+  }
+  @keyframes mascot-cta {
+    0%,
+    100% {
+      box-shadow:
+        0 2px 0 var(--accent-strong),
+        0 0 0 0 color-mix(in srgb, var(--accent) 50%, transparent);
+    }
+    60% {
+      box-shadow:
+        0 2px 0 var(--accent-strong),
+        0 0 0 10px transparent;
+    }
+  }
+  @keyframes mascot-cta-tap {
+    0%,
+    55%,
+    100% {
+      transform: rotate(0);
+    }
+    70% {
+      transform: rotate(-40deg);
+    }
+    80% {
+      transform: rotate(10deg);
+    }
+  }
+  @keyframes mascot-orbit {
+    0%,
+    100% {
+      transform: translate(calc(-50% + 44px), -50%);
+    }
+    12.5% {
+      transform: translate(calc(-50% + 31px), calc(-50% + 7px));
+    }
+    25% {
+      transform: translate(-50%, calc(-50% + 10px));
+    }
+    37.5% {
+      transform: translate(calc(-50% - 31px), calc(-50% + 7px));
+    }
+    50% {
+      transform: translate(calc(-50% - 44px), -50%);
+    }
+    62.5% {
+      transform: translate(calc(-50% - 31px), calc(-50% - 7px));
+    }
+    75% {
+      transform: translate(-50%, calc(-50% - 10px));
+    }
+    87.5% {
+      transform: translate(calc(-50% + 31px), calc(-50% - 7px));
+    }
+  }
+  @keyframes mascot-sweat {
+    0% {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(12px);
     }
   }
   @keyframes mascot-stamp {
@@ -355,8 +546,12 @@ const STATES = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .mascot__stage.is-hit,
-    .mascot__stamp.is-on {
+    .mascot__body.is-hit,
+    .mascot__stamp.is-on,
+    .mascot[data-engaged='false'] .mascot__cta,
+    .mascot__cta-icon,
+    .mascot__dizzy i,
+    .mascot__sweat {
       animation: none;
     }
     .mascot__stamp.is-on {

@@ -1,5 +1,6 @@
 ---
 import { useTranslations, type Lang } from '../i18n/ui';
+import RageStats from './RageStats.astro';
 
 interface Props {
   lang: Lang;
@@ -51,6 +52,8 @@ const circ = 2 * Math.PI * r;
       <span id="share-save-label">{t('share.save')}</span>
     </button>
   </div>
+
+  <RageStats lang={lang} kind="scan" />
 
   <ul class="trust">
     <li>{t('hero.badge.local')}</li>

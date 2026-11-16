@@ -1,153 +1,145 @@
 ---
 /**
- * Counter strip under the score ring: global hits, global scans and the
- * visitor's own hits, plus a collapsible country ranking. Filled in by
- * scripts/rage.ts from /api/stats. While the global store is unavailable the
- * script sets data-enabled="false" and only the personal count stays visible.
+ * Counter card. Two instances sit in the hero panel:
+ *   kind="smash" under the mascot: global hits, the visitor's own hits and a
+ *                country ranking by hits.
+ *   kind="scan"  under the score ring: global scans and a country ranking by
+ *                scans.
+ * Filled in by scripts/rage.ts from /api/stats. While the global store is
+ * unavailable the script sets data-enabled="false" on every [data-stats]
+ * element: the smash card keeps only the visitor's own count and the scan card
+ * is hidden.
  */
 import { useTranslations, type Lang } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
+  kind: 'smash' | 'scan';
 }
-const { lang } = Astro.props;
+const { lang, kind } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<section class="stats" id="stats" data-enabled="false" aria-label={t('rage.statsLabel')}>
+<section class="stats" data-stats data-kind={kind} data-enabled="false" aria-label={t(`rage.stat.${kind}`)}>
   <dl class="stats__row">
     <div class="stat stat--global">
-      <dt class="stat__label">{t('rage.stat.smash')}</dt>
-      <dd class="stat__num" id="stat-smash">–</dd>
+      <dt class="stat__label">{t(`rage.stat.${kind}`)}</dt>
+      <dd class="stat__num" id={`stat-${kind}`}>–</dd>
     </div>
-    <div class="stat stat--global">
-      <dt class="stat__label">{t('rage.stat.scan')}</dt>
-      <dd class="stat__num" id="stat-scan">–</dd>
-    </div>
-    <div class="stat">
-      <dt class="stat__label">{t('rage.stat.you')}</dt>
-      <dd class="stat__num" id="stat-you">0</dd>
-    </div>
+    {
+      kind === 'smash' && (
+        <div class="stat stat--you">
+          <dt class="stat__label">{t('rage.stat.you')}</dt>
+          <dd class="stat__num stat__num--you" id="stat-you">0</dd>
+        </div>
+      )
+    }
   </dl>
 
-  <details class="stats__more stat--global" id="stats-more">
+  <details class="stats__more stat--global">
     <summary>{t('rage.countries')}</summary>
-    <div class="stats__lists">
-      <div>
-        <h3>{t('rage.countries.smash')}</h3>
-        <ol id="top-smash"></ol>
-      </div>
-      <div>
-        <h3>{t('rage.countries.scan')}</h3>
-        <ol id="top-scan"></ol>
-      </div>
-    </div>
+    <ol class="stats__list" id={`top-${kind}`}></ol>
   </details>
-
-  <p class="stats__note" id="stats-note">{t('rage.note')}</p>
 </section>
-
-<script>
-  import '../scripts/rage';
-</script>
 
 <style>
   .stats {
-    margin: 22px auto 0;
-    max-width: 640px;
-    padding: 14px 16px 12px;
-    background: var(--bg-soft);
+    width: min(260px, 100%);
+    margin-top: 14px;
+    padding: 10px 14px 8px;
+    background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
     text-align: center;
+  }
+  .stats[data-kind='scan'][data-enabled='false'] {
+    display: none;
   }
   .stats[data-enabled='false'] .stat--global {
     display: none;
   }
   .stats__row {
     margin: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
-    gap: 10px 14px;
+    display: flex;
+    justify-content: center;
   }
   .stat {
-    margin: 0;
+    flex: 1 1 0;
     min-width: 0;
+    margin: 0;
+    padding-inline: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .stats[data-enabled='true'] .stat + .stat {
+    border-inline-start: 1px solid var(--border);
   }
   .stat__label {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 650;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
     color: var(--muted);
     overflow-wrap: anywhere;
   }
   .stat__num {
     margin: 2px 0 0;
     font-family: var(--mono);
-    font-size: 1.45rem;
+    font-size: 1.6rem;
     font-weight: 700;
+    line-height: 1.2;
     color: var(--text);
     font-variant-numeric: tabular-nums;
+  }
+  .stat__num--you {
+    color: var(--accent-strong);
   }
   .stat__num.is-bump {
     animation: stat-bump 0.18s ease-out;
   }
   @keyframes stat-bump {
     50% {
-      transform: scale(1.12);
+      transform: scale(1.14);
       color: var(--accent-strong);
     }
   }
   .stats__more {
-    margin-top: 10px;
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--border);
     text-align: start;
   }
   .stats__more summary {
     cursor: pointer;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     font-weight: 650;
-    color: var(--accent-strong);
+    color: var(--muted);
     text-align: center;
   }
-  .stats__lists {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
-    gap: 12px 20px;
-    margin-top: 10px;
+  .stats__more summary:hover {
+    color: var(--accent-strong);
   }
-  .stats__lists h3 {
-    margin: 0 0 4px;
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
-    color: var(--muted);
-  }
-  .stats__lists ol {
-    margin: 0;
+  .stats__list {
+    margin: 6px 0 2px;
     padding: 0;
     list-style: none;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
   }
-  .stats__lists :global(li) {
+  .stats__list :global(li) {
     display: flex;
     justify-content: space-between;
     gap: 10px;
     padding: 2px 0;
     overflow-wrap: anywhere;
   }
-  .stats__lists :global(li span:last-child) {
+  .stats__list :global(li span:last-child) {
     font-family: var(--mono);
     font-variant-numeric: tabular-nums;
     color: var(--muted);
   }
-  .stats__lists :global(li.is-empty) {
+  .stats__list :global(li.is-empty) {
     color: var(--muted-2);
-  }
-  .stats__note {
-    margin: 10px 0 0;
-    font-size: 0.75rem;
-    line-height: 1.45;
-    color: var(--muted-2);
-    overflow-wrap: anywhere;
   }
   @media (prefers-reduced-motion: reduce) {
     .stat__num.is-bump {

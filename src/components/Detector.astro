@@ -7,7 +7,6 @@ import { getGuide, type GuideArticle } from '../config/guides';
 import LangToggle from './LangToggle.astro';
 import ScoreRing from './ScoreRing.astro';
 import Mascot from './Mascot.astro';
-import RageStats from './RageStats.astro';
 import Sponsors from './Sponsors.astro';
 import ResultSponsor from './ResultSponsor.astro';
 import IpPurityCard from './IpPurityCard.astro';
@@ -120,22 +119,20 @@ const apiExamples = [
         <ScoreRing lang={lang} />
       </div>
 
-      <RageStats lang={lang} />
+      <p class="rage-note" id="stats-note">{t('rage.note')}</p>
 
       <aside class="tool-card" aria-labelledby="tool-card-title">
-        <p class="tool-card__label" id="tool-card-title">{t('tools.title')}</p>
-        <div class="tool-card__row">
-          <div class="tool-card__copy">
-            <strong>{t('tools.cageName')}</strong>
-            <p>{t('tools.cageBody')}</p>
-          </div>
+        <p class="tool-card__line">
+          <span class="tool-card__label" id="tool-card-title">{t('tools.title')}:</span>{' '}
           <a
-            class="tool-card__btn"
+            class="tool-card__link"
             href="https://github.com/Lee-xeo/Claude-Cage"
             target="_blank"
             rel="noopener noreferrer"
-          >{t('tools.cageCta')}</a>
-        </div>
+            title={t('tools.cageCta')}
+          >{t('tools.cageName')} ↗</a>{' '}
+          <span class="tool-card__body">{t('tools.cageBody')}</span>
+        </p>
         <p class="tool-card__note">{t('tools.cageNote')}</p>
       </aside>
 
@@ -522,72 +519,43 @@ const apiExamples = [
     color: var(--accent-strong);
   }
 
-  .tool-card {
-    margin: 22px auto 0;
-    max-width: 640px;
-    padding: 14px 16px 12px;
-    text-align: left;
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-  }
-  .tool-card__label {
-    margin: 0 0 8px;
-    font-size: 0.75rem;
-    font-weight: 650;
-    letter-spacing: 0.04em;
-    color: var(--muted);
-  }
-  .tool-card__row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px 16px;
-  }
-  .tool-card__copy {
-    min-width: 0;
-  }
-  .tool-card__copy strong {
-    display: block;
-    font-size: 1rem;
-    color: var(--text);
-  }
-  .tool-card__copy p {
-    margin: 4px 0 0;
-    color: var(--muted);
-    font-size: 0.9rem;
-    line-height: 1.5;
-    overflow-wrap: anywhere;
-  }
-  .tool-card__btn {
-    flex: none;
-    display: inline-flex;
-    align-items: center;
-    padding: 8px 14px;
-    border-radius: 999px;
-    border: 1px solid var(--border-strong);
-    background: var(--surface);
-    color: var(--text);
-    font-size: 0.88rem;
-    font-weight: 650;
-    text-decoration: none;
-  }
-  .tool-card__btn:hover {
-    border-color: var(--accent);
-    color: var(--accent-strong);
-  }
-  .tool-card__note {
-    margin: 10px 0 0;
+  .rage-note {
+    margin: 18px auto 0;
+    max-width: 52ch;
     font-size: 0.75rem;
     line-height: 1.45;
     color: var(--muted-2);
     overflow-wrap: anywhere;
   }
-  @media (max-width: 560px) {
-    .tool-card__row {
-      flex-direction: column;
-      align-items: flex-start;
-    }
+  .tool-card {
+    margin: 14px auto 0;
+    max-width: 640px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    text-align: center;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--muted-2);
+  }
+  .tool-card__line {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+  .tool-card__link {
+    color: var(--muted);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 2px;
+  }
+  .tool-card__link:hover {
+    color: var(--accent-strong);
+    text-decoration-color: currentColor;
+  }
+  .tool-card__note {
+    margin: 2px 0 0;
+    font-size: 0.72rem;
+    overflow-wrap: anywhere;
   }
 
   /* ---------- guides showcase ---------- */
