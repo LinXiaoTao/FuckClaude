@@ -73,7 +73,7 @@ export const payment_methods_comparison_content = {
 <h2>三、扣款失败的原因</h2>
 <p>官方排查清单，按官方给出的顺序：</p>
 <ol>
-  <li><strong>账单地区：</strong>账单地址与银行卡发卡国家必须属于受支持的账单地区，且账单地址要与发卡国家一致。</li>
+  <li><strong>账单地区：</strong>账单地址与银行卡发卡地区必须属于受支持的账单地区，且账单地址要与发卡地区一致。</li>
   <li><strong>账单地址：</strong>必须与银行预留的地址一致。少一个重音符号或街道名拼错，都可能导致拒付。</li>
   <li><strong>3D Secure：</strong>银行要求时，完成短信验证码或银行 App 确认。</li>
   <li><strong>支付方式：</strong>使用信用卡或借记卡，不要用 PayPal、Venmo。</li>
@@ -94,7 +94,7 @@ export const payment_methods_comparison_content = {
 
 <h2>六、订阅前检查清单</h2>
 <pre><code>1. 银行发行的信用卡或借记卡，持卡人是你本人
-2. 账单所在国家属于受支持的账单地区（以帮助中心为准）
+2. 账单所在地区属于受支持的账单地区（以帮助中心为准）
 3. 账单地址与银行记录逐字符一致
 4. 银行卡支持 3D Secure，并且你能收到验证码
 5. 余额覆盖首次扣款和下一次续费

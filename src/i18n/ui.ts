@@ -191,9 +191,9 @@ export const ui = {
     'rage.stat.smash': 'Hits worldwide',
     'rage.stat.scan': 'Scans run',
     'rage.stat.you': 'Your hits',
-    'rage.countries': 'Top countries',
+    'rage.countries': 'Top regions',
     'rage.empty': 'No data yet',
-    'rage.note': 'Only a count and your country (taken from your IP) are sent. No cookies, no account, no scan results.',
+    'rage.note': 'Only a count and your region (taken from your IP) are sent. No cookies, no account, no scan results.',
     'rage.offline': 'The global counter is offline. Hits are counted on this device only.',
 
     'how.title': 'How the check works',
@@ -601,9 +601,9 @@ export const ui = {
     'rage.stat.smash': '全球点击',
     'rage.stat.scan': '已完成扫描',
     'rage.stat.you': '你的点击',
-    'rage.countries': '国家排行',
+    'rage.countries': '地区排行',
     'rage.empty': '暂无数据',
-    'rage.note': '只会发送一个计数和你所在的国家（由 IP 得出），不使用 Cookie，不需要账号，也不上传扫描结果。',
+    'rage.note': '只会发送一个计数和你所在的地区（由 IP 得出），不使用 Cookie，不需要账号，也不上传扫描结果。',
     'rage.offline': '全球计数暂不可用，点击只在本机累计。',
 
     'how.title': '检测原理',

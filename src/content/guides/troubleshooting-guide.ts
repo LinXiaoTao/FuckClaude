@@ -224,7 +224,7 @@ diagnoseAPI();</code></pre>
 <ul>
   <li><strong>卡被拒绝：</strong> 余额不足、CVV 无效或卡已过期。确保余额够支付全部金额。</li>
   <li><strong>卡类型不被接受：</strong> Pro 与 Max 只列出信用卡和借记卡，预付卡可能仅因类型而被拒。Anthropic 没有公布被拦截的 BIN。</li>
-  <li><strong>地址不匹配：</strong> 账单地址必须与银行记录一致，与发卡国家一致，并属于受支持的账单地区。</li>
+  <li><strong>地址不匹配：</strong> 账单地址必须与银行记录一致，与发卡地区一致，并属于受支持的账单地区。</li>
   <li><strong>3D Secure 未完成：</strong> 银行要求时，完成短信验证码或银行 App 确认。</li>
   <li><strong>反复尝试：</strong> 重试一次后询问银行。只有发卡行能说明拒绝的原因。</li>
 </ul>

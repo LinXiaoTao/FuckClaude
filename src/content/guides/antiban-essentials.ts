@@ -68,7 +68,7 @@ export const antiban_essentials_content = {
 <ul>
   <li><strong>封禁原因：</strong>Anthropic <a href="https://support.claude.com/en/articles/8241253-safeguards-warnings-and-appeals" target="_blank" rel="noopener noreferrer">帮助中心</a>列出三类：反复违反使用政策、从不受支持的地区创建账户、违反服务条款。</li>
   <li><strong>支持地区：</strong>中国大陆、香港、澳门不在<a href="https://www.anthropic.com/supported-countries" target="_blank" rel="noopener noreferrer">支持地区名单</a>内，台湾、新加坡、日本、印度在名单内。2026 年 10 月 1 日起，香港用户反馈账号被停用，其中包括通过受支持地区 VPN 出口访问的用户，Anthropic 尚未回应（见<a href="/zh/news/">资讯</a>）。</li>
-  <li><strong>支付：</strong>网页端 Pro 与 Max 只接受信用卡或借记卡，账单地址必须与发卡国家一致。详见<a href="/zh/guides/payment-methods-comparison/">支付方式与扣款失败排查</a>。</li>
+  <li><strong>支付：</strong>网页端 Pro 与 Max 只接受信用卡或借记卡，账单地址必须与发卡地区一致。详见<a href="/zh/guides/payment-methods-comparison/">支付方式与扣款失败排查</a>。</li>
   <li><strong>申诉：</strong>用被封账号登录 claude.ai 即可进入申诉表单。API 警告发邮件到 usersafety@anthropic.com。</li>
   <li><strong>规模：</strong>Anthropic <a href="https://www.anthropic.com/transparency/system-trust-reporting" target="_blank" rel="noopener noreferrer">透明度报告</a>显示，2026 年上半年约 10.5% 的申诉最终恢复了账号。</li>
 </ul>
@@ -77,7 +77,7 @@ export const antiban_essentials_content = {
 <ul>
   <li><strong>一号一栈：</strong>不要在多个 Pro 账号间复用同一张卡、手机号或账单地址。社区反馈把批量封号与共用支付方式、手机号和 IP 联系在一起。</li>
   <li><strong>企业股权结构：</strong>自 2025 年 9 月起，由不受支持地区（如中国）总部公司直接或间接控股超 50% 的实体一律禁止 — 即使注册在新加坡或美国。</li>
-  <li><strong>地理信息一致：</strong>发卡国家与账单地址必须一致（官方要求）。社区反馈还提到，美国卡加新加坡 IP 加中国时区，是封号案例中常见的不一致组合。</li>
+  <li><strong>地理信息一致：</strong>发卡地区与账单地址必须一致（官方要求）。社区反馈还提到，美国卡加新加坡 IP 加中国时区，是封号案例中常见的不一致组合。</li>
   <li><strong>避开 VoIP 号段：</strong>优先实体 SIM 或口碑接码平台；大量 VoIP 前缀无法过验证或直接触发审核。</li>
   <li><strong>先走退款申请：</strong>Anthropic 没有公布银行争议对账号的影响。遇到扣款失败或不想要的扣款，先用 Get help &gt; Claude Refund Request，再考虑联系银行。</li>
 </ul>

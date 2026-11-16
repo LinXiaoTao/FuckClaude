@@ -71,7 +71,7 @@ claude</code></pre>
 <ol>
   <li><strong>网络与 IP 属性：</strong> 绝大多数数据中心机房 IP（如 AWS、Hetzner、搬瓦工、DigitalOcean）都会被赋予高风险权重；而位于支持地区（如美国、英国、新加坡、日本、台湾）的原生双 ISP 住宅家宽 IP 风险最低。</li>
   <li><strong>环境与指纹层：</strong> 综合评估系统时区（<code>Intl.DateTimeFormat</code>）、浏览器语言列表（<code>navigator.languages</code>）、Canvas 字体探测（微软雅黑、苹方、MiSans/鸿蒙黑体等）及设备品牌。</li>
-  <li><strong>支付与身份校验：</strong> 虚拟信用卡卡头（BIN）、账单地址国家与 IP 国家一致性对齐，以及接码用的手机号段（VoIP 虚拟号直接拒绝）。</li>
+  <li><strong>支付与身份校验：</strong> 虚拟信用卡卡头（BIN）、账单地址所在地区与 IP 所在地区的一致性对齐，以及接码用的手机号段（VoIP 虚拟号直接拒绝）。</li>
   <li><strong>行为与蒸馏模型：</strong> 自动化脚本高频并发请求、异常上下文饱和攻击以及破坏 Prompt Cache 的请求模式，会触发 429 Rate Limit 与账户判定。</li>
 </ol>
 `,

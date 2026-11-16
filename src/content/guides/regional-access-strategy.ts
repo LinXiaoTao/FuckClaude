@@ -176,7 +176,7 @@ Thank you,
 <p>Anthropic 没有公开说明如何判断地区。以下是社区反馈中常被讨论的信号，并非已确认的规则：</p>
 <ul>
   <li><strong>IP 地理位置：</strong> 普遍认为是主要信号之一</li>
-  <li><strong>支付卡所属国家：</strong> 账单地址必须与发卡国家一致（官方要求）</li>
+  <li><strong>支付卡所属地区：</strong> 账单地址必须与发卡地区一致（官方要求）</li>
   <li><strong>电话号码国家代码：</strong> 短信验证号码可能提示用户所在位置</li>
   <li><strong>账单地址：</strong> 必须属于受支持的账单地区（官方要求）</li>
 </ul>
@@ -232,7 +232,7 @@ curl https://ipinfo.io | jq '{ip, city, region, country, org}'
 <ul>
   <li>一些欧盟银行拒绝美国订阅 - 使用国际提供商的虚拟卡</li>
   <li>强客户认证（SCA）可能需要 3D Secure - 确保卡支持</li>
-  <li>增值税根据账单地址国家自动应用</li>
+  <li>增值税根据账单地址所在地区自动应用</li>
 </ul>
 
 <h2>四、 跨境出差场景的合规使用指南</h2>

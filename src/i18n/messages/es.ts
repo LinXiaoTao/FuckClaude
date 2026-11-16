@@ -172,9 +172,9 @@ export default {
   'rage.stat.smash': 'Golpes en el mundo',
   'rage.stat.scan': 'Análisis realizados',
   'rage.stat.you': 'Tus golpes',
-  'rage.countries': 'Países con más actividad',
+  'rage.countries': 'Regiones con más actividad',
   'rage.empty': 'Aún no hay datos',
-  'rage.note': 'Solo se envían un número y tu país (obtenido de tu IP). Sin cookies, sin cuenta, sin resultados del análisis.',
+  'rage.note': 'Solo se envían un número y tu región (obtenida de tu IP). Sin cookies, sin cuenta, sin resultados del análisis.',
   'rage.offline': 'El contador global no está disponible. Los golpes se cuentan solo en este dispositivo.',
 
   'how.title': 'Cómo funciona la comprobación',

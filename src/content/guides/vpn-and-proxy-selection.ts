@@ -183,7 +183,7 @@ curl --proxy socks5://127.0.0.1:1080 https://ipinfo.io</code></pre>
 <ul>
   <li><strong>IP 池类型：</strong> 验证服务商提供真实的 ISP 来源住宅 IP，而非标记为"住宅"的数据中心段。</li>
   <li><strong>专用 vs 共享：</strong> 专用 IP 消除与滥用用户共享的风险，但成本显著更高。共享住宅 IP 可接受，前提是池干净且频繁轮换。</li>
-  <li><strong>出口地区选择：</strong> 选择 Anthropic 支持地区（美国、英国、新加坡、日本）的出口 IP，确保账单地址与 IP 国家一致。</li>
+  <li><strong>出口地区选择：</strong> 选择 Anthropic 支持地区（美国、英国、新加坡、日本）的出口 IP，确保账单地址与 IP 所在地区一致。</li>
   <li><strong>无日志政策：</strong> 选择经审计的无日志政策服务商，以最小化合规和隐私风险。</li>
   <li><strong>DNS 泄漏防护：</strong> 确保 VPN 客户端包含内置 DNS 泄漏防护，使用远程 DNS 服务器（1.1.1.1、8.8.8.8）。</li>
 </ul>

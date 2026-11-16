@@ -223,9 +223,9 @@ python3 -c "import json; d=json.load(open('.claude.json')); print(d.get('oauthAc
       <td>Pro 与 Max 列出接受借记卡；余额要够支付续费</td>
     </tr>
     <tr>
-      <td>支持国家的国际借记卡</td>
+      <td>支持地区的国际借记卡</td>
       <td>中</td>
-      <td>账单国家须与账号地区一致</td>
+      <td>账单地区须与账号地区一致</td>
     </tr>
     <tr>
       <td>大众预付卡 / 加密货币充值预付卡</td>
@@ -237,7 +237,7 @@ python3 -c "import json; d=json.load(open('.claude.json')); print(d.get('oauthAc
 
 <ul>
   <li><strong>优先选择成熟银行发行的卡：</strong> Anthropic 没有公布会拦截哪些 BIN，网上流传的 BIN 列表都未经验证，并会随发卡方调整风险等级而过期。选择能让你准确设置账单地址的银行信用卡或借记卡。</li>
-  <li><strong>账单地址：</strong> 官方清单要求账单地址与银行记录一致，并与发卡国家一致。社区反馈也提到，IP 国家、账单国家和手机号国家保持一致能减少摩擦；这是观察，不是官方规则。</li>
+  <li><strong>账单地址：</strong> 官方清单要求账单地址与银行记录一致，并与发卡地区一致。社区反馈也提到，IP 所在地区、账单地区和手机号归属地区保持一致能减少摩擦；这是观察，不是官方规则。</li>
   <li><strong>预留足够余额：</strong> 确保卡内余额够支付首次扣款和下一次续费。续费失败可能让账号降级为 Free 计划。</li>
   <li><strong>支付工具保持稳定：</strong> 同一账号勿每周换卡，频繁变更类似账号被盗，反而提高审查概率。</li>
 </ul>
@@ -245,7 +245,7 @@ python3 -c "import json; d=json.load(open('.claude.json')); print(d.get('oauthAc
 <h3>注册当日检查清单</h3>
 <ol>
   <li>浏览器 Profile 已与目标地区对齐（见 <a href="/zh/guides/environment-cleanup-and-ip-setup/">环境纯化与 IP 配置</a>）。</li>
-  <li>住宅 IP 与账单国家一致（见 <a href="/zh/guides/vpn-and-proxy-selection/">VPN 与代理选择</a>）。</li>
+  <li>住宅 IP 与账单地区一致（见 <a href="/zh/guides/vpn-and-proxy-selection/">VPN 与代理选择</a>）。</li>
   <li>使用全新或独占手机号，非公共接码池。</li>
   <li>账单地址与银行记录一致的信用卡或借记卡。</li>
   <li>启用 2FA 并下载备份码后再结束会话。</li>
@@ -270,7 +270,7 @@ python3 -c "import json; d=json.load(open('.claude.json')); print(d.get('oauthAc
 <ul>
   <li>不要在使用 Anthropic 退款申请之前向银行发起争议。Anthropic 没有公布争议对账号的影响，你可能因此失去付款渠道。</li>
   <li>勿购买二手 Claude 账号，常携带历史封禁与盗绑支付信息。</li>
-  <li>勿在机房 IP 下注册并绑定账单国家不一致的美国卡。</li>
+  <li>勿在机房 IP 下注册并绑定账单地区不一致的美国卡。</li>
   <li>为图省事关闭 2FA 会增加新 IP 登录时的短信重验证。</li>
 </ul>
 
