@@ -12,7 +12,9 @@
  * The figure is also a button (hammer cursor, "click to hit" pill). On each
  * hit scripts/rage.ts swings a hammer, knocks the body back (.mascot__body),
  * shows dizzy stars, leaves plasters and, after a streak, tints the figure red
- * (data-hurt 1-3). The "hits" counter card sits under the figure.
+ * (data-hurt 1-3). While reacting (data-react 1-3, set by rage.ts) the state
+ * figure is replaced by a hurt illustration (.mascot__hitfig, loaded lazily
+ * from data-src). The "hits" counter card sits under the figure.
  */
 import { useTranslations, type Lang } from '../i18n/ui';
 import RageStats from './RageStats.astro';
@@ -30,14 +32,21 @@ const STATES = [
   { id: 'medium', src: '/mascot/ceo-suspect.webp' },
   { id: 'high', src: '/mascot/ceo-gun.webp' },
 ];
+
+const REACTIONS = [
+  { level: 1, src: '/mascot/ceo-hit-1.webp' },
+  { level: 2, src: '/mascot/ceo-hit-2.webp' },
+  { level: 3, src: '/mascot/ceo-hit-3.webp' },
+];
 ---
 
-<div class="mascot" id="mascot" data-state="doze" data-hurt="0" data-engaged="false">
+<div class="mascot" id="mascot" data-state="doze" data-hurt="0" data-react="0" data-engaged="false">
   <p class="mascot__bubble" id="mascot-bubble">{t('rage.hint')}</p>
   <button class="mascot__hit" id="mascot-hit" type="button" aria-label={t('rage.aria')}>
     <span class="mascot__stage" id="mascot-stage">
       <span class="mascot__body" id="mascot-body">
         {STATES.map((s) => <img class="mascot__fig" data-mstate={s.id} src={s.src} alt="" decoding="async" draggable="false" />)}
+        {REACTIONS.map((r) => <img class="mascot__hitfig" data-level={r.level} data-src={r.src} alt="" decoding="async" draggable="false" />)}
       </span>
       <span class="mascot__zzz"><i>Z</i><i>Z</i><i>Z</i></span>
       <span class="mascot__dizzy" aria-hidden="true"><i style="--i:0">💫</i><i style="--i:1">⭐</i><i style="--i:2">💫</i></span>
@@ -129,7 +138,7 @@ const STATES = [
     transform: translateY(-3px) scale(1.02);
   }
   .mascot__body.is-hit {
-    animation: mascot-knock 0.46s cubic-bezier(0.2, 0.8, 0.3, 1);
+    animation: mascot-knock 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
   }
   /* streak damage: the figure gets redder and sweats, then sees stars */
   .mascot[data-hurt='2'] .mascot__body {
@@ -298,6 +307,26 @@ const STATES = [
       mascot-gun 0.45s linear 0.32s infinite;
   }
 
+  /* ---- hit reaction: hurt illustration replaces the state figure ---- */
+  .mascot__hitfig {
+    display: none;
+    height: 232px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    transform-origin: 50% 85%;
+    will-change: transform;
+  }
+  .mascot:not([data-react='0']) .mascot__fig[data-mstate] {
+    display: none;
+  }
+  .mascot[data-react='1'] .mascot__hitfig[data-level='1'],
+  .mascot[data-react='2'] .mascot__hitfig[data-level='2'],
+  .mascot[data-react='3'] .mascot__hitfig[data-level='3'] {
+    display: block;
+    animation: mascot-wobble 0.6s ease-in-out infinite;
+  }
+
   /* ---- Zzz bubbles, doze only ---- */
   .mascot__zzz {
     display: none;
@@ -354,6 +383,15 @@ const STATES = [
     }
     100% {
       transform: none;
+    }
+  }
+  @keyframes mascot-wobble {
+    0%,
+    100% {
+      transform: rotate(-1.6deg);
+    }
+    50% {
+      transform: rotate(1.6deg) translateY(-2px);
     }
   }
   @keyframes mascot-cta {
@@ -550,6 +588,7 @@ const STATES = [
     .mascot__stamp.is-on,
     .mascot[data-engaged='false'] .mascot__cta,
     .mascot__cta-icon,
+    .mascot__hitfig,
     .mascot__dizzy i,
     .mascot__sweat {
       animation: none;
@@ -566,7 +605,8 @@ const STATES = [
     .mascot__stage {
       height: 196px;
     }
-    .mascot__fig {
+    .mascot__fig,
+    .mascot__hitfig {
       height: 190px;
     }
   }
