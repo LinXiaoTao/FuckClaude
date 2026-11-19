@@ -16,6 +16,8 @@ import { loadLocaleData } from '../i18n/locale-data-client';
 import { langFromDocument, useTranslations } from '../i18n/ui-client';
 
 type Kind = 'smash' | 'scan';
+/** Mirrors `data-state` on [data-stats]; `loading` lasts until the first snapshot. */
+type StatsState = 'loading' | 'on' | 'off';
 
 interface CountryCount {
   code: string;
@@ -66,10 +68,10 @@ const marksEl = q('#mascot-marks');
 const stamp = q('#mascot-stamp');
 const bubble = q('#mascot-bubble');
 const statsEls = document.querySelectorAll('[data-stats]');
-const numFormat = new Intl.NumberFormat(pageLang);
+const numFormat = new Intl.NumberFormat(pageLang, { numberingSystem: 'latn' });
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-let enabled = false;
+let state: StatsState = 'loading';
 let smashTotal = 0;
 let scanTotal = 0;
 let you = readYou();
@@ -104,7 +106,9 @@ function saveYou() {
 function setNum(id: string, value: number, bump = false) {
   const el = q(id);
   if (!el) return;
-  el.textContent = numFormat.format(value);
+  const text = numFormat.format(value);
+  el.textContent = text;
+  el.style.setProperty('--len', String(text.length));
   if (!bump || reduceMotion.matches) return;
   el.classList.remove('is-bump');
   void el.offsetWidth;
@@ -152,12 +156,16 @@ function renderAll() {
   setNum('#stat-you', you);
 }
 
+function setStatsState(next: StatsState) {
+  state = next;
+  for (const el of statsEls) el.setAttribute('data-state', next);
+}
+
 function applySnapshot(snap: Snapshot) {
-  enabled = snap.enabled;
-  for (const el of statsEls) el.setAttribute('data-enabled', String(enabled));
+  setStatsState(snap.enabled ? 'on' : 'off');
   const note = q('#stats-note');
-  if (note) note.textContent = enabled ? t('rage.note') : t('rage.offline');
-  if (!enabled) return;
+  if (note) note.textContent = snap.enabled ? t('rage.note') : t('rage.offline');
+  if (!snap.enabled) return;
   smashTotal = snap.smash.total + pending;
   scanTotal = snap.scan.total;
   renderAll();
@@ -168,14 +176,18 @@ function applySnapshot(snap: Snapshot) {
 async function refresh() {
   try {
     const res = await fetch('/api/stats', { headers: { Accept: 'application/json' } });
-    if (res.ok) applySnapshot((await res.json()) as Snapshot);
+    if (res.ok) {
+      applySnapshot((await res.json()) as Snapshot);
+      return;
+    }
   } catch {
     /* offline: keep what is on screen */
   }
+  if (state === 'loading') setStatsState('off');
 }
 
 function send(kind: Kind, n: number, keepalive = false) {
-  if (!enabled || n <= 0) return;
+  if (state !== 'on' || n <= 0) return;
   void fetch('/api/stats', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -416,7 +428,7 @@ function onHit(event: MouseEvent) {
   pending += 1;
   saveYou();
   setNum('#stat-you', you, true);
-  setNum('#stat-smash', smashTotal, true);
+  if (state === 'on') setNum('#stat-smash', smashTotal, true);
   mascotEl?.setAttribute('data-engaged', 'true');
   registerStreak();
 
@@ -447,7 +459,7 @@ function onHit(event: MouseEvent) {
 
 function onScanComplete() {
   scanTotal += 1;
-  setNum('#stat-scan', scanTotal, true);
+  if (state === 'on') setNum('#stat-scan', scanTotal, true);
   send('scan', 1);
 }
 

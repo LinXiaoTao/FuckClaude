@@ -5,10 +5,11 @@
  *                region ranking by hits.
  *   kind="scan"  under the score ring: global scans and a region ranking by
  *                scans.
- * Filled in by scripts/rage.ts from /api/stats. While the global store is
- * unavailable the script sets data-enabled="false" on every [data-stats]
- * element: the smash card keeps only the visitor's own count and the scan card
- * is hidden.
+ * Filled in by scripts/rage.ts from /api/stats. `data-state` on [data-stats]
+ * starts as `loading` (full-size card, global numbers show "–" so nothing moves
+ * when data arrives), then becomes `on`, or `off` when the global store is
+ * unavailable: the smash card keeps only the visitor's own count and the scan
+ * card is hidden.
  */
 import { useTranslations, type Lang } from '../i18n/ui';
 
@@ -20,7 +21,7 @@ const { lang, kind } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<section class="stats" data-stats data-kind={kind} data-enabled="false" aria-label={t(`rage.stat.${kind}`)}>
+<section class="stats" data-stats data-kind={kind} data-state="loading" aria-label={t(`rage.stat.${kind}`)}>
   <dl class="stats__row">
     <div class="stat stat--global">
       <dt class="stat__label">{t(`rage.stat.${kind}`)}</dt>
@@ -53,16 +54,21 @@ const t = useTranslations(lang);
     box-shadow: var(--shadow-sm);
     text-align: center;
   }
-  .stats[data-kind='scan'][data-enabled='false'] {
+  .stats[data-kind='scan'][data-state='off'] {
     display: none;
   }
-  .stats[data-enabled='false'] .stat--global {
+  .stats[data-state='off'] .stat--global {
     display: none;
   }
   .stats__row {
     margin: 0;
     display: flex;
     justify-content: center;
+  }
+  .stats[data-kind='smash'] .stats__row {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
   }
   .stat {
     flex: 1 1 0;
@@ -72,9 +78,37 @@ const t = useTranslations(lang);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    container-type: inline-size;
   }
-  .stats[data-enabled='true'] .stat + .stat {
-    border-inline-start: 1px solid var(--border);
+  .stats[data-kind='smash'] .stat--global {
+    flex: none;
+    width: 100%;
+  }
+  .stats[data-kind='smash'] .stat--you {
+    flex: none;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--border);
+    text-align: start;
+  }
+  .stats[data-kind='smash'][data-state='off'] .stat--you {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+  .stats[data-kind='smash'] .stat--you .stat__label {
+    flex: 0 0 38%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .stats[data-kind='smash'] .stat--you .stat__num--you {
+    flex: 1 1 0;
+    min-width: 0;
   }
   .stat__label {
     font-size: 0.72rem;
@@ -86,14 +120,23 @@ const t = useTranslations(lang);
   .stat__num {
     margin: 2px 0 0;
     font-family: var(--mono);
-    font-size: 1.6rem;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1;
     color: var(--text);
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    height: 1.92rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(0.9rem, calc(100cqw / (var(--len, 1) * 0.62)), 1.6rem);
   }
   .stat__num--you {
+    height: 1.5rem;
+    justify-content: flex-end;
     color: var(--accent-strong);
+    /* 56cqw: the row minus the 38% label and the 8px gap */
+    font-size: clamp(0.9rem, calc(56cqw / (var(--len, 1) * 0.62)), 1.2rem);
   }
   .stat__num.is-bump {
     animation: stat-bump 0.18s ease-out;
@@ -137,6 +180,8 @@ const t = useTranslations(lang);
     font-family: var(--mono);
     font-variant-numeric: tabular-nums;
     color: var(--muted);
+    white-space: nowrap;
+    flex: none;
   }
   .stats__list :global(li.is-empty) {
     color: var(--muted-2);
