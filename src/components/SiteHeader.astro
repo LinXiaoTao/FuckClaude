@@ -1,0 +1,477 @@
+---
+import { localePath, type Lang } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui';
+import { NAV_ITEMS, type NavGroup, type NavItemId } from '../config/nav';
+import LangToggle from './LangToggle.astro';
+import SocialLinks from './SocialLinks.astro';
+
+interface Props {
+  lang: Lang;
+  current?: NavItemId;
+}
+
+const { lang, current } = Astro.props;
+const t = useTranslations(lang);
+const home = localePath(lang, '/');
+
+const toolsItems = NAV_ITEMS.filter((item) => item.group === 'tools');
+const exploreItems = NAV_ITEMS.filter((item) => item.group === 'explore');
+
+const navGroups: {
+  id: NavGroup;
+  labelKey: 'nav.group.tools' | 'nav.group.explore';
+  items: (typeof NAV_ITEMS)[number][];
+}[] = [
+  { id: 'tools', labelKey: 'nav.group.tools', items: toolsItems },
+  { id: 'explore', labelKey: 'nav.group.explore', items: exploreItems },
+];
+
+function groupIsCurrent(items: typeof NAV_ITEMS): boolean {
+  return current !== undefined && items.some((item) => item.id === current);
+}
+---
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href={home}>
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="currentColor"></rect>
+        <g fill="#FAF9F5">
+          <rect x="26.9" y="8" width="7.6" height="29" rx="3.8"></rect>
+          <rect x="18.9" y="24.5" width="6.4" height="11" rx="3.2"></rect>
+          <rect x="36.1" y="24.5" width="6.4" height="11" rx="3.2"></rect>
+          <rect x="16.9" y="30" width="27.6" height="24" rx="9"></rect>
+          <rect x="40.6" y="32.5" width="7.6" height="16" rx="3.8" transform="rotate(-24 44.4 40.5)"></rect>
+        </g>
+      </svg>
+      <span class="brand__text">{t('nav.title')}</span>
+    </a>
+    <div class="nav__actions">
+      <div class="nav__desktop">
+        {
+          navGroups.map((group) => (
+            <details class="nav-dropdown" data-nav-menu>
+              <summary
+                class:list={[
+                  'nav-dropdown__summary',
+                  { 'nav-dropdown__summary--active': groupIsCurrent(group.items) },
+                ]}
+              >
+                {t(group.labelKey)}
+              </summary>
+              <div class="nav-dropdown__panel" role="list">
+                {group.items.map((item) => (
+                  <a
+                    class="nav-dropdown__item"
+                    role="listitem"
+                    href={localePath(lang, item.path)}
+                    aria-current={current === item.id ? 'page' : undefined}
+                  >
+                    <span class="nav-dropdown__title">{t(item.labelKey)}</span>
+                    <span class="nav-dropdown__desc">{t(item.descKey)}</span>
+                  </a>
+                ))}
+              </div>
+            </details>
+          ))
+        }
+      </div>
+      <LangToggle lang={lang} />
+      <details class="nav-drawer" data-nav-menu>
+        <summary class="nav-drawer__toggle" aria-label={t('nav.menu')}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M4 7h16M4 12h16M4 17h16"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"></path>
+          </svg>
+        </summary>
+        <div class="nav-drawer__panel">
+          {
+            navGroups.map((group) => (
+              <div class="nav-drawer__group">
+                <p class="nav-drawer__heading">{t(group.labelKey)}</p>
+                <div class="nav-drawer__items" role="list">
+                  {group.items.map((item) => (
+                    <a
+                      class="nav-drawer__item"
+                      role="listitem"
+                      href={localePath(lang, item.path)}
+                      aria-current={current === item.id ? 'page' : undefined}
+                    >
+                      <span class="nav-drawer__title">{t(item.labelKey)}</span>
+                      <span class="nav-drawer__desc">{t(item.descKey)}</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))
+          }
+          <SocialLinks lang={lang} variant="drawer" />
+        </div>
+      </details>
+      <a
+        class="icon-link nav-github"
+        href="https://github.com/LinXiaoTao/FuckClaude"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="GitHub"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path
+            d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.3-1.8-1.3-1.8-1.1-.7 0-.7 0-.7 1.2 0 1.9 1.2 1.9 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z"
+          ></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  import '../scripts/nav';
+</script>
+
+<style is:global>
+  /* ---------- site header nav ---------- */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    backdrop-filter: blur(12px);
+    background: rgba(250, 249, 245, 0.85);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    height: 60px;
+    max-height: 64px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 650;
+    color: var(--text);
+    font-size: 0.98rem;
+    min-width: 0;
+    flex-shrink: 1;
+  }
+  .brand:hover {
+    text-decoration: none;
+  }
+  .brand svg {
+    width: 24px;
+    height: 24px;
+    flex: none;
+    color: var(--accent);
+  }
+  .brand__text {
+    max-width: 42vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .nav__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nav__desktop {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-drawer {
+    display: none;
+  }
+
+  .lang-switcher {
+    position: relative;
+    font-size: 0.82rem;
+  }
+  .lang-switcher summary {
+    list-style: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--muted);
+    font-weight: 600;
+    user-select: none;
+  }
+  .lang-switcher summary::-webkit-details-marker {
+    display: none;
+  }
+  .lang-switcher[open] summary {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+  .lang-switcher__menu {
+    position: absolute;
+    inset-inline-end: 0;
+    top: calc(100% + 6px);
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    min-width: 11rem;
+    width: min(22rem, calc(100vw - 24px));
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    box-shadow: var(--shadow-md);
+    z-index: 40;
+  }
+  .lang-switcher__menu a {
+    display: block;
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .lang-switcher__menu a:hover {
+    text-decoration: none;
+    background: var(--accent-soft);
+    color: var(--text);
+  }
+  .lang-switcher__menu a[aria-current='page'] {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 650;
+  }
+
+  .nav-dropdown {
+    position: relative;
+    font-size: 0.84rem;
+  }
+  .nav-dropdown__summary {
+    list-style: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--muted);
+    font-weight: 600;
+    user-select: none;
+  }
+  .nav-dropdown__summary::-webkit-details-marker {
+    display: none;
+  }
+  .nav-dropdown__summary--active,
+  .nav-dropdown[open] .nav-dropdown__summary {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+  .nav-dropdown__summary--active {
+    color: var(--accent-strong);
+  }
+  .nav-dropdown__panel {
+    position: absolute;
+    inset-inline-start: 0;
+    top: calc(100% + 6px);
+    margin: 0;
+    padding: 6px;
+    width: min(22rem, calc(100vw - 24px));
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    box-shadow: var(--shadow-md);
+    z-index: 40;
+  }
+  .nav-dropdown__item {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .nav-dropdown__item:hover {
+    background: var(--accent-soft);
+    text-decoration: none;
+  }
+  .nav-dropdown__item[aria-current='page'] {
+    background: var(--accent-soft);
+  }
+  .nav-dropdown__item[aria-current='page'] .nav-dropdown__title {
+    color: var(--accent-strong);
+    font-weight: 650;
+  }
+  .nav-dropdown__title {
+    display: block;
+    font-weight: 600;
+    font-size: 0.86rem;
+  }
+  .nav-dropdown__desc {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.76rem;
+    color: var(--muted-2);
+    line-height: 1.35;
+  }
+
+  .icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 6px;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--muted);
+    transition:
+      color 0.18s,
+      border-color 0.18s,
+      transform 0.12s;
+  }
+  .icon-link:hover {
+    color: var(--text);
+    border-color: currentColor;
+    transform: translateY(-1px);
+    text-decoration: none;
+  }
+  .icon-link:active {
+    transform: scale(0.95);
+  }
+
+  .nav-drawer__toggle {
+    list-style: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--muted);
+    user-select: none;
+  }
+  .nav-drawer__toggle::-webkit-details-marker {
+    display: none;
+  }
+  .nav-drawer[open] .nav-drawer__toggle {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+  .nav-drawer__panel {
+    position: absolute;
+    inset-inline-end: 0;
+    top: calc(100% + 6px);
+    margin: 0;
+    padding: 10px 8px 12px;
+    width: min(22rem, calc(100vw - 24px));
+    max-height: min(70vh, 28rem);
+    overflow-y: auto;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    box-shadow: var(--shadow-md);
+    z-index: 45;
+  }
+  .nav-drawer__heading {
+    margin: 8px 8px 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted-2);
+  }
+  .nav-drawer__group:first-child .nav-drawer__heading {
+    margin-top: 0;
+  }
+  .nav-drawer__item {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .nav-drawer__item:hover {
+    background: var(--accent-soft);
+    text-decoration: none;
+  }
+  .nav-drawer__item[aria-current='page'] .nav-drawer__title {
+    color: var(--accent-strong);
+    font-weight: 650;
+  }
+  .nav-drawer__title {
+    display: block;
+    font-weight: 600;
+    font-size: 0.86rem;
+  }
+  .nav-drawer__desc {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.76rem;
+    color: var(--muted-2);
+    line-height: 1.35;
+  }
+  .nav-drawer .socials--drawer {
+    margin: 12px 8px 4px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    justify-content: flex-start;
+  }
+
+  @media (max-width: 900px) {
+    .nav__desktop {
+      display: none;
+    }
+    .nav-drawer {
+      display: block;
+      position: relative;
+    }
+    .nav-github {
+      display: none;
+    }
+    .nav__inner {
+      height: 60px;
+      max-height: 64px;
+    }
+    .nav__actions {
+      flex-wrap: nowrap;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .nav__inner {
+      gap: 8px;
+      height: 60px;
+      max-height: 64px;
+    }
+    .brand__text {
+      max-width: 38vw;
+      font-size: 0.9rem;
+    }
+    .lang-switcher {
+      font-size: 0.78rem;
+    }
+    .lang-switcher summary {
+      padding: 4px 8px;
+    }
+    .icon-link,
+    .nav-drawer__toggle {
+      min-width: 28px;
+      height: 28px;
+      padding: 0 4px;
+    }
+  }
+</style>

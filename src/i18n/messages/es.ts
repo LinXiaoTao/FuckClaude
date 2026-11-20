@@ -429,4 +429,206 @@ export default {
   'i18n.noticeLink': 'Ver versión en inglés',
   'lang.toggleLabel': 'Idioma del sitio',
   'share.cardFooter': 'Mida el suyo en fuck-claude.vercel.app',
+
+  'memorial.card.banned': 'Bloqueada {date}',
+  'memorial.card.candle': 'Encender una vela',
+  'memorial.card.candleCount': '{n}',
+  'memorial.card.created': 'Creada {date}',
+  'memorial.card.no': 'N.º {no}',
+  'memorial.card.survived': 'Sobrevivió {days} días',
+  'memorial.claim.code': 'Código de edición',
+  'memorial.claim.no': 'Número de lápida',
+  'memorial.claim.submit': 'Verificar y guardar',
+  'memorial.claim.title': 'Tengo un código de edición',
+  'memorial.compare.hint':
+    'Introduzca la fecha de creación de su cuenta. No se envía nada al servidor.',
+  'memorial.compare.label': 'Comparar mi cuenta',
+  'memorial.compare.result':
+    '{pct}% de las lápidas de este muro sobrevivieron menos días de los que lleva viva su cuenta.',
+  'memorial.disclaimer':
+    'Todas las entradas son autoinformadas y no verificadas. Solo se cuentan las cuentas reportadas como bloqueadas, por lo que estas cifras no son la tasa de bloqueo de Anthropic y no dicen nada sobre las cuentas que nunca fueron bloqueadas. Anthropic no ha confirmado causas ni magnitud de los bloqueos.',
+  'memorial.err.bad_request': 'Solicitud no válida.',
+  'memorial.err.banned_future': 'La fecha de bloqueo no puede estar en el futuro.',
+  'memorial.err.before_release':
+    'La fecha de creación debe ser en o después del primer lanzamiento público de Claude.',
+  'memorial.err.dates_reversed':
+    'La fecha de bloqueo debe ser igual o posterior a la de creación.',
+  'memorial.err.elapsed_too_short': 'Espere un momento antes de enviar.',
+  'memorial.err.forbidden': 'El código de edición es incorrecto o falta.',
+  'memorial.err.honeypot': 'Envío rechazado.',
+  'memorial.err.invalid_date': 'Introduzca fechas válidas en formato AAAA-MM-DD.',
+  'memorial.err.invalid_plan': 'Elija un plan.',
+  'memorial.err.rate_limited': 'Demasiadas solicitudes. Inténtelo más tarde.',
+  'memorial.err.unavailable': 'Servicio temporalmente no disponible.',
+  'memorial.faq.a1':
+    'Una lista voluntaria de cuentas Claude que los usuarios reportan como bloqueadas, con cuánto duró cada una. Son datos de la comunidad, no una lista oficial de Anthropic.',
+  'memorial.faq.a2':
+    'No. Cualquiera puede enviar fechas y un plan. No comprobamos cuentas con Anthropic ni guardamos pruebas.',
+  'memorial.faq.a3':
+    'Dos fechas, plan, recuento de velas, hora de envío y un hash de su código de edición. Sin IP, huella, correo ni texto libre.',
+  'memorial.faq.q1': '¿Qué es esta página?',
+  'memorial.faq.q2': '¿Está verificado?',
+  'memorial.faq.q3': '¿Qué se almacena?',
+  'memorial.faq.title': 'Preguntas frecuentes',
+  'memorial.form.banned': 'Cuenta bloqueada',
+  'memorial.form.codeWarning':
+    'Guarde este código de edición ahora. No se volverá a mostrar. Lo necesita para editar o eliminar la entrada.',
+  'memorial.form.copy': 'Copiar código de edición',
+  'memorial.form.created': 'Cuenta creada',
+  'memorial.form.editCode': 'Su código de edición',
+  'memorial.form.plan': 'Plan al bloqueo',
+  'memorial.form.submit': 'Enviar',
+  'memorial.form.success': 'Lápida añadida',
+  'memorial.form.title': 'Añadir una lápida',
+  'memorial.lead':
+    'Lápidas anónimas de cuentas Claude que la gente dice fueron bloqueadas. Los recuentos provienen solo de envíos voluntarios.',
+  'memorial.loadMore': 'Cargar más',
+  'memorial.meta.description':
+    'Un muro autoinformado de cuentas Claude bloqueadas con estadísticas de días de supervivencia. Las entradas no están verificadas por Anthropic.',
+  'memorial.meta.title': 'Memorial de cuentas Claude bloqueadas',
+  'memorial.my.delete': 'Eliminar',
+  'memorial.my.edit': 'Editar',
+  'memorial.my.empty': 'Aún no hay lápidas guardadas en este navegador.',
+  'memorial.my.title': 'Mis lápidas',
+  'memorial.offline':
+    'El almacén del memorial no está configurado. Los envíos y el muro están ocultos.',
+  'memorial.plan.free': 'Free',
+  'memorial.plan.max': 'Max',
+  'memorial.plan.other': 'Otro',
+  'memorial.plan.pro': 'Pro',
+  'memorial.sort.long': 'Mayor supervivencia',
+  'memorial.sort.new': 'Más recientes',
+  'memorial.sort.short': 'Menor supervivencia',
+  'memorial.stat.candles': 'Velas',
+  'memorial.stat.longest': 'Más larga',
+  'memorial.stat.median': 'Supervivencia mediana (días)',
+  'memorial.stat.shortest': 'Más corta',
+  'memorial.stat.tombstones': 'Lápidas',
+  'memorial.title': 'Memorial de cuentas Claude',
+
+  'nav.detector': 'Comprobación Claude',
+  'nav.detector.desc': 'Escaneo de huella del navegador para señales de riesgo de Claude.',
+  'nav.extension.desc': 'Extensión de navegador que replica el escaneo de este sitio.',
+  'nav.group.explore': 'Explorar',
+  'nav.group.tools': 'Herramientas',
+  'nav.guides.desc': 'Guías anti-bloqueo sobre entorno, pago y apelaciones.',
+  'nav.ip': 'Pureza de IP',
+  'nav.ip.desc': 'Compruebe la reputación de proxy y datacenter de su IP de salida.',
+  'nav.memorial': 'Memorial Claude',
+  'nav.memorial.desc': 'Muro autoinformado de cuentas Claude bloqueadas.',
+  'nav.menu': 'Menú',
+  'nav.menu.close': 'Cerrar menú',
+  'nav.news.desc': 'Noticias seleccionadas sobre política y productos de Claude.',
+  'nav.whoami': 'Quién soy',
+  'nav.whoami.desc': 'Vea qué puede leer este sitio sobre su visita.',
+
+  'whoami.col.reading': 'Lectura',
+  'whoami.col.timing': 'Tiempo',
+  'whoami.col.value': 'Valor',
+  'whoami.disclaimer':
+    'Todas las comprobaciones son heurísticas y no garantizan cómo tratará ningún servicio su tráfico.',
+  'whoami.faq.a1':
+    'Las lecturas permanecen en su navegador para mostrarse. /api/whoami y /api/ip responden solicitudes en vivo y no se escriben en una base de datos desde esta página.',
+  'whoami.faq.a2':
+    'Significa que dos señales que suelen coincidir no coinciden en su caso. Es una pista para revisar VPN, suplantación de configuración regional o proxies; no es un veredicto de bloqueo.',
+  'whoami.faq.a3':
+    'Los sitios pueden activar la recopilación ICE para conocer direcciones host o reflexivas adicionales. Muchas herramientas de privacidad bloquean o falsifican esos candidatos.',
+  'whoami.faq.q1': '¿Esta página guarda mis datos?',
+  'whoami.faq.q2': '¿Qué significa una contradicción?',
+  'whoami.faq.q3': '¿Por qué importa WebRTC?',
+  'whoami.faqTitle': 'Preguntas frecuentes',
+  'whoami.findingsTitle': 'Comprobaciones de coherencia',
+  'whoami.headline.consistent':
+    'Sin contradicciones entre las comprobaciones que pudimos ejecutar.',
+  'whoami.headline.mismatches':
+    '{n} contradicción(es) entre las comprobaciones que pudimos ejecutar.',
+  'whoami.headline.pending': 'Aún no hay suficientes lecturas para comparar.',
+  'whoami.layer.network': 'Red',
+  'whoami.layer.probe': 'Sonda WebRTC',
+  'whoami.layer.request': 'Solicitud',
+  'whoami.layer.script': 'Navegador',
+  'whoami.lead':
+    'Esta página enumera señales que un sitio puede leer de su solicitud y navegador. No pide GPS preciso. Los hallazgos son heurísticas, no prueba.',
+  'whoami.link.home': 'Comprobación del entorno Claude',
+  'whoami.link.ip': 'Comprobación de pureza de IP',
+  'whoami.linksAria': 'Herramientas relacionadas',
+  'whoami.meta.description':
+    'Lecturas que un sitio puede obtener de su navegador y solicitud, y comprobaciones cuando no coinciden. Sin puntuación.',
+  'whoami.meta.title': 'Quién soy',
+  'whoami.ms': '+{n} ms',
+  'whoami.probe.note':
+    'Solo se inicia tras hacer clic. Usa el STUN público de Cloudflare; nada de la sonda se sube.',
+  'whoami.probe.run': 'Ejecutar sonda WebRTC',
+  'whoami.probe.running': 'Sondeando…',
+  'whoami.reading.network.asn': 'ASN',
+  'whoami.reading.network.org': 'Organización de red',
+  'whoami.reading.network.proxy': 'Indicador proxy / VPN',
+  'whoami.reading.network.type': 'Tipo de red IP',
+  'whoami.reading.probe.hostIps': 'Direcciones ICE host',
+  'whoami.reading.probe.srflxIp': 'Dirección STUN srflx',
+  'whoami.reading.request.acceptLanguage': 'Cabecera Accept-Language',
+  'whoami.reading.request.city': 'Ciudad geo (IP)',
+  'whoami.reading.request.country': 'País geo (IP)',
+  'whoami.reading.request.dnt': 'Cabecera DNT',
+  'whoami.reading.request.ip': 'IP vista por el servidor',
+  'whoami.reading.request.ipTimezone': 'Zona horaria geo (IP)',
+  'whoami.reading.request.region': 'Región geo (IP)',
+  'whoami.reading.request.secChUaPlatform': 'Cabecera Sec-CH-UA-Platform',
+  'whoami.reading.request.secGpc': 'Cabecera Sec-GPC',
+  'whoami.reading.request.userAgent': 'Cabecera User-Agent',
+  'whoami.reading.script.canvas': 'Hash de Canvas',
+  'whoami.reading.script.cores': 'Núcleos de CPU',
+  'whoami.reading.script.gpu': 'Renderizador WebGL',
+  'whoami.reading.script.languages': 'navigator.languages',
+  'whoami.reading.script.memory': 'Memoria del dispositivo',
+  'whoami.reading.script.privacy': 'Señales de privacidad',
+  'whoami.reading.script.screen': 'Pantalla',
+  'whoami.reading.script.timezone': 'Zona horaria del navegador',
+  'whoami.reading.script.touch': 'maxTouchPoints',
+  'whoami.reading.script.uaDataPlatform': 'Plataforma UA-CH',
+  'whoami.reading.script.userAgent': 'navigator.userAgent',
+  'whoami.readingsTitle': 'Lecturas',
+  'whoami.title': 'Quién soy',
+  'whoami.verdict.match': 'Coherente',
+  'whoami.verdict.mismatch': 'Contradicción',
+  'whoami.rule.tz-offset.title': 'Desfase horario vs zona geo (IP)',
+  'whoami.rule.tz-offset.match':
+    'El desfase UTC del navegador coincide con el de la zona horaria geo (IP).',
+  'whoami.rule.tz-offset.mismatch':
+    'El desfase UTC del navegador difiere del de la zona horaria geo (IP).',
+  'whoami.rule.lang-country.title': 'Idiomas del navegador vs país (IP)',
+  'whoami.rule.lang-country.match':
+    'Una etiqueta de idioma principal encaja con los idiomas habituales del país (IP).',
+  'whoami.rule.lang-country.mismatch':
+    'Ninguna etiqueta de idioma principal encaja con los idiomas habituales del país (IP).',
+  'whoami.rule.lang-header-script.title': 'Accept-Language vs navigator.languages',
+  'whoami.rule.lang-header-script.match':
+    'La primera etiqueta de idioma coincide en cabecera y script.',
+  'whoami.rule.lang-header-script.mismatch':
+    'La primera etiqueta de idioma difiere entre cabecera y script.',
+  'whoami.rule.ua-platform.title': 'User-Agent vs indicio de plataforma',
+  'whoami.rule.ua-platform.match':
+    'User-Agent y el indicio de plataforma apuntan a la misma familia de SO.',
+  'whoami.rule.ua-platform.mismatch':
+    'User-Agent y el indicio de plataforma apuntan a familias de SO distintas.',
+  'whoami.rule.ua-gpu.title': 'User-Agent vs renderizador GPU',
+  'whoami.rule.ua-gpu.match':
+    'El renderizador GPU parece plausible para la plataforma declarada.',
+  'whoami.rule.ua-gpu.mismatch':
+    'El renderizador GPU parece incorrecto para la plataforma declarada.',
+  'whoami.rule.webrtc-ip.title': 'WebRTC srflx vs IP del servidor',
+  'whoami.rule.webrtc-ip.match':
+    'La dirección STUN srflx coincide con la IP vista por el servidor.',
+  'whoami.rule.webrtc-ip.mismatch':
+    'La dirección STUN srflx difiere de la IP vista por el servidor.',
+  'whoami.rule.webrtc-tun.title': 'Candidatos host vs rango TUN',
+  'whoami.rule.webrtc-tun.match':
+    'Hay candidatos host y ninguno está en 198.18.0.0/15.',
+  'whoami.rule.webrtc-tun.mismatch':
+    'Un candidato host está en 198.18.0.0/15 (rango TUN habitual en Clash/Surge; solo heurística).',
+  'whoami.rule.ip-network-type.title': 'Expectativa de IP residencial',
+  'whoami.rule.ip-network-type.match':
+    'La salida parece residencial y no está marcada como proxy/VPN.',
+  'whoami.rule.ip-network-type.mismatch':
+    'La salida parece de datacenter o proxy/VPN.',
 } satisfies Record<string, string>;

@@ -1,0 +1,366 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from './SiteHeader.astro';
+import Footer from './Footer.astro';
+import { localePath, type Lang } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const home = localePath(lang, '/');
+const ipPath = localePath(lang, '/ip/');
+const path = localePath(lang, '/who-am-i/');
+
+const site = Astro.site ?? new URL('https://fuck-claude.vercel.app');
+const currentUrl = new URL(path, site).href;
+const homeUrl = new URL(home, site).href;
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: t('nav.home'), item: homeUrl },
+    { '@type': 'ListItem', position: 2, name: t('whoami.title'), item: currentUrl },
+  ],
+};
+---
+
+<BaseLayout
+  lang={lang}
+  path={path}
+  title={`${t('whoami.meta.title')} | Fuck Claude`}
+  description={t('whoami.meta.description')}
+  omitFaq
+  jsonLdExtra={breadcrumbJsonLd}
+>
+  <SiteHeader lang={lang} current="whoami" />
+
+  <main class="wrap whoami">
+    <section class="whoami-hero">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href={home}>{t('nav.home')}</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page">{t('whoami.title')}</li>
+        </ol>
+      </nav>
+      <h1>{t('whoami.title')}</h1>
+      <p class="whoami-hero__lead">{t('whoami.lead')}</p>
+    </section>
+
+    <div class="whoami__root" data-whoami data-lang={lang}>
+      <p class="whoami__headline" data-whoami-headline>{t('whoami.headline.pending')}</p>
+
+      <section class="whoami__block" aria-labelledby="whoami-findings-heading">
+        <h2 id="whoami-findings-heading">{t('whoami.findingsTitle')}</h2>
+        <div data-whoami-findings></div>
+      </section>
+
+      <section class="whoami__block" aria-labelledby="whoami-readings-heading">
+        <h2 id="whoami-readings-heading">{t('whoami.readingsTitle')}</h2>
+        <div data-whoami-readings></div>
+      </section>
+
+      <div class="whoami__probe-wrap">
+        <button type="button" class="whoami__probe" data-whoami-probe>
+          {t('whoami.probe.run')}
+        </button>
+        <p class="whoami__probe-note">{t('whoami.probe.note')}</p>
+      </div>
+
+      <section class="whoami__faq" aria-labelledby="whoami-faq-heading">
+        <h2 id="whoami-faq-heading">{t('whoami.faqTitle')}</h2>
+        <details class="whoami__faq-item">
+          <summary>{t('whoami.faq.q1')}</summary>
+          <p>{t('whoami.faq.a1')}</p>
+        </details>
+        <details class="whoami__faq-item">
+          <summary>{t('whoami.faq.q2')}</summary>
+          <p>{t('whoami.faq.a2')}</p>
+        </details>
+        <details class="whoami__faq-item">
+          <summary>{t('whoami.faq.q3')}</summary>
+          <p>{t('whoami.faq.a3')}</p>
+        </details>
+      </section>
+
+      <nav class="whoami__links" aria-label={t('whoami.linksAria')}>
+        <a class="whoami__link" href={home}>{t('whoami.link.home')}</a>
+        <a class="whoami__link" href={ipPath}>{t('whoami.link.ip')}</a>
+      </nav>
+
+      <p class="whoami__disclaimer">{t('whoami.disclaimer')}</p>
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>
+
+<script>
+  import { mountWhoAmI } from '../scripts/whoami-ui';
+  mountWhoAmI();
+</script>
+
+<style>
+  .whoami-hero {
+    padding: 36px 0 8px;
+  }
+  .breadcrumb {
+    margin-bottom: 12px;
+    font-size: 0.86rem;
+  }
+  .breadcrumb ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted-2);
+  }
+  .breadcrumb a {
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .breadcrumb a:hover {
+    color: var(--accent-strong);
+  }
+  .whoami-hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    margin: 0 0 10px;
+    line-height: 1.2;
+  }
+  .whoami-hero__lead {
+    margin: 0;
+    max-width: 68ch;
+    color: var(--muted);
+    font-size: 1.02rem;
+    line-height: 1.55;
+  }
+
+  .whoami__root {
+    padding-block-end: 48px;
+    max-width: min(920px, 100%);
+  }
+  .whoami__headline {
+    font-size: 1.12rem;
+    font-weight: 650;
+    margin: 20px 0 24px;
+    line-height: 1.45;
+  }
+  .whoami__block {
+    margin-block-end: 28px;
+  }
+  .whoami__block h2 {
+    font-size: 1.05rem;
+    margin: 0 0 12px;
+    font-weight: 700;
+  }
+  .whoami__probe-wrap {
+    margin: 28px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .whoami__probe {
+    appearance: none;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-weight: 650;
+    font-size: 0.92rem;
+    padding: 10px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .whoami__probe:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent-strong);
+  }
+  .whoami__probe:disabled {
+    opacity: 0.65;
+    cursor: wait;
+  }
+  .whoami__probe-note {
+    margin: 0;
+    max-width: 56ch;
+    font-size: 0.86rem;
+    color: var(--muted-2);
+    line-height: 1.45;
+  }
+  .whoami__faq {
+    margin-block: 32px 24px;
+  }
+  .whoami__faq h2 {
+    font-size: 1.05rem;
+    margin: 0 0 12px;
+  }
+  .whoami__faq-item {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-block-end: 10px;
+    background: var(--surface);
+  }
+  .whoami__faq-item summary {
+    cursor: pointer;
+    font-weight: 650;
+    list-style-position: outside;
+  }
+  .whoami__faq-item p {
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .whoami__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    margin-block-end: 16px;
+  }
+  .whoami__link {
+    font-weight: 650;
+    color: var(--accent-strong);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .whoami__disclaimer {
+    margin: 0;
+    font-size: 0.86rem;
+    color: var(--muted-2);
+    max-width: 62ch;
+    line-height: 1.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .whoami__probe {
+      transition: none;
+    }
+  }
+</style>
+
+<style is:global>
+  .whoami__findings {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+    grid-template-columns: minmax(min(280px, 100%), 1fr);
+  }
+  .whoami__finding {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    background: var(--surface);
+    overflow-wrap: anywhere;
+  }
+  .whoami__finding--mismatch {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  }
+  .whoami__finding-title {
+    margin: 0 0 6px;
+    font-size: 0.98rem;
+    font-weight: 700;
+  }
+  .whoami__verdict-badge {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 650;
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin: 0 0 10px;
+  }
+  .whoami__verdict-badge--match {
+    color: var(--muted);
+    background: color-mix(in srgb, var(--border) 40%, var(--surface));
+    border: 1px solid var(--border);
+  }
+  .whoami__verdict-badge--mismatch {
+    color: var(--accent-strong);
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
+  }
+  .whoami__finding-verdict {
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+  .whoami__evidence {
+    margin: 0;
+    display: grid;
+    gap: 6px 12px;
+    grid-template-columns: minmax(min(120px, 100%), 1fr) 2fr;
+    font-size: 0.88rem;
+  }
+  .whoami__evidence dt {
+    margin: 0;
+    color: var(--muted-2);
+    font-weight: 600;
+  }
+  .whoami__evidence dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 480px) {
+    .whoami__evidence {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2px;
+    }
+    .whoami__evidence dd {
+      margin-block-end: 8px;
+    }
+  }
+  .whoami__mono {
+    font-family: var(--mono);
+    font-size: 0.84rem;
+    overflow-wrap: anywhere;
+  }
+  .whoami__layer {
+    margin-block-end: 18px;
+  }
+  .whoami__layer-title {
+    font-size: 0.95rem;
+    margin: 0 0 8px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .whoami__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  .whoami__table th,
+  .whoami__table td {
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    text-align: start;
+    vertical-align: top;
+  }
+  .whoami__table th {
+    background: color-mix(in srgb, var(--border) 35%, var(--surface));
+    font-weight: 650;
+  }
+  .whoami__table td.whoami__mono {
+    overflow-wrap: anywhere;
+  }
+  .whoami__ms {
+    white-space: nowrap;
+    color: var(--muted-2);
+    font-family: var(--mono);
+    font-size: 0.82rem;
+  }
+  .whoami__empty {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin: 0;
+  }
+</style>

@@ -4,14 +4,13 @@ import { localize } from '../i18n/localize';
 import { useTranslations } from '../i18n/ui';
 import { regionForLang, signalsFor } from '../config/signals';
 import { getGuide, type GuideArticle } from '../config/guides';
-import LangToggle from './LangToggle.astro';
+import SiteHeader from './SiteHeader.astro';
 import ScoreRing from './ScoreRing.astro';
 import Mascot from './Mascot.astro';
 import Sponsors from './Sponsors.astro';
 import ResultSponsor from './ResultSponsor.astro';
 import IpPurityCard from './IpPurityCard.astro';
 import CnModels from './CnModels.astro';
-import SocialLinks from './SocialLinks.astro';
 import Footer from './Footer.astro';
 import ClaudeNews from './ClaudeNews.astro';
 import CommunityPosts from './CommunityPosts.astro';
@@ -23,10 +22,7 @@ interface Props {
 const { lang } = Astro.props;
 const pageSignals = signalsFor(regionForLang(lang));
 const t = useTranslations(lang);
-const home = localePath(lang, '/');
 const guidesHub = localePath(lang, '/guides/');
-const newsHub = localePath(lang, '/news/');
-const extensionPage = localePath(lang, '/extension/');
 const guideUrl = (slug: string) => localePath(lang, `/guides/${slug}/`);
 const FEATURED_GUIDE_SLUGS = [
   'antiban-essentials',
@@ -46,63 +42,7 @@ const apiExamples = [
 ];
 ---
 
-<header class="nav">
-  <div class="wrap nav__inner">
-    <a class="brand" href={home}>
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <rect width="64" height="64" rx="14" fill="currentColor"></rect>
-        <g fill="#FAF9F5">
-          <rect x="26.9" y="8" width="7.6" height="29" rx="3.8"></rect>
-          <rect x="18.9" y="24.5" width="6.4" height="11" rx="3.2"></rect>
-          <rect x="36.1" y="24.5" width="6.4" height="11" rx="3.2"></rect>
-          <rect x="16.9" y="30" width="27.6" height="24" rx="9"></rect>
-          <rect x="40.6" y="32.5" width="7.6" height="16" rx="3.8" transform="rotate(-24 44.4 40.5)"></rect>
-        </g>
-      </svg>
-      <span class="brand__text">{t('nav.title')}</span>
-    </a>
-    <nav class="nav__actions">
-      <a class="nav__link" href={guidesHub}>
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
-          <path d="M6 6h10"></path>
-          <path d="M6 10h10"></path>
-        </svg>
-        <span>{t('nav.guides')}</span>
-      </a>
-      <a class="nav__link" href={newsHub}>
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path>
-          <path d="M18 14h-8"></path>
-          <path d="M15 18h-5"></path>
-          <path d="M10 6h8v4h-8V6Z"></path>
-        </svg>
-        <span>{t('nav.news')}</span>
-      </a>
-      <a class="nav__link" href={extensionPage}>
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M2 12h20"></path>
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-        </svg>
-        <span>{t('nav.extension')}</span>
-      </a>
-      <LangToggle lang={lang} />
-      <SocialLinks lang={lang} />
-      <a
-        class="icon-link"
-        href="https://github.com/LinXiaoTao/FuckClaude"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="GitHub"
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.3-1.8-1.3-1.8-1.1-.7 0-.7 0-.7 1.2 0 1.9 1.2 1.9 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z"></path>
-        </svg>
-      </a>
-    </nav>
-  </div>
-</header>
+<SiteHeader lang={lang} current="home" />
 
 <main class="wrap">
   <section class="hero">
@@ -378,12 +318,6 @@ const apiExamples = [
 </script>
 
 <style>
-  .brand__text {
-    max-width: 52vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
   .privacy__link {
     margin-top: 8px;
   }

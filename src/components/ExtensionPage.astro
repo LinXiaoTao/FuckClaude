@@ -2,8 +2,7 @@
 import { copyFileSync, existsSync, mkdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import LangToggle from './LangToggle.astro';
-import SocialLinks from './SocialLinks.astro';
+import SiteHeader from './SiteHeader.astro';
 import Footer from './Footer.astro';
 import { localePath, type Lang } from '../i18n/locales';
 import { useTranslations } from '../i18n/ui';
@@ -15,8 +14,6 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const home = localePath(lang, '/');
-const guidesHub = localePath(lang, '/guides/');
-const newsHub = localePath(lang, '/news/');
 const extensionPage = localePath(lang, '/extension/');
 
 const extPkg = JSON.parse(readFileSync(join(process.cwd(), 'extension/package.json'), 'utf8')) as {
@@ -85,31 +82,7 @@ function formatBytes(bytes: number): string {
   omitFaq
   jsonLdExtra={breadcrumbJsonLd}
 >
-  <header class="nav">
-    <div class="wrap nav__inner">
-      <a class="brand" href={home}>
-        <svg viewBox="0 0 64 64" aria-hidden="true">
-          <rect width="64" height="64" rx="14" fill="currentColor"></rect>
-          <g fill="#FAF9F5">
-            <rect x="26.9" y="8" width="7.6" height="29" rx="3.8"></rect>
-            <rect x="18.9" y="24.5" width="6.4" height="11" rx="3.2"></rect>
-            <rect x="36.1" y="24.5" width="6.4" height="11" rx="3.2"></rect>
-            <rect x="16.9" y="30" width="27.6" height="24" rx="9"></rect>
-            <rect x="40.6" y="32.5" width="7.6" height="16" rx="3.8" transform="rotate(-24 44.4 40.5)"></rect>
-          </g>
-        </svg>
-        <span class="brand__text">{t('nav.title')}</span>
-      </a>
-      <nav class="nav__actions">
-        <a class="nav__link" href={home}>{t('nav.home')}</a>
-        <a class="nav__link" href={guidesHub}>{t('nav.guides')}</a>
-        <a class="nav__link" href={newsHub}>{t('nav.news')}</a>
-        <a class="nav__link" href={extensionPage} aria-current="page">{t('nav.extension')}</a>
-        <LangToggle lang={lang} />
-        <SocialLinks lang={lang} />
-      </nav>
-    </div>
-  </header>
+  <SiteHeader lang={lang} current="extension" />
 
   <main class="wrap">
     <article class="ext">

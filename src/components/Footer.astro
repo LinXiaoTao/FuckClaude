@@ -1,28 +1,29 @@
 ---
 import { localePath, type Lang } from '../i18n/locales';
 import { useTranslations } from '../i18n/ui';
+import { NAV_ITEMS } from '../config/nav';
+import SocialLinks from './SocialLinks.astro';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const home = localePath(lang, '/');
-const guidesUrl = localePath(lang, '/guides/');
-const newsUrl = localePath(lang, '/news/');
+const footerNavItems = NAV_ITEMS.filter((item) => item.footer);
 ---
 
 <footer>
   <div class="wrap">
     <p class="footer__disclaimer">{t('footer.disclaimer')}</p>
     <nav class="footer__links" aria-label="Footer navigation">
-      <a href={home}>{t('nav.home')}</a>
-      <span aria-hidden="true">·</span>
-      <a href={localePath(lang, '/ip/')}>{t('footer.ip')}</a>
-      <span aria-hidden="true">·</span>
-      <a href={guidesUrl}>{t('nav.guides')}</a>
-      <span aria-hidden="true">·</span>
-      <a href={newsUrl}>{t('nav.news')}</a>
+      {
+        footerNavItems.map((item, index) => (
+          <>
+            {index > 0 ? <span aria-hidden="true">·</span> : null}
+            <a href={localePath(lang, item.path)}>{t(item.labelKey)}</a>
+          </>
+        ))
+      }
       <span aria-hidden="true">·</span>
       <a href={localePath(lang, '/about/')}>{t('footer.about')}</a>
       <span aria-hidden="true">·</span>
@@ -32,6 +33,7 @@ const newsUrl = localePath(lang, '/news/');
       <span aria-hidden="true">·</span>
       <a href={localePath(lang, '/contact/')}>{t('footer.contact')}</a>
     </nav>
+    <SocialLinks lang={lang} variant="footer" />
     <p class="footer__meta">
       <span>{t('footer.license')}</span>
       <a

@@ -12,8 +12,11 @@ import { useTranslations, type Lang } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
+  variant?: 'drawer' | 'footer';
 }
-const { lang } = Astro.props;
+const { lang, variant } = Astro.props;
+const rootClass =
+  variant === 'footer' ? 'socials socials--footer' : variant === 'drawer' ? 'socials socials--drawer' : 'socials';
 const t = useTranslations(lang);
 
 const items = await Promise.all(
@@ -29,7 +32,7 @@ const items = await Promise.all(
 );
 ---
 
-<ul class="socials">
+<ul class={rootClass}>
   {
     items.map((s) => (
       <li class="social" style={`--brand: ${s.color}`}>
@@ -154,5 +157,27 @@ const items = await Promise.all(
     .socials {
       gap: 6px;
     }
+  }
+
+  .socials--footer {
+    margin-top: 14px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .socials--footer .social:first-child .social__pop {
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+  }
+  .socials--footer .social:last-child .social__pop {
+    inset-inline-end: 0;
+    inset-inline-start: auto;
+  }
+  .socials--footer .social:first-child:hover .social__pop,
+  .socials--footer .social:first-child .social__link:focus-visible + .social__pop {
+    transform: none;
+  }
+  .socials--footer .social:last-child:hover .social__pop,
+  .socials--footer .social:last-child .social__link:focus-visible + .social__pop {
+    transform: none;
   }
 </style>

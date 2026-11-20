@@ -1,0 +1,534 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from './SiteHeader.astro';
+import Footer from './Footer.astro';
+import I18nNotice from './I18nNotice.astro';
+import { PLANS } from '../config/memorial';
+import { localePath, type Lang } from '../i18n/locales';
+import { translationNoticeApplies, useTranslations } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const home = localePath(lang, '/');
+const path = localePath(lang, '/memorial/');
+const showNotice = translationNoticeApplies(lang, 'fallback');
+
+const site = Astro.site ?? new URL('https://fuck-claude.vercel.app');
+const currentUrl = new URL(path, site).href;
+const homeUrl = new URL(home, site).href;
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: t('nav.home'), item: homeUrl },
+    { '@type': 'ListItem', position: 2, name: t('memorial.title'), item: currentUrl },
+  ],
+};
+---
+
+<BaseLayout
+  lang={lang}
+  path={path}
+  title={`${t('memorial.meta.title')} | Fuck Claude`}
+  description={t('memorial.meta.description')}
+  omitFaq
+  jsonLdExtra={breadcrumbJsonLd}
+>
+  <SiteHeader lang={lang} current="memorial" />
+
+  <main class="wrap" data-memorial-root data-state="loading">
+    <section class="mem-hero">
+      {showNotice && <I18nNotice lang={lang} />}
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href={home}>{t('nav.home')}</a></li>
+          <li aria-hidden="true">/</li>
+          <li aria-current="page">{t('memorial.title')}</li>
+        </ol>
+      </nav>
+      <h1>{t('memorial.title')}</h1>
+      <p class="mem-hero__lead">{t('memorial.lead')}</p>
+
+      <div class="mem-stats" aria-live="polite">
+        <dl class="mem-stats__row">
+          <div class="mem-stat">
+            <dt>{t('memorial.stat.tombstones')}</dt>
+            <dd class="mem-stat__num" id="mem-stat-count" data-mem-stat>–</dd>
+          </div>
+          <div class="mem-stat">
+            <dt>{t('memorial.stat.median')}</dt>
+            <dd class="mem-stat__num" id="mem-stat-median" data-mem-stat>–</dd>
+          </div>
+          <div class="mem-stat">
+            <dt>{t('memorial.stat.longest')}</dt>
+            <dd class="mem-stat__num" id="mem-stat-max" data-mem-stat>–</dd>
+          </div>
+          <div class="mem-stat">
+            <dt>{t('memorial.stat.shortest')}</dt>
+            <dd class="mem-stat__num" id="mem-stat-min" data-mem-stat>–</dd>
+          </div>
+          <div class="mem-stat">
+            <dt>{t('memorial.stat.candles')}</dt>
+            <dd class="mem-stat__num" id="mem-stat-candles" data-mem-stat>–</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <p class="mem-disclaimer" role="note">{t('memorial.disclaimer')}</p>
+    <p class="mem-offline" id="mem-offline" hidden>{t('memorial.offline')}</p>
+
+    <section class="mem-compare" aria-labelledby="mem-compare-title">
+      <h2 id="mem-compare-title">{t('memorial.compare.label')}</h2>
+      <p class="mem-compare__hint">{t('memorial.compare.hint')}</p>
+      <label class="mem-field">
+        <span class="mem-field__label">{t('memorial.form.created')}</span>
+        <input type="date" id="mem-compare-date" class="mem-input" />
+      </label>
+      <p class="mem-compare__out" id="mem-compare-out" hidden></p>
+    </section>
+
+    <section class="mem-wall" data-mem-wall hidden>
+      <div class="mem-tabs" role="tablist">
+        <button type="button" class="mem-tab is-active" data-sort="new" role="tab">
+          {t('memorial.sort.new')}
+        </button>
+        <button type="button" class="mem-tab" data-sort="long" role="tab">
+          {t('memorial.sort.long')}
+        </button>
+        <button type="button" class="mem-tab" data-sort="short" role="tab">
+          {t('memorial.sort.short')}
+        </button>
+      </div>
+      <div class="mem-grid" id="mem-grid" aria-live="polite"></div>
+      <button type="button" class="mem-load" id="mem-load-more" hidden>{t('memorial.loadMore')}</button>
+    </section>
+
+    <section class="mem-form-wrap" data-mem-form-wrap hidden>
+      <h2>{t('memorial.form.title')}</h2>
+      <form id="mem-form" class="mem-form" novalidate>
+        <label class="mem-field">
+          <span class="mem-field__label">{t('memorial.form.created')}</span>
+          <input type="date" name="createdOn" required class="mem-input" />
+          <span class="mem-err" data-err="createdOn" hidden></span>
+        </label>
+        <label class="mem-field">
+          <span class="mem-field__label">{t('memorial.form.banned')}</span>
+          <input type="date" name="bannedOn" required class="mem-input" />
+          <span class="mem-err" data-err="bannedOn" hidden></span>
+        </label>
+        <label class="mem-field">
+          <span class="mem-field__label">{t('memorial.form.plan')}</span>
+          <select name="plan" required class="mem-input">
+            {PLANS.map((p) => (
+              <option value={p}>{t(`memorial.plan.${p}`)}</option>
+            ))}
+          </select>
+        </label>
+        <label class="mem-hp" aria-hidden="true">
+          <input type="text" name="website" tabindex="-1" autocomplete="off" />
+        </label>
+        <button type="submit" class="mem-btn">{t('memorial.form.submit')}</button>
+        <p class="mem-form-err" id="mem-form-err" hidden></p>
+      </form>
+      <div class="mem-success" id="mem-success" hidden>
+        <p>{t('memorial.form.success')}</p>
+        <p class="mem-success__label">{t('memorial.form.editCode')}</p>
+        <code class="mem-code" id="mem-edit-code"></code>
+        <button type="button" class="mem-btn mem-btn--ghost" id="mem-copy-code">{t('memorial.form.copy')}</button>
+        <p class="mem-warn">{t('memorial.form.codeWarning')}</p>
+      </div>
+    </section>
+
+    <section class="mem-my" data-mem-my hidden>
+      <h2>{t('memorial.my.title')}</h2>
+      <p id="mem-my-empty">{t('memorial.my.empty')}</p>
+      <ul class="mem-my-list" id="mem-my-list"></ul>
+      <h3>{t('memorial.claim.title')}</h3>
+      <form id="mem-claim-form" class="mem-form mem-form--inline">
+        <label class="mem-field">
+          <span class="mem-field__label">{t('memorial.claim.no')}</span>
+          <input type="number" name="no" min="1" step="1" required class="mem-input mem-input--narrow" />
+        </label>
+        <label class="mem-field">
+          <span class="mem-field__label">{t('memorial.claim.code')}</span>
+          <input type="text" name="editToken" required class="mem-input" autocomplete="off" />
+        </label>
+        <button type="submit" class="mem-btn">{t('memorial.claim.submit')}</button>
+        <p class="mem-form-err" id="mem-claim-err" hidden></p>
+      </form>
+    </section>
+
+    <section class="mem-faq">
+      <h2>{t('memorial.faq.title')}</h2>
+      <details>
+        <summary>{t('memorial.faq.q1')}</summary>
+        <p>{t('memorial.faq.a1')}</p>
+      </details>
+      <details>
+        <summary>{t('memorial.faq.q2')}</summary>
+        <p>{t('memorial.faq.a2')}</p>
+      </details>
+      <details>
+        <summary>{t('memorial.faq.q3')}</summary>
+        <p>{t('memorial.faq.a3')}</p>
+      </details>
+    </section>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>
+
+<script>
+  import '../scripts/memorial-ui.ts';
+</script>
+
+<style>
+  .mem-hero {
+    padding: 36px 0 12px;
+  }
+  .breadcrumb {
+    margin-bottom: 12px;
+    font-size: 0.86rem;
+  }
+  .breadcrumb ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted-2);
+  }
+  .breadcrumb a {
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .mem-hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    margin: 0 0 10px;
+    line-height: 1.2;
+  }
+  .mem-hero__lead {
+    margin: 0 0 18px;
+    max-width: 68ch;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .mem-stats {
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 16px;
+  }
+  .mem-stats__row {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr));
+    gap: 10px;
+  }
+  .mem-stat {
+    margin: 0;
+    text-align: center;
+    container-type: inline-size;
+  }
+  .mem-stat dt {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .mem-stat__num {
+    margin: 0;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: clamp(1rem, 4.5cqi, 1.35rem);
+    height: 1.45em;
+    line-height: 1.45em;
+    white-space: nowrap;
+    overflow: hidden;
+    font-variant-numeric: tabular-nums;
+  }
+  .mem-disclaimer {
+    padding: 12px 14px;
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin: 0 0 20px;
+  }
+  .mem-offline {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .mem-compare,
+  .mem-wall,
+  .mem-form-wrap,
+  .mem-my,
+  .mem-faq {
+    margin-bottom: 28px;
+  }
+  .mem-compare h2,
+  .mem-form-wrap h2,
+  .mem-my h2,
+  .mem-faq h2 {
+    font-size: 1.25rem;
+    margin: 0 0 8px;
+  }
+  .mem-compare__hint {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 0 0 10px;
+  }
+  .mem-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+  .mem-field__label {
+    font-size: 0.86rem;
+    font-weight: 600;
+  }
+  .mem-input {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    color: inherit;
+    font: inherit;
+    max-width: 100%;
+  }
+  .mem-input--narrow {
+    max-width: 8rem;
+  }
+  .mem-hp {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+  .mem-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .mem-tab {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font: inherit;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+  .mem-tab.is-active {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  }
+  .mem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(180px, 100%), 1fr));
+    gap: 14px;
+  }
+  .mem-btn {
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: none;
+    background: var(--accent);
+    color: var(--on-accent, #fff);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .mem-btn--ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: inherit;
+  }
+  .mem-load {
+    margin-top: 14px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    font: inherit;
+    cursor: pointer;
+  }
+  .mem-form--inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  .mem-err,
+  .mem-form-err {
+    color: var(--danger, #c0392b);
+    font-size: 0.84rem;
+    margin: 0;
+  }
+  .mem-success {
+    margin-top: 12px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .mem-code {
+    display: block;
+    padding: 10px;
+    margin: 8px 0;
+    word-break: break-all;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    background: var(--bg);
+    border-radius: 8px;
+  }
+  .mem-warn {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin: 8px 0 0;
+  }
+  .mem-my-list {
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .mem-faq details {
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
+  }
+  .mem-faq summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .mem-faq p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mem-tab,
+    .mem-btn,
+    .mem-load {
+      transition: none;
+    }
+  }
+</style>
+
+<style is:global>
+  .mem-card {
+    position: relative;
+    padding: 14px 12px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px 18px 12px 12px;
+    box-shadow: var(--shadow-sm);
+    overflow-wrap: anywhere;
+  }
+  .mem-card::before {
+    content: '';
+    position: absolute;
+    inset-inline: 8px;
+    top: -1px;
+    height: 14px;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    background: var(--surface);
+    pointer-events: none;
+  }
+  .mem-card__no {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin: 0 0 4px;
+  }
+  .mem-card__days {
+    font-weight: 700;
+    margin: 0 0 8px;
+    font-size: 1.02rem;
+  }
+  .mem-card__meta {
+    margin: 0 0 10px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .mem-chip {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+    margin-bottom: 10px;
+  }
+  .mem-candle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    background: transparent;
+    font: inherit;
+    font-size: 0.86rem;
+    cursor: pointer;
+  }
+  .mem-candle:disabled {
+    opacity: 0.55;
+    cursor: default;
+  }
+  .mem-candle__n {
+    font-family: var(--mono);
+    font-weight: 700;
+  }
+  .mem-my-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .mem-my-item .mem-btn {
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: none;
+    background: var(--accent);
+    color: var(--on-accent, #fff);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .mem-my-item .mem-btn--ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: inherit;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mem-candle {
+      transition: none;
+    }
+  }
+</style>
