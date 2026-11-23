@@ -77,6 +77,9 @@ function groupIsCurrent(items: typeof NAV_ITEMS): boolean {
         }
       </div>
       <LangToggle lang={lang} />
+      <div class="nav__socials">
+        <SocialLinks lang={lang} />
+      </div>
       <details class="nav-drawer" data-nav-menu>
         <summary class="nav-drawer__toggle" aria-label={t('nav.menu')}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -432,7 +435,8 @@ function groupIsCurrent(items: typeof NAV_ITEMS): boolean {
   }
 
   @media (max-width: 900px) {
-    .nav__desktop {
+    .nav__desktop,
+    .nav__socials {
       display: none;
     }
     .nav-drawer {

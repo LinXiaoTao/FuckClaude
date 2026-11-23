@@ -2,8 +2,6 @@
 import { localePath, type Lang } from '../i18n/locales';
 import { useTranslations } from '../i18n/ui';
 import { NAV_ITEMS } from '../config/nav';
-import SocialLinks from './SocialLinks.astro';
-
 interface Props {
   lang: Lang;
 }
@@ -33,7 +31,6 @@ const footerNavItems = NAV_ITEMS.filter((item) => item.footer);
       <span aria-hidden="true">·</span>
       <a href={localePath(lang, '/contact/')}>{t('footer.contact')}</a>
     </nav>
-    <SocialLinks lang={lang} variant="footer" />
     <p class="footer__meta">
       <span>{t('footer.license')}</span>
       <a

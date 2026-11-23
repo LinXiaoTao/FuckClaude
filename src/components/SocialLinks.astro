@@ -1,6 +1,7 @@
 ---
 /**
- * Header social icons (Xiaohongshu / Douyin / X) next to the GitHub link.
+ * Social icons (Xiaohongshu / Douyin / X) next to the GitHub link in the desktop
+ * header; the `drawer` variant sits at the end of the mobile menu panel.
  * Every icon is a normal click-through link; on hover-capable devices a
  * popover shows a QR code so all three profiles can also be followed by
  * scanning with the matching app. QR SVGs are generated at build time with
@@ -12,11 +13,10 @@ import { useTranslations, type Lang } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
-  variant?: 'drawer' | 'footer';
+  variant?: 'drawer';
 }
 const { lang, variant } = Astro.props;
-const rootClass =
-  variant === 'footer' ? 'socials socials--footer' : variant === 'drawer' ? 'socials socials--drawer' : 'socials';
+const rootClass = variant === 'drawer' ? 'socials socials--drawer' : 'socials';
 const t = useTranslations(lang);
 
 const items = await Promise.all(
@@ -157,27 +157,5 @@ const items = await Promise.all(
     .socials {
       gap: 6px;
     }
-  }
-
-  .socials--footer {
-    margin-top: 14px;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-  }
-  .socials--footer .social:first-child .social__pop {
-    inset-inline-start: 0;
-    inset-inline-end: auto;
-  }
-  .socials--footer .social:last-child .social__pop {
-    inset-inline-end: 0;
-    inset-inline-start: auto;
-  }
-  .socials--footer .social:first-child:hover .social__pop,
-  .socials--footer .social:first-child .social__link:focus-visible + .social__pop {
-    transform: none;
-  }
-  .socials--footer .social:last-child:hover .social__pop,
-  .socials--footer .social:last-child .social__link:focus-visible + .social__pop {
-    transform: none;
   }
 </style>
