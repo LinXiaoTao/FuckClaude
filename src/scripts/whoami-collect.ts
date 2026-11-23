@@ -83,8 +83,8 @@ function uaDataPlatform(): string | null {
   return p && p.length > 0 ? p : null;
 }
 
-function collectScriptReadings(started: number): Partial<Snapshot> {
-  const now = () => performance.now() - started;
+function collectScriptReadings(): Partial<Snapshot> {
+  const now = () => performance.now();
   const out: Partial<Snapshot> = {};
 
   out['script.timezone'] = reading('script.timezone', 'script', scriptTimezoneValue(), now());
@@ -120,8 +120,8 @@ function collectScriptReadings(started: number): Partial<Snapshot> {
   return out;
 }
 
-function mapRequest(api: WhoAmIApi, started: number): Partial<Snapshot> {
-  const t = () => performance.now() - started;
+function mapRequest(api: WhoAmIApi, atMs: number): Partial<Snapshot> {
+  const t = () => atMs;
   const out: Partial<Snapshot> = {};
   if (api.ip) out['request.ip'] = reading('request.ip', 'request', api.ip, t());
   if (api.geo.country) out['request.country'] = reading('request.country', 'request', api.geo.country, t());
@@ -146,8 +146,8 @@ interface IpJson {
   flags?: { proxy?: boolean | null; vpn?: boolean | null };
 }
 
-function mapNetwork(data: IpJson, started: number): Partial<Snapshot> {
-  const t = () => performance.now() - started;
+function mapNetwork(data: IpJson, atMs: number): Partial<Snapshot> {
+  const t = () => atMs;
   const out: Partial<Snapshot> = {};
   const type = data.network?.type;
   if (type) out['network.type'] = reading('network.type', 'network', type, t());
@@ -198,7 +198,7 @@ function isMdnsHost(candidate: string): boolean {
   return /\.local\b/i.test(candidate);
 }
 
-export function runWebrtcProbe(started: number): Promise<Partial<Snapshot>> {
+export function runWebrtcProbe(): Promise<Partial<Snapshot>> {
   return new Promise((resolve) => {
     if (typeof RTCPeerConnection === 'undefined') {
       resolve({});
@@ -218,7 +218,7 @@ export function runWebrtcProbe(started: number): Promise<Partial<Snapshot>> {
       } catch {
         /* ignore */
       }
-      const t = () => performance.now() - started;
+      const t = () => performance.now();
       const out: Partial<Snapshot> = {};
       if (srflx) out['probe.srflxIp'] = reading('probe.srflxIp', 'probe', srflx, t());
       if (hosts.size > 0) {
@@ -263,16 +263,16 @@ export function runWebrtcProbe(started: number): Promise<Partial<Snapshot>> {
   });
 }
 
-export async function collectWhoAmISnapshot(): Promise<Snapshot> {
-  const started = performance.now();
-  const [api, ipJson, script] = await Promise.all([
-    fetchWhoAmIApi(),
-    fetchIpNetwork(),
-    Promise.resolve(collectScriptReadings(started)),
-  ]);
+/** Resolves with the value and the page-load time at which it arrived. */
+async function timed<T>(promise: Promise<T>): Promise<{ value: T; atMs: number }> {
+  const value = await promise;
+  return { value, atMs: performance.now() };
+}
 
-  const snap: Snapshot = { ...script };
-  if (api) Object.assign(snap, mapRequest(api, started));
-  if (ipJson) Object.assign(snap, mapNetwork(ipJson, started));
+export async function collectWhoAmISnapshot(): Promise<Snapshot> {
+  const snap: Snapshot = { ...collectScriptReadings() };
+  const [api, ipJson] = await Promise.all([timed(fetchWhoAmIApi()), timed(fetchIpNetwork())]);
+  if (api.value) Object.assign(snap, mapRequest(api.value, api.atMs));
+  if (ipJson.value) Object.assign(snap, mapNetwork(ipJson.value, ipJson.atMs));
   return snap;
 }

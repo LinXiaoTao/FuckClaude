@@ -441,3 +441,74 @@ export const RULES: readonly Rule[] = [
 export function evaluateRules(s: Snapshot): Finding[] {
   return RULES.map((rule) => rule.evaluate(s));
 }
+
+/**
+ * Whether a rule compares two readings against each other (shown side by side
+ * with `≠` or `=`) or checks one reading against an expectation.
+ */
+export const RULE_COMPARES: Record<RuleId, boolean> = {
+  'tz-offset': true,
+  'lang-country': true,
+  'lang-header-script': true,
+  'ua-platform': true,
+  'ua-gpu': true,
+  'webrtc-ip': true,
+  'webrtc-tun': false,
+  'ip-network-type': false,
+};
+
+export function formatUtcOffset(minutes: number): string {
+  const sign = minutes < 0 ? '-' : '+';
+  const abs = Math.abs(minutes);
+  const h = Math.floor(abs / 60);
+  const m = abs % 60;
+  return m === 0 ? `UTC${sign}${h}` : `UTC${sign}${h}:${String(m).padStart(2, '0')}`;
+}
+
+const BROWSER_PATTERNS: readonly (readonly [RegExp, string])[] = [
+  [/Edg(?:e|A|iOS)?\/(\d+)/, 'Edge'],
+  [/OPR\/(\d+)/, 'Opera'],
+  [/Firefox\/(\d+)|FxiOS\/(\d+)/, 'Firefox'],
+  [/(?:Chrome|CriOS)\/(\d+)/, 'Chrome'],
+  [/Version\/(\d+)[^ ]* (?:Mobile\/\S+ )?Safari\//, 'Safari'],
+];
+
+/** "Chrome 150 · macOS" from a User-Agent string, or null when neither part is recognised. */
+export function summarizeUserAgent(ua: string): string | null {
+  let browser: string | null = null;
+  for (const [pattern, name] of BROWSER_PATTERNS) {
+    const m = pattern.exec(ua);
+    if (m) {
+      browser = `${name} ${m[1] ?? m[2]}`;
+      break;
+    }
+  }
+  const os = osFamilyFromUserAgent(ua);
+  const parts = [browser, os].filter((p): p is string => p !== null);
+  return parts.length > 0 ? parts.join(' · ') : null;
+}
+
+function zoneWithOffset(value: string): string {
+  const zone = value.trim();
+  const off = utcOffsetMinutesForZone(zone);
+  return off === null ? zone : `${zone} (${formatUtcOffset(off)})`;
+}
+
+const VALUE_FORMATTERS: Partial<Record<ReadingId, (value: string) => string>> = {
+  'request.ipTimezone': zoneWithOffset,
+  'request.userAgent': (v) => summarizeUserAgent(v) ?? v,
+  'script.userAgent': (v) => summarizeUserAgent(v) ?? v,
+  'request.secChUaPlatform': (v) => v.replace(/^"|"$/g, ''),
+};
+
+/** Short, human-readable form of a raw reading; readings without a formatter pass through. */
+export function displayValue(id: ReadingId, value: string): string {
+  const format = VALUE_FORMATTERS[id];
+  return format ? format(value) : value;
+}
+
+/** "320 ms" below one second, "6.1 s" above. */
+export function formatElapsed(ms: number): string {
+  const rounded = Math.round(ms);
+  return rounded < 1000 ? `${rounded} ms` : `${(ms / 1000).toFixed(1)} s`;
+}

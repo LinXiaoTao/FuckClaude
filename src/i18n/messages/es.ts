@@ -522,9 +522,6 @@ export default {
   'nav.whoami': 'Quién soy',
   'nav.whoami.desc': 'Vea qué puede leer este sitio sobre su visita.',
 
-  'whoami.col.reading': 'Lectura',
-  'whoami.col.timing': 'Tiempo',
-  'whoami.col.value': 'Valor',
   'whoami.disclaimer':
     'Todas las comprobaciones son heurísticas y no garantizan cómo tratará ningún servicio su tráfico.',
   'whoami.faq.a1':
@@ -540,8 +537,7 @@ export default {
   'whoami.findingsTitle': 'Comprobaciones de coherencia',
   'whoami.headline.consistent':
     'Sin contradicciones entre las comprobaciones que pudimos ejecutar.',
-  'whoami.headline.mismatches':
-    '{n} contradicción(es) entre las comprobaciones que pudimos ejecutar.',
+  'whoami.headline.mismatches': 'Se encontraron contradicciones en {n} de las {total} comprobaciones que pudimos ejecutar.',
   'whoami.headline.pending': 'Aún no hay suficientes lecturas para comparar.',
   'whoami.layer.network': 'Red',
   'whoami.layer.probe': 'Sonda WebRTC',
@@ -555,7 +551,6 @@ export default {
   'whoami.meta.description':
     'Lecturas que un sitio puede obtener de su navegador y solicitud, y comprobaciones cuando no coinciden. Sin puntuación.',
   'whoami.meta.title': 'Quién soy',
-  'whoami.ms': '+{n} ms',
   'whoami.probe.note':
     'Solo se inicia tras hacer clic. Usa el STUN público de Cloudflare; nada de la sonda se sube.',
   'whoami.probe.run': 'Ejecutar sonda WebRTC',
@@ -588,6 +583,15 @@ export default {
   'whoami.reading.script.uaDataPlatform': 'Plataforma UA-CH',
   'whoami.reading.script.userAgent': 'navigator.userAgent',
   'whoami.readingsTitle': 'Lecturas',
+  'whoami.headline.where': 'Su solicitud llega a este sitio desde {place}.',
+  'whoami.readingsHint':
+    'El tiempo es el momento en que llegó cada lectura, contado desde la carga de la página. Las fuentes se leen en paralelo.',
+  'whoami.layer.request.desc': 'Se envía con cada solicitud, así que cualquier sitio lo recibe sin ejecutar un script.',
+  'whoami.layer.network.desc': 'El tipo de red de la dirección IP de la que procede su solicitud, consultado por este sitio.',
+  'whoami.layer.script.desc': 'Lo lee JavaScript en esta página. Cualquier sitio que ejecute un script puede leer los mismos valores.',
+  'whoami.layer.probe.desc':
+    'Solo se ejecuta tras hacer clic. Su navegador pregunta a un servidor STUN público en qué direcciones es accesible.',
+  'whoami.layer.count': 'Lecturas: {n}',
   'whoami.title': 'Quién soy',
   'whoami.verdict.match': 'Coherente',
   'whoami.verdict.mismatch': 'Contradicción',

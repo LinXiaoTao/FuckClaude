@@ -51,7 +51,10 @@ const breadcrumbJsonLd = {
     </section>
 
     <div class="whoami__root" data-whoami data-lang={lang}>
-      <p class="whoami__headline" data-whoami-headline>{t('whoami.headline.pending')}</p>
+      <div class="whoami__headline" data-whoami-headline>
+        <p class="whoami__headline-where" data-whoami-where hidden></p>
+        <p class="whoami__headline-verdict" data-whoami-verdict>{t('whoami.headline.pending')}</p>
+      </div>
 
       <section class="whoami__block" aria-labelledby="whoami-findings-heading">
         <h2 id="whoami-findings-heading">{t('whoami.findingsTitle')}</h2>
@@ -60,6 +63,7 @@ const breadcrumbJsonLd = {
 
       <section class="whoami__block" aria-labelledby="whoami-readings-heading">
         <h2 id="whoami-readings-heading">{t('whoami.readingsTitle')}</h2>
+        <p class="whoami__hint">{t('whoami.readingsHint')}</p>
         <div data-whoami-readings></div>
       </section>
 
@@ -72,18 +76,20 @@ const breadcrumbJsonLd = {
 
       <section class="whoami__faq" aria-labelledby="whoami-faq-heading">
         <h2 id="whoami-faq-heading">{t('whoami.faqTitle')}</h2>
-        <details class="whoami__faq-item">
-          <summary>{t('whoami.faq.q1')}</summary>
-          <p>{t('whoami.faq.a1')}</p>
-        </details>
-        <details class="whoami__faq-item">
-          <summary>{t('whoami.faq.q2')}</summary>
-          <p>{t('whoami.faq.a2')}</p>
-        </details>
-        <details class="whoami__faq-item">
-          <summary>{t('whoami.faq.q3')}</summary>
-          <p>{t('whoami.faq.a3')}</p>
-        </details>
+        <div class="whoami__faq-list">
+          <details class="whoami__faq-item">
+            <summary>{t('whoami.faq.q1')}</summary>
+            <p>{t('whoami.faq.a1')}</p>
+          </details>
+          <details class="whoami__faq-item">
+            <summary>{t('whoami.faq.q2')}</summary>
+            <p>{t('whoami.faq.a2')}</p>
+          </details>
+          <details class="whoami__faq-item">
+            <summary>{t('whoami.faq.q3')}</summary>
+            <p>{t('whoami.faq.a3')}</p>
+          </details>
+        </div>
       </section>
 
       <nav class="whoami__links" aria-label={t('whoami.linksAria')}>
@@ -147,25 +153,44 @@ const breadcrumbJsonLd = {
     max-width: min(920px, 100%);
   }
   .whoami__headline {
-    font-size: 1.12rem;
+    display: grid;
+    gap: 10px;
+    margin: 24px 0 32px;
+  }
+  .whoami__headline-where {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 2.8vw, 1.8rem);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .whoami__headline-verdict {
+    margin: 0;
+    font-size: 1.02rem;
     font-weight: 650;
-    margin: 20px 0 24px;
-    line-height: 1.45;
+    line-height: 1.5;
   }
   .whoami__block {
-    margin-block-end: 28px;
+    margin-block-end: 36px;
   }
   .whoami__block h2 {
     font-size: 1.05rem;
     margin: 0 0 12px;
     font-weight: 700;
   }
+  .whoami__hint {
+    margin: -4px 0 14px;
+    max-width: 62ch;
+    font-size: 0.86rem;
+    color: var(--muted-2);
+    line-height: 1.5;
+  }
   .whoami__probe-wrap {
-    margin: 28px 0;
+    margin: 0 0 40px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 10px;
   }
   .whoami__probe {
     appearance: none;
@@ -191,33 +216,85 @@ const breadcrumbJsonLd = {
     max-width: 56ch;
     font-size: 0.86rem;
     color: var(--muted-2);
-    line-height: 1.45;
+    line-height: 1.5;
   }
+
   .whoami__faq {
-    margin-block: 32px 24px;
+    margin-block-end: 32px;
   }
   .whoami__faq h2 {
     font-size: 1.05rem;
     margin: 0 0 12px;
+    font-weight: 700;
   }
-  .whoami__faq-item {
+  .whoami__faq-list {
+    counter-reset: whoami-faq;
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 14px;
-    margin-block-end: 10px;
+    border-radius: 12px;
     background: var(--surface);
+    overflow: hidden;
+  }
+  .whoami__faq-item + .whoami__faq-item {
+    border-top: 1px solid var(--border);
   }
   .whoami__faq-item summary {
+    counter-increment: whoami-faq;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
     cursor: pointer;
+    list-style: none;
+    font-size: 0.94rem;
     font-weight: 650;
-    list-style-position: outside;
+    line-height: 1.4;
+  }
+  .whoami__faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+  .whoami__faq-item summary::before {
+    content: 'Q' counter(whoami-faq);
+    flex: none;
+    min-width: 2.2em;
+    padding: 1px 6px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--muted-2);
+  }
+  /* The chevron is a rotated corner, so it uses physical borders: logical ones would flip it in RTL. */
+  .whoami__faq-item summary::after {
+    content: '';
+    flex: none;
+    margin-inline-start: auto;
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid var(--muted-2);
+    border-bottom: 2px solid var(--muted-2);
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform 0.18s;
+  }
+  .whoami__faq-item[open] summary::after {
+    transform: translateY(2px) rotate(-135deg);
+  }
+  .whoami__faq-item summary:hover {
+    background: var(--accent-soft);
+  }
+  .whoami__faq-item summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
   }
   .whoami__faq-item p {
-    margin: 10px 0 0;
+    margin: 0;
+    padding: 0 16px 16px;
     color: var(--muted);
     font-size: 0.9rem;
-    line-height: 1.5;
+    line-height: 1.55;
   }
+
   .whoami__links {
     display: flex;
     flex-wrap: wrap;
@@ -239,25 +316,46 @@ const breadcrumbJsonLd = {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .whoami__probe {
+    .whoami__probe,
+    .whoami__faq-item summary::after {
       transition: none;
     }
   }
 </style>
 
 <style is:global>
+  .whoami__empty {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .whoami__mono {
+    font-family: var(--mono);
+    font-size: 0.84rem;
+    overflow-wrap: anywhere;
+  }
+  .whoami__time {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
   .whoami__findings {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
     gap: 14px;
-    grid-template-columns: minmax(min(280px, 100%), 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(min(480px, 100%), 1fr));
   }
   .whoami__finding {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 14px 16px;
     background: var(--surface);
     overflow-wrap: anywhere;
   }
@@ -265,18 +363,26 @@ const breadcrumbJsonLd = {
     border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
     background: color-mix(in srgb, var(--accent) 6%, var(--surface));
   }
+  .whoami__finding-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
   .whoami__finding-title {
-    margin: 0 0 6px;
-    font-size: 0.98rem;
+    margin: 0;
+    font-size: 0.95rem;
     font-weight: 700;
+    line-height: 1.35;
   }
   .whoami__verdict-badge {
+    flex: none;
     display: inline-block;
-    font-size: 0.78rem;
-    font-weight: 650;
     padding: 2px 8px;
     border-radius: 999px;
-    margin: 0 0 10px;
+    font-size: 0.76rem;
+    font-weight: 650;
+    line-height: 1.4;
   }
   .whoami__verdict-badge--match {
     color: var(--muted);
@@ -288,79 +394,148 @@ const breadcrumbJsonLd = {
     background: color-mix(in srgb, var(--accent) 14%, var(--surface));
     border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
   }
-  .whoami__finding-verdict {
-    margin: 0 0 10px;
-    color: var(--muted);
-    font-size: 0.92rem;
-    line-height: 1.45;
-  }
-  .whoami__evidence {
-    margin: 0;
+  .whoami__pair {
     display: grid;
-    gap: 6px 12px;
-    grid-template-columns: minmax(min(120px, 100%), 1fr) 2fr;
-    font-size: 0.88rem;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: stretch;
+    gap: 10px;
   }
-  .whoami__evidence dt {
-    margin: 0;
+  .whoami__cells {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+  }
+  .whoami__cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--border) 24%, var(--surface));
+  }
+  .whoami__cell-label {
+    font-size: 0.74rem;
+    line-height: 1.35;
     color: var(--muted-2);
-    font-weight: 600;
   }
-  .whoami__evidence dd {
+  .whoami__cell-value {
+    font-size: 0.9rem;
+    font-weight: 650;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+  .whoami__rel {
+    align-self: center;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .whoami__rel--match {
+    color: var(--muted);
+    background: color-mix(in srgb, var(--border) 40%, var(--surface));
+  }
+  .whoami__rel--mismatch {
+    color: var(--accent-strong);
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+  }
+  .whoami__finding-verdict {
     margin: 0;
-    overflow-wrap: anywhere;
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.5;
   }
-  @media (max-width: 480px) {
-    .whoami__evidence {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 2px;
-    }
-    .whoami__evidence dd {
-      margin-block-end: 8px;
-    }
-  }
-  .whoami__mono {
-    font-family: var(--mono);
-    font-size: 0.84rem;
-    overflow-wrap: anywhere;
-  }
+
   .whoami__layer {
-    margin-block-end: 18px;
+    margin-block-end: 14px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+  }
+  .whoami__layer-head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 4px 14px;
+    margin-block-end: 14px;
+    padding-block-end: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .whoami__layer-time {
+    min-width: 3.6em;
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--accent-strong);
+    direction: ltr;
+  }
+  /* The time keeps its own left-to-right direction, so on rtl pages it needs a physical align. */
+  html[dir='rtl'] .whoami__layer-time {
+    text-align: right;
   }
   .whoami__layer-title {
-    font-size: 0.95rem;
-    margin: 0 0 8px;
+    margin: 0;
+    font-size: 0.98rem;
     font-weight: 700;
+    line-height: 1.3;
+  }
+  .whoami__layer-desc {
+    margin: 3px 0 0;
+    font-size: 0.84rem;
+    line-height: 1.5;
     color: var(--muted);
   }
-  .whoami__table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.88rem;
-  }
-  .whoami__table th,
-  .whoami__table td {
-    border: 1px solid var(--border);
-    padding: 8px 10px;
-    text-align: start;
-    vertical-align: top;
-  }
-  .whoami__table th {
-    background: color-mix(in srgb, var(--border) 35%, var(--surface));
-    font-weight: 650;
-  }
-  .whoami__table td.whoami__mono {
-    overflow-wrap: anywhere;
-  }
-  .whoami__ms {
+  .whoami__layer-count {
+    font-size: 0.78rem;
+    line-height: 1.6;
     white-space: nowrap;
     color: var(--muted-2);
-    font-family: var(--mono);
-    font-size: 0.82rem;
   }
-  .whoami__empty {
-    color: var(--muted);
-    font-size: 0.92rem;
+  .whoami__rows {
     margin: 0;
+    display: grid;
+    gap: 12px 16px;
+    grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr));
+  }
+  .whoami__row {
+    min-width: 0;
+  }
+  .whoami__row--wide {
+    grid-column: 1 / -1;
+  }
+  .whoami__row-label {
+    margin: 0 0 3px;
+    font-size: 0.76rem;
+    line-height: 1.35;
+    color: var(--muted-2);
+  }
+  .whoami__row dd {
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 560px) {
+    .whoami__pair {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px;
+    }
+    .whoami__rel {
+      justify-self: center;
+    }
+    .whoami__layer-head {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .whoami__layer-titles {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
   }
 </style>

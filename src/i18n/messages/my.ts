@@ -509,9 +509,6 @@ export default {
   'nav.news.desc': 'ရွေးချယ်ထားသော Claude မူဝါဒနှင့် ထုတ်ကုန် သတင်း။',
   'nav.whoami': 'ကျွန်ုပ် အကြောင်း',
   'nav.whoami.desc': 'ဤဆိုက်က သင့်လည်ပတ်မှု အကြောင်း ဘာဖတ်နိုင်သလဲ ကြည့်ပါ။',
-  'whoami.col.reading': 'ဖတ်ယူမှု',
-  'whoami.col.timing': 'အချိန်',
-  'whoami.col.value': 'တန်ဖိုး',
   'whoami.disclaimer': 'စစ်ဆေးချက်အားလုံးသည် heuristic ဖြစ်ပြီး မည်သည့် ဝန်ဆောင်မှုက သင့် traffic ကို ဘယ်လို ကိုင်တွယ်မည်ကို အာမခံချက် မဟုတ်ပါ။',
   'whoami.faq.a1':
     'ဖတ်ယူမှုများသည် ပြသရန်အတွက် ဘရောက်ဇာတွင် သာရှိသည်။ /api/whoami နှင့် /api/ip သည် တိုက်ရိုက် တောင်းဆိုမှုများကို ဖြေပြီး ဤစာမျက်နှာမှ ဒေတာဘေ့စ်သို့ မရေးပါ။',
@@ -525,7 +522,7 @@ export default {
   'whoami.faqTitle': 'မေးလေ့ရှိသော မေးခွန်း',
   'whoami.findingsTitle': 'ကိုက်ညီမှု စစ်ဆေးချက်များ',
   'whoami.headline.consistent': 'ကျွန်ုပ်တို့ လုပ်နိုင်ခဲ့သော စစ်ဆေးချက်များထဲ ကွဲလွဲမှု မရှိပါ။',
-  'whoami.headline.mismatches': 'ကျွန်ုပ်တို့ လုပ်နိုင်ခဲ့သော စစ်ဆေးချက်များထဲ {n} ခု ကွဲလွဲမှု တွေ့ရှိသည်။',
+  'whoami.headline.mismatches': 'ကျွန်ုပ်တို့ လုပ်နိုင်ခဲ့သော စစ်ဆေးချက် {total} ခုထဲမှ {n} ခုတွင် ကွဲလွဲမှု တွေ့ရှိသည်။',
   'whoami.headline.pending': 'နှိုင်းယှဉ်ရန် ဖတ်ယူမှု မလုံလောက်သေးပါ။',
   'whoami.layer.network': 'ကွန်ရက်',
   'whoami.layer.probe': 'WebRTC စစ်ဆေးမှု',
@@ -539,7 +536,6 @@ export default {
   'whoami.meta.description':
     'ဝဘ်ဆိုက်က ဘရောက်ဇာနှင့် တောင်းဆိုမှုမှ ဖတ်နိုင်သော တန်ဖိုးများ၊ မကိုက်ညီသည့်အခါ စစ်ဆေးချက်များ။ အမှတ် မရှိပါ။',
   'whoami.meta.title': 'ကျွန်ုပ် အကြောင်း',
-  'whoami.ms': '+{n} ms',
   'whoami.probe.note':
     'နှိပ်ပြီးမှသာ စတင်သည်။ Cloudflare အများပြည်သူ STUN သုံးသည်။ probe မှ မည်သည့် ဒေတာမျှ မတင်ပါ။',
   'whoami.probe.run': 'WebRTC probe လုပ်မည်',
@@ -572,6 +568,15 @@ export default {
   'whoami.reading.script.uaDataPlatform': 'UA-CH platform',
   'whoami.reading.script.userAgent': 'navigator.userAgent',
   'whoami.readingsTitle': 'ဖတ်ယူမှုများ',
+  'whoami.headline.where': 'သင့်တောင်းဆိုမှုသည် {place} မှ ဤဆိုက်သို့ ရောက်လာသည်။',
+  'whoami.readingsHint':
+    'အချိန်ဆိုသည်မှာ ဖတ်ယူမှုတစ်ခုစီ ရောက်လာသော အချိန်ဖြစ်ပြီး စာမျက်နှာ တင်ချိန်မှ စတင်ရေတွက်သည်။ ရင်းမြစ်များကို အပြိုင် ဖတ်သည်။',
+  'whoami.layer.request.desc': 'တောင်းဆိုမှုတိုင်းနှင့်အတူ ပို့သဖြင့် မည်သည့်ဆိုက်မဆို script မလည်ပတ်ဘဲ လက်ခံရရှိသည်။',
+  'whoami.layer.network.desc': 'သင့်တောင်းဆိုမှု ထွက်ပေါ်လာသော IP လိပ်စာ၏ ကွန်ရက်အမျိုးအစားကို ဤဆိုက်က ရှာဖွေထားသည်။',
+  'whoami.layer.script.desc': 'ဤစာမျက်နှာပေါ်ရှိ JavaScript က ဖတ်သည်။ script လည်ပတ်သော မည်သည့်ဆိုက်မဆို တူညီသော တန်ဖိုးများကို ဖတ်နိုင်သည်။',
+  'whoami.layer.probe.desc':
+    'နှိပ်ပြီးမှသာ လည်ပတ်သည်။ ဘရောက်ဇာသည် အများပြည်သူ STUN ဆာဗာကို မည်သည့်လိပ်စာများဖြင့် ချိတ်ဆက်နိုင်သည်ကို မေးသည်။',
+  'whoami.layer.count': 'ဖတ်ယူမှု - {n} ခု',
   'whoami.title': 'ကျွန်ုပ် အကြောင်း',
   'whoami.verdict.match': 'ကိုက်ညီ',
   'whoami.verdict.mismatch': 'ကွဲလွဲ',
