@@ -296,6 +296,7 @@ export const ui = {
     'social.x': 'X (Twitter)',
     'social.xiaohongshu': 'Xiaohongshu (RED)',
     'social.douyin': 'Douyin',
+    'social.wechat': 'WeChat Official Account',
     'social.jike': 'Jike',
     'social.scan': 'Scan with the app, or click to open',
 
@@ -890,6 +891,7 @@ export const ui = {
     'social.x': 'X(推特)',
     'social.xiaohongshu': '小红书',
     'social.douyin': '抖音',
+    'social.wechat': '微信公众号',
     'social.jike': '即刻',
     'social.scan': '用 App 扫码关注，或点击直达',
 

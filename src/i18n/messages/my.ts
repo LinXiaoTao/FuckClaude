@@ -262,6 +262,7 @@ export default {
   'social.x': 'X (Twitter)',
   'social.xiaohongshu': 'Xiaohongshu (RED)',
   'social.douyin': 'Douyin',
+  'social.wechat': 'WeChat တရားဝင်အကောင့်',
   'social.jike': 'Jike',
   'social.scan': 'App ဖြင့် scan လုပ်ပါ သို့မဟုတ် ဖွင့်ရန် နှိပ်ပါ',
 

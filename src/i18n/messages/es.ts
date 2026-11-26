@@ -266,6 +266,7 @@ export default {
   'social.x': 'X (Twitter)',
   'social.xiaohongshu': 'Xiaohongshu (RED)',
   'social.douyin': 'Douyin',
+  'social.wechat': 'Cuenta oficial de WeChat',
   'social.jike': 'Jike',
   'social.scan': 'Escanee con la aplicación o haga clic para abrir',
 
